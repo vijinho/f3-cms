@@ -3,6 +3,7 @@
 Consider this a work-in-progress and an 'alpha' release.
 
 [![Travis CI Build](https://travis-ci.org/vijinho/f3-cms.svg?branch=dev-master)](https://travis-ci.org/vijinho/f3-cms)
+[![Build Status](https://scrutinizer-ci.com/g/vijinho/f3-cms/badges/build.png?b=dev-master)](https://scrutinizer-ci.com/g/vijinho/f3-cms/build-status/dev-master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/vijinho/f3-cms/badges/quality-score.png?b=dev-master)](https://scrutinizer-ci.com/g/vijinho/f3-cms/?branch=dev-master)
 [![Code Coverage](https://scrutinizer-ci.com/g/vijinho/f3-cms/badges/coverage.png?b=dev-master)](https://scrutinizer-ci.com/g/vijinho/f3-cms/?branch=dev-master)
 
