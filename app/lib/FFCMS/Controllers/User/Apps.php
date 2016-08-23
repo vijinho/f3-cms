@@ -20,16 +20,13 @@ class Apps extends Controllers\User\Base
      * User's own API applications
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function apps(\Base $f3, array $params)
+    public function apps(\Base $f3)
     {
         $this->redirectLoggedOutUser();
 
         $oAuth2Model = Models\OAuth2::instance();
-        $appsMapper = $oAuth2Model->getAppsMapper();
-        $tokensMapper = $oAuth2Model->getTokensMapper();
 
         // fetch the user's apps
         $f3->set('apps', $oAuth2Model->getUserApps($f3->get('uuid')));
@@ -48,10 +45,9 @@ class Apps extends Controllers\User\Base
      * register app
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function appPost(\Base $f3, array $params)
+    public function appPost(\Base $f3)
     {
         $this->csrf('@api_apps');
         $this->redirectLoggedOutUser();
@@ -59,7 +55,6 @@ class Apps extends Controllers\User\Base
         $view = 'apps/apps.phtml';
         $oAuth2Model = Models\OAuth2::instance();
         $appsMapper = $oAuth2Model->getAppsMapper();
-        $tokensMapper = $oAuth2Model->getTokensMapper();
 
         // filter input vars of request, set back into REQUEST
         $appsMapper->copyfrom($f3->get('REQUEST'));
@@ -125,17 +120,15 @@ class Apps extends Controllers\User\Base
      * register app
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function updateAppPost(\Base $f3, array $params)
+    public function updateAppPost(\Base $f3)
     {
         $this->csrf('@user_api');
         $this->redirectLoggedOutUser();
 
         $oAuth2Model = Models\OAuth2::instance();
         $appsMapper = $oAuth2Model->getAppsMapper();
-        $tokensMapper = $oAuth2Model->getTokensMapper();
 
         // filter input vars of request, set back into REQUEST
         $appsMapper->copyfrom($f3->get('REQUEST'));

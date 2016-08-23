@@ -48,9 +48,9 @@ trait Validation
     /**
      * Boolean flag from validation run results if object is valid
      *
-     * @var array
+     * @var boolean
      */
-    protected $valid = [];
+    protected $valid = false;
 
     /**
      * Errors from last validation run
@@ -61,9 +61,9 @@ trait Validation
 
 
     /**
-     * initialize with array of params, 'db' and 'logger' can be injected
+     * initialize
      */
-    public function __construct($params = [])
+    public function __construct()
     {
         // save default validation rules and filter rules in-case we add rules
         $this->validationRulesDefault = $this->validationRules;
@@ -190,12 +190,12 @@ trait Validation
      *
      * @param array $data
      * @param array $rules
-     * @return $data
+     * @return array $data
      */
     public function filter(array $data = [], array $rules = []): array
     {
         $validator = Helpers\Validator::instance();
-        $validator->filter_rules($this->filterRules);
+        $validator->filter_rules(empty($rules) ? $this->filterRules : $rules);
         return $validator->filter($data);
     }
 
@@ -237,7 +237,7 @@ trait Validation
      * Process errors of results from (return array of $this->validate(true)) $validator->run($data) into friendlier notifications
      *
      * @param mixed $errors errors from $validator->run($data) or get last errors
-     * @param array $notifications
+     * @return array $notifications
      */
     public function validationErrors($errors = []): array
     {

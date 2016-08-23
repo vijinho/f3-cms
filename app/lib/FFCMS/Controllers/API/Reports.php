@@ -21,14 +21,11 @@ class Reports extends APIMapper
      * Perform a create/update of the an item, used by POST, PUT, PATCH
      *
      * @param \Base $f3
-     * @param array $params
      * @param array $prohibitedFields
      * @return void
      */
-    private function save(\Base $f3, array $params, array $prohibitedFields = [])
+    private function save(\Base $f3, array $prohibitedFields = [])
     {
-        $isAdmin = $f3->get('isAdmin');
-
         // do not allow request to define these fields:
         $data = $f3->get('REQUEST');
         foreach ($prohibitedFields as $field) {
@@ -90,7 +87,6 @@ class Reports extends APIMapper
      */
     public function patch(\Base $f3, array $params)
     {
-        $isAdmin = $f3->get('isAdmin');
         $m = $this->getIdObjectIfAdmin($f3, $params, 'uuid', $f3->get('id'));
         if (!is_object($m) || null == $m->uuid) {
             return;
@@ -100,7 +96,7 @@ class Reports extends APIMapper
         $f3->set('REQUEST.key', $m->key);
 
         // these fields can't be modified
-        return $this->save($f3, $params, [
+        return $this->save($f3, [
             'id', 'uuid'
         ]);
     }
@@ -110,12 +106,10 @@ class Reports extends APIMapper
      * Replace data
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function put(\Base $f3, array $params)
+    public function put(\Base $f3)
     {
-        $isAdmin = $f3->get('isAdmin');
         $m = $this->getIdObjectIfAdmin($f3, $params, 'uuid', $f3->get('id'));
         if (!is_object($m) || null == $m->uuid) {
             return;
@@ -125,7 +119,7 @@ class Reports extends APIMapper
         $f3->set('REQUEST.users_uuid', $m->users_uuid);
 
         // these fields can't be modified
-        return $this->save($f3, $params, [
+        return $this->save($f3, [
             'id'
         ]);
     }
@@ -158,7 +152,7 @@ class Reports extends APIMapper
             'id', 'uuid'
         ];
 
-        return $this->save($f3, $params, $prohibitedFields);
+        return $this->save($f3, $prohibitedFields);
     }
 
 

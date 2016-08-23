@@ -39,13 +39,11 @@ class Admin extends Controllers\User\Base
      *
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function index(\Base $f3, array $params)
+    public function index(\Base $f3)
     {
         $this->redirectLoggedOutUser();
-        $userData = $f3->get('user');
 
         echo \View::instance()->render('cms/admin/index.phtml');
     }
@@ -55,10 +53,9 @@ class Admin extends Controllers\User\Base
      *
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function phpinfo(\Base $f3, array $params)
+    public function phpinfo(\Base $f3)
     {
         phpinfo();
     }

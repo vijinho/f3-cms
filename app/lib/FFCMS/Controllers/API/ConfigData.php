@@ -18,14 +18,11 @@ class ConfigData extends APIMapper
      * Perform a create/update of the an item, used by POST, PUT, PATCH
      *
      * @param \Base $f3
-     * @param array $params
      * @param array $prohibitedFields
      * @return void
      */
-    private function save(\Base $f3, array $params, array $prohibitedFields = [])
+    private function save(\Base $f3, array $prohibitedFields = [])
     {
-        $isAdmin = $f3->get('isAdmin');
-
         // do not allow request to define these fields:
         $data = $f3->get('REQUEST');
         foreach ($prohibitedFields as $field) {
@@ -97,7 +94,7 @@ class ConfigData extends APIMapper
         $f3->set('REQUEST.key', $m->key);
 
         // these fields can't be modified
-        return $this->save($f3, $params, [
+        return $this->save($f3, [
             'id', 'uuid'
         ]);
     }
@@ -120,7 +117,7 @@ class ConfigData extends APIMapper
         $f3->set('REQUEST.uuid', $m->uuid);
 
         // these fields can't be modified
-        return $this->save($f3, $params, [
+        return $this->save($f3, [
             'id'
         ]);
     }
@@ -145,7 +142,7 @@ class ConfigData extends APIMapper
             'id', 'uuid'
         ];
 
-        return $this->save($f3, $params, $prohibitedFields);
+        return $this->save($f3, $prohibitedFields);
     }
 
 }

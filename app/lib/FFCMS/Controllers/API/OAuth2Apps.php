@@ -15,20 +15,17 @@ use FFCMS\{Traits, Models, Mappers};
 class OAuth2Apps extends APIMapper
 {
     protected $table = 'oauth2_apps';
-    
+
 
     /**
      * Perform a create/update of the an item, used by POST, PUT, PATCH
      *
      * @param \Base $f3
-     * @param array $params
      * @param array $prohibitedFields
      * @return void
      */
-    private function save(\Base $f3, array $params, array $prohibitedFields = [])
+    private function save(\Base $f3, array $prohibitedFields = [])
     {
-        $isAdmin = $f3->get('isAdmin');
-
         // set audit user if not set
         $data = $f3->get('REQUEST');
         $user = $f3->get('user');
@@ -120,7 +117,7 @@ class OAuth2Apps extends APIMapper
         $f3->set('REQUEST.client_secret', $m->client_secret);
 
         // these fields can't be modified
-        return $this->save($f3, $params, [
+        return $this->save($f3, [
             'id'
         ]);
     }
@@ -140,7 +137,7 @@ class OAuth2Apps extends APIMapper
             return;
         }
 
-        return $this->save($f3, $params, [
+        return $this->save($f3, [
             'id'
         ]);
     }
@@ -150,10 +147,9 @@ class OAuth2Apps extends APIMapper
      * Create new data
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function post(\Base $f3, array $params)
+    public function post(\Base $f3)
     {
         $isAdmin = $f3->get('isAdmin');
         if (!$isAdmin) {
@@ -165,7 +161,7 @@ class OAuth2Apps extends APIMapper
             'id', 'uuid'
         ];
 
-        return $this->save($f3, $params, $prohibitedFields);
+        return $this->save($f3, $prohibitedFields);
     }
 
 }

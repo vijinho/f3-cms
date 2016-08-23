@@ -21,14 +21,11 @@ class UsersData extends APIMapper
      * Perform a create/update of the an item, used by POST, PUT, PATCH
      *
      * @param \Base $f3
-     * @param array $params
      * @param array $prohibitedFields
      * @return void
      */
-    private function save(\Base $f3, array $params, array $prohibitedFields = [])
+    private function save(\Base $f3, array $prohibitedFields = [])
     {
-        $isAdmin = $f3->get('is_admin');
-
         // do not allow request to define these fields:
         $data = $f3->get('REQUEST');
         foreach ($prohibitedFields as $field) {
@@ -103,7 +100,7 @@ class UsersData extends APIMapper
         $f3->set('REQUEST.key', $m->key);
 
         // these fields can't be modified
-        return $this->save($f3, $params, [
+        return $this->save($f3, [
             'id', 'uuid'
         ]);
     }
@@ -131,7 +128,7 @@ class UsersData extends APIMapper
         $f3->set('REQUEST.users_uuid', $m->users_uuid);
 
         // these fields can't be modified
-        return $this->save($f3, $params, [
+        return $this->save($f3, [
             'id'
         ]);
     }
@@ -161,7 +158,7 @@ class UsersData extends APIMapper
             'id', 'uuid'
         ];
 
-        return $this->save($f3, $params, $prohibitedFields);
+        return $this->save($f3, $prohibitedFields);
     }
 
 

@@ -195,7 +195,7 @@ class Users extends DB
     /**
      * Create a template object for a new user
      *
-     * @param Mappers\Users $m User Mapper
+     * @param \FFCMS\Mappers\Users $m User Mapper
      * @link http://fatfreeframework.com/sql-mapper
      */
     public function &newUserTemplate($m = null): \FFCMS\Mappers\Users

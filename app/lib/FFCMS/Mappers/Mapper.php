@@ -13,6 +13,7 @@ use FFCMS\Traits;
  * @license GPLv3 (http://www.gnu.org/licenses/gpl-3.0.html)
  * @link https://fatfreeframework.com/sql-mapper
  * @link https://github.com/Wixel/GUMP
+ *
  */
 
 // abstract class Magic implements ArrayAccess
@@ -43,15 +44,13 @@ abstract class Mapper extends \DB\SQL\Mapper
     protected $db;
 
     /**
-     * @var table for the mapper
+     * @var string $table for the mapper
      */
     protected $table;
 
     /**
      * initialize with array of params, 'db' and 'logger' can be injected
      *
-     * @param \Log $logger
-     * @param \DB\SQL $db
      */
     public function __construct(array $params = [])
     {
@@ -195,8 +194,8 @@ abstract class Mapper extends \DB\SQL\Mapper
     /**
      * Convert the mapper object to format suitable for JSON
      *
-     * @param boolean $public cast as public (visible) data or raw db data?
-     * @param mixed optional string|array fields to include
+     * @param boolean $unmodified cast as public (visible) data or raw db data?
+     * @param mixed $fields optional string|array fields to include
      * @return string json-encoded data
      */
     public function exportJson(bool $unmodified = false, $fields = null): string
@@ -256,10 +255,9 @@ abstract class Mapper extends \DB\SQL\Mapper
      * Apply filter rules to data
      *
      * @param array $data
-     * @param array $rules
      * @return array $data
      */
-    public function filter(array $data = [], array $rules = [])
+    public function filter(array $data = [])
     {
         if (!is_array($data) || empty($data)) {
             $data = $this->cast();

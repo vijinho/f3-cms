@@ -22,10 +22,8 @@ abstract class Base extends Controllers\Base
      * perform a client logout
      *
      * @param \Base $f3
-     * @param array $params
-     * @return void
      */
-    protected function doLogout(\Base $f3, array $params)
+    protected function doLogout(\Base $f3)
     {
         $uuid = $f3->get('uuid');
         $f3->clear('SESSION');
@@ -40,12 +38,11 @@ abstract class Base extends Controllers\Base
      * logout for api users
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function logout(\Base $f3, array $params)
+    public function logout(\Base $f3)
     {
-        $this->doLogout($f3, $params);
+        $this->doLogout($f3);
         $this->notify(_('You are now logged out!'), 'success');
         $f3->reroute('@index');
     }
@@ -55,10 +52,9 @@ abstract class Base extends Controllers\Base
      * show login screen form
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function login(\Base $f3, array $params)
+    public function login(\Base $f3)
     {
         $this->dnsbl();
         $this->redirectLoggedInUser();

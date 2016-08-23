@@ -21,29 +21,28 @@ class Token extends API
      * requires input of client_id and client_secret
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function token(\Base $f3, array $params)
+    public function token(\Base $f3)
     {
         $grant = $f3->get('REQUEST.grant_type');
 
         switch ($grant) {
 
             case 'authorization_code': // exchange auth code for access token
-                return $this->code($f3, $params);
+                return $this->code($f3);
                 break;
 
             case 'client_credentials': // client app gets a token for itself
-                return $this->credentials($f3, $params);
+                return $this->credentials($f3);
                 break;
 
             case 'password': // client app passes end-user username and password to get token
-                return $this->password($f3, $params);
+                return $this->password($f3);
                 break;
 
             case 'refresh_token': // refresh access token using refresh token
-                return $this->refresh($f3, $params);
+                return $this->refresh($f3);
                 break;
 
             default:
@@ -60,11 +59,10 @@ class Token extends API
      * requires input of 'code'
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      * @link http://tools.ietf.org/html/rfc6749
      */
-    protected function code(\Base $f3, array $params)
+    protected function code(\Base $f3)
     {
         // this requires a valid client_id/secret
         if (!$this->validateAccess()) {
@@ -160,11 +158,10 @@ class Token extends API
      *
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      * @link http://tools.ietf.org/html/rfc6749
      */
-    protected function credentials(\Base $f3, array $params)
+    protected function credentials(\Base $f3)
     {
         // this requires a valid client_id/secret
         if (!$this->validateAccess()) {
@@ -242,11 +239,10 @@ class Token extends API
      * requires input of 'username' and 'password'
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      * @link http://tools.ietf.org/html/rfc6749
      */
-    protected function password(\Base $f3, array $params)
+    protected function password(\Base $f3)
     {
         if ('http' == $f3->get('SCHEME') && !empty($f3->get('api.https'))) {
             $this->failure('api_connection_failure', "Connection only allowed via HTTPS!", 400);
@@ -357,10 +353,9 @@ class Token extends API
      * Revoke an access token, revoke?token=TOKEN GET.
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function revoke(\Base $f3, array $params)
+    public function revoke(\Base $f3)
     {
         if (!$this->validateAccess()) {
             return;
@@ -430,11 +425,10 @@ class Token extends API
      * Request a new access_token using the refresh_token
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      * @link http://tools.ietf.org/html/rfc6749
      */
-    protected function refresh(\Base $f3, array $params)
+    protected function refresh(\Base $f3)
     {
         // fetch models now
         $oAuth2Model = Models\OAuth2::instance();

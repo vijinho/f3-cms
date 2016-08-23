@@ -58,14 +58,12 @@ abstract class APIMapper extends API
 
 
     /**
-     * initialize with array of params, 'db' and 'logger' can be injected
-     *
-     * @param \Log $logger
-     * @param \DB\SQL $db
+     * initialize
+     * @param \Base $f3
      */
-    public function __construct(\Base $f3, array $params = [])
+    public function __construct(\Base $f3)
     {
-        parent::__construct($f3, $params);
+        parent::__construct($f3);
 
         $f3 = \Base::instance();
 
@@ -89,13 +87,12 @@ abstract class APIMapper extends API
     /**
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function init(\Base $f3, array $params)
+    public function init(\Base $f3)
     {
         $this->isAuthorised = $this->validateAccess();
-        if (!$this->isAuthorised) {
+        if (empty($this->isAuthorised)) {
             return $this->setOAuthError('invalid_grant');
         }
 
@@ -116,9 +113,7 @@ abstract class APIMapper extends API
     /**
      * Get the associated mapper for the table
      *
-     * @param \Base $f3
-     * @param array $params
-     * @return void
+     * @return
      */
     public function &getMapper()
     {
@@ -139,7 +134,7 @@ abstract class APIMapper extends API
     public function getIdObjectIfUser(\Base $f3, array $params, string $idField = 'uuid', $defaultId = null)
     {
         // valid user?
-        if (!$this->isAuthorised) {
+        if (empty($this->isAuthorised)) {
             return;
         }
 
@@ -184,7 +179,7 @@ abstract class APIMapper extends API
      */
     public function getIdObjectIfAdmin(\Base $f3, array $params, string $idField = 'uuid', $defaultId = null)
     {
-        if (!$this->isAuthorised) {
+        if (empty($this->isAuthorised)) {
             return;
         }
 
@@ -276,10 +271,9 @@ abstract class APIMapper extends API
      * list objects (list is a reserved keyword)
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function listingAdmin(\Base $f3, array $params)
+    public function listingAdmin(\Base $f3)
     {
         // must be an admin
         $isAdmin = $f3->get('isAdmin');
@@ -288,7 +282,7 @@ abstract class APIMapper extends API
             return $this->setOAuthError('access_denied');
         }
 
-        $this->data = $this->getListingResults($f3, $params, $this->getMapper());
+        $this->data = $this->getListingResults($f3, $this->getMapper());
     }
 
 
@@ -296,10 +290,9 @@ abstract class APIMapper extends API
      * search objects
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function searchAdmin(\Base $f3, array $params)
+    public function searchAdmin(\Base $f3)
     {
         // must be an admin
         $isAdmin = $f3->get('isAdmin');
@@ -308,7 +301,7 @@ abstract class APIMapper extends API
             return $this->setOAuthError('access_denied');
         }
 
-        $this->data = $this->getSearchResults($f3, $params, $this->getMapper());
+        $this->data = $this->getSearchResults($f3, $this->getMapper());
     }
 
 
@@ -322,6 +315,7 @@ abstract class APIMapper extends API
     public function listing(\Base $f3, array $params)
     {
         $isAdmin = $f3->get('isAdmin');
+        $users_uuid = null;
         if (!$isAdmin && array_key_exists('id', $params)) {
             $this->failure('authentication_error', "User does not have permission.", 401);
             return $this->setOAuthError('access_denied');
@@ -386,7 +380,7 @@ abstract class APIMapper extends API
         $fields = join(',', $fields);
 
         // count rows
-        if ($isAdmin && empty($id)) {
+        if ($isAdmin) {
             $rows = $m->count();
         } else {
             $rows = $m->count(['users_uuid = ?', $users_uuid]);
@@ -402,6 +396,7 @@ abstract class APIMapper extends API
             $perPage = $rows;
         }
 
+        $pagination = [];
         $pagination['count'] = ceil($rows / $perPage);
 
         // too high page number?
@@ -557,7 +552,7 @@ abstract class APIMapper extends API
         $fields = empty($validFields['fields']) ? join(',', $allFields) : $validFields['fields'];
 
         // validated fields to search in, use all if empty
-        $searchFields = empty($searchFields) ? join(',', $allFields) : $validFields['searchFields'];
+        $searchFields = empty($fields) ? join(',', $allFields) : $validFields['searchFields'];
 
         // get search type
         $search = $f3->get('REQUEST.search');

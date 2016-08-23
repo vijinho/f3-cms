@@ -19,10 +19,9 @@ class User extends Base
      * user homepage
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function index(\Base $f3, array $params)
+    public function index(\Base $f3)
     {
         $this->redirectLoggedOutUser();
         $userData = $f3->get('user');
@@ -36,10 +35,9 @@ class User extends Base
      * login form submitted
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function loginPost(\Base $f3, array $params)
+    public function loginPost(\Base $f3)
     {
         $this->redirectLoggedInUser();
         $this->csrf('@user');
@@ -102,10 +100,9 @@ class User extends Base
      * my account
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function account(\Base $f3, array $params)
+    public function account(\Base $f3)
     {
         $this->redirectLoggedOutUser();
 
@@ -123,10 +120,9 @@ class User extends Base
      * my account posted
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function accountPost(\Base $f3, array $params)
+    public function accountPost(\Base $f3)
     {
         $this->csrf('@user');
         $this->redirectLoggedOutUser();
@@ -276,7 +272,6 @@ class User extends Base
                    'event' => 'Set Email Confirmed Fail',
                    'old' => $oldUserMapper->cast(),
                    'new' => $usersMapper->cast(),
-                   'debug' => $e
                 ]);
                 $this->notify(_('Setting confirmation email failed.'), 'warning');
             }
@@ -291,10 +286,9 @@ class User extends Base
      * registration page
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function register(\Base $f3, array $params)
+    public function register(\Base $f3)
     {
         $this->redirectLoggedInUser();
 
@@ -307,10 +301,9 @@ class User extends Base
      * registration posted
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function registerPost(\Base $f3, array $params)
+    public function registerPost(\Base $f3)
     {
         $this->redirectLoggedInUser();
         $this->csrf('@register');
@@ -328,8 +321,6 @@ class User extends Base
         }
 
         $view = 'user/register.phtml';
-        // url if registration failed
-        $registrationUrl = $this->url('@register', $f3->get('REQUEST'));
 
         $email = $f3->get('REQUEST.email');
         if (empty($email)) {
@@ -402,10 +393,9 @@ class User extends Base
      * Confirm email address link handler from email
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function confirmEmail(\Base $f3, array $params)
+    public function confirmEmail(\Base $f3)
     {
         $db = \Registry::get('db');
         $usersModel = Models\Users::instance();
@@ -494,7 +484,7 @@ class User extends Base
         $mail = Helpers\Mail::getPHPMailer([
             'To'      => $usersMapper->email,
             'Subject' => "Confirm Email Address",
-            'Body'    => \Markdown::instance()->convert(\View::instance()->render('email/confirm_email.md'), 'text/html'),
+            'Body'    => \Markdown::instance()->convert(\View::instance()->render('email/confirm_email.md')),
             'AltBody' => \View::instance()->render('email/forgot_password.md', 'text/plain')
         ]);
 

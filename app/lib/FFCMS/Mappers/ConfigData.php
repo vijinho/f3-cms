@@ -2,14 +2,21 @@
 
 namespace FFCMS\Mappers;
 
-use FFMVC\Helpers as Helpers;
-
 /**
  * Config Data Mapper Class.
  *
  * @author Vijay Mahrra <vijay@yoyo.org>
  * @copyright (c) Copyright 2016 Vijay Mahrra
  * @license GPLv3 (http://www.gnu.org/licenses/gpl-3.0.html)
+ *
+ * @property int    $id
+ * @property string $uuid
+ * @property string $description
+ * @property string $key
+ * @property string $value
+ * @property string $type
+ * @property string $options
+ * @property string $rank
  */
 class ConfigData extends Mapper
 {
@@ -19,15 +26,14 @@ class ConfigData extends Mapper
      * @var array $fieldsVisible
      */
     public $fieldsVisible = [
-        'uuid' => true,
+        'uuid'        => true,
         'description' => true,
-        'key' => true,
-        'value' => true,
-        'type' => true,
-        'options' => true,
-        'rank' => true
+        'key'         => true,
+        'value'       => true,
+        'type'        => true,
+        'options'     => true,
+        'rank'        => true,
     ];
-
 
     /**
      * Filter rules for fields
@@ -36,15 +42,14 @@ class ConfigData extends Mapper
      * @link https://github.com/Wixel/GUMP
      */
     public $filterRules = [
-        'uuid' => 'trim|sanitize_string|lower',
+        'uuid'        => 'trim|sanitize_string|lower',
         'description' => 'trim|sanitize_string',
-        'key' => 'trim|sanitize_string|lower|slug',
-        'value' => 'trim',
-        'type' => 'trim|sanitize_string|lower',
-        'options' => 'trim',
-        'rank' => 'sanitize_numbers|whole_number'
+        'key'         => 'trim|sanitize_string|lower|slug',
+        'value'       => 'trim',
+        'type'        => 'trim|sanitize_string|lower',
+        'options'     => 'trim',
+        'rank'        => 'sanitize_numbers|whole_number',
     ];
-
 
     /**
      * Validation rules for fields
@@ -53,11 +58,11 @@ class ConfigData extends Mapper
      * @link https://github.com/Wixel/GUMP
      */
     public $validationRules = [
-        'uuid' => 'exact_len,36|alpha_dash',
-        'key' => 'max_len,255',
-        'value' => 'max_len,32768',
-        'type' => 'max_len,32',
+        'uuid'    => 'exact_len,36|alpha_dash',
+        'key'     => 'max_len,255',
+        'value'   => 'max_len,32768',
+        'type'    => 'max_len,32',
         'options' => 'max_len,32768',
-        'rank' => 'integer|min_numeric,0'
+        'rank'    => 'integer|min_numeric,0',
     ];
 }

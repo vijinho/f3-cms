@@ -25,7 +25,7 @@ class ConfigData extends DB
     {
         parent::__construct($params, $logger, $db);
 
-        $this->dataMapper = new Mappers\ConfigData;
+        $this->mapper = new Mappers\ConfigData;
     }
 
     /**

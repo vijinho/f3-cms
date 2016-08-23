@@ -16,6 +16,11 @@ class Audit extends DB
 {
 
     /**
+     * @var \FFCMS\Mappers\Audit  mapper for audit
+     */
+    public $mapper;
+
+    /**
      * initialize with array of params, 'db' and 'logger' can be injected
      *
      * @param \Log $logger
@@ -25,7 +30,7 @@ class Audit extends DB
     {
         parent::__construct($params, $logger, $db);
 
-        $this->dataMapper = new Mappers\Audit;
+        $this->mapper = new Mappers\Audit;
     }
 
 

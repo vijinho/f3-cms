@@ -64,7 +64,7 @@ class App
 
             // replace cfg with values loaded in
             $f3->set('cfg', $cfg);
-            
+
             return $cfg;
         }
 
@@ -74,6 +74,7 @@ class App
         // is the url under /api ?
         $api = '/api' == substr($f3->get('PATH'), 0, 4);
         $f3->set('api', $api);
+        $language = $f3->get('LANG');
 
         // do not use sessions for api calls
         if (PHP_SAPI == 'cli' ||  $api) {
@@ -118,7 +119,8 @@ class App
             $f3->route('GET /docs/@page', function ($f3, array $params) {
                 $filename = '../docs/'.strtoupper($params['page']).'.md';
                 if (!file_exists($filename)) {
-                    die("Documentation Error!\n\nNo such document exists!\n");
+                    echo "Documentation Error!\n\nNo such document exists!\n";
+                    return;
                 } else {
                     echo $f3->read($filename);
                 }
@@ -145,9 +147,9 @@ class App
         $debug = $f3->get('DEBUG');
 
         if (!$api && $debug == 4) {
-            $w = new \Whoops\Run;
-            $w->pushHandler(new \Whoops\Handler\PrettyPageHandler);
-            $w->register();
+            $whoops = new \Whoops\Run;
+            $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+            $whoops->register();
         }
 
         // custom error handler if debugging
@@ -216,7 +218,7 @@ class App
                 }
             }
             // http://php.net/manual/en/function.ob-end-flush.php
-            @ob_end_flush();
+            while (@ob_end_flush());
         });
 
         // clean ALL incoming user input by default
@@ -313,10 +315,9 @@ class App
 
         // @see http://fatfreeframework.com/optimization
         $f3->route('GET /minify/@type',
-            function ($f3, $args) {
-                    $type = $args['type'];
+            function ($f3) {
                     $path = realpath(dirname(__FILE__) . '/../www/');
-                    $files = str_replace('../', '', $_GET['files']); // close potential hacking attempts
+                    $files = str_replace('../', '', $f3->get('GET.files')); // close potential hacking attempts
                     echo \Web::instance()->minify($files, null, true, $path);
             },
             $f3->get('minify.ttl')

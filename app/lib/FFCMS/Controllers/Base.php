@@ -23,10 +23,8 @@ abstract class Base
 
     /**
      * @param \Base $f3
-     * @param array $params
-     * @return void
      */
-    public function __construct(\Base $f3, array $params)
+    public function __construct(\Base $f3)
     {
         $f3 = \Base::instance();
 
@@ -48,7 +46,6 @@ abstract class Base
         // get logged in user info
         $usersModel = Models\Users::instance();
         $usersMapper = $usersModel->getMapper();
-        $usersDataMapper = $usersModel->getDataMapper();
 
         // get the logged in user
         $uuid = $f3->get('uuid');

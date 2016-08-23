@@ -18,14 +18,11 @@ class Audit extends APIMapper
      * Perform a create/update of the an item, used by POST, PUT, PATCH
      *
      * @param \Base $f3
-     * @param array $params
      * @param array $prohibitedFields
      * @return void
      */
-    private function save(\Base $f3, array $params, array $prohibitedFields = [])
+    private function save(\Base $f3, array $prohibitedFields = [])
     {
-        $isAdmin = $f3->get('isAdmin');
-
         // set audit user if not set
         $data = $f3->get('REQUEST');
         $user = $f3->get('user');
@@ -109,7 +106,7 @@ class Audit extends APIMapper
         $f3->set('REQUEST.uuid', $m->uuid);
 
         // these fields can't be modified
-        return $this->save($f3, $params, [
+        return $this->save($f3, [
             'id', 'uuid'
         ]);
     }
@@ -128,7 +125,7 @@ class Audit extends APIMapper
         $f3->set('REQUEST.uuid', $m->uuid);
 
         // these fields can't be modified
-        return $this->save($f3, $params, [
+        return $this->save($f3, [
             'id'
         ]);
     }
@@ -153,7 +150,7 @@ class Audit extends APIMapper
             'id', 'uuid'
         ];
 
-        return $this->save($f3, $params, $prohibitedFields);
+        return $this->save($f3, $prohibitedFields);
     }
 
 }

@@ -45,11 +45,10 @@ class Users extends APIMapper
      * Perform a create/update of the an item, used by POST, PUT, PATCH
      *
      * @param \Base $f3
-     * @param array $params
      * @param array $prohibitedFields
      * @return void
      */
-    private function save(\Base $f3, array $params, array $prohibitedFields = [])
+    private function save(\Base $f3, array $prohibitedFields = [])
     {
         // do not allow request to define these fields:
         $data = $f3->get('REQUEST');
@@ -87,7 +86,7 @@ class Users extends APIMapper
                 'users_uuid' => $m->uuid,
                 'actor' => $f3->get('uuid'),
                 'event' => 'User Updated via API',
-                'old' => $oldUserMapper->cast(),
+                'old' => $oldMapper->cast(),
                 'new' => $m->cast()
             ]);
 
@@ -102,10 +101,9 @@ class Users extends APIMapper
      * Update user details - normal user can
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function patch(\Base $f3, array $params)
+    public function patch(\Base $f3)
     {
         $isAdmin = $f3->get('is_admin');
         // should return a pre-existing object
@@ -127,7 +125,7 @@ class Users extends APIMapper
             $fields[] = 'groups';
         }
 
-        return $this->save($f3, $params, $fields);
+        return $this->save($f3, $fields);
     }
 
 
@@ -158,7 +156,7 @@ class Users extends APIMapper
             }
         }
 
-        return $this->save($f3, $params, $prohibitedFields);
+        return $this->save($f3, $prohibitedFields);
     }
 
 
@@ -166,10 +164,9 @@ class Users extends APIMapper
      * Create a new user - admin only
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function post(\Base $f3, array $params)
+    public function post(\Base $f3)
     {
         // must be an admin
         $isAdmin = $f3->get('is_admin');
@@ -187,7 +184,7 @@ class Users extends APIMapper
             'id'
         ];
 
-        return $this->save($f3, $params, $prohibitedFields);
+        return $this->save($f3, $prohibitedFields);
     }
 
 

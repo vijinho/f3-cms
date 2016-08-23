@@ -26,11 +26,8 @@ class OAuth2 extends Controllers\User\Base
      */
     public function Callback(\Base $f3, array $params)
     {
-        $request = $f3->get('REQUEST');
-
         $oAuth2Model = Models\OAuth2::instance();
         $appsMapper = $oAuth2Model->getAppsMapper();
-        $tokensMapper = $oAuth2Model->getTokensMapper();
 
         // verify client_id is acceptable
         $clientId = $f3->get('REQUEST.client_id');
@@ -116,9 +113,6 @@ class OAuth2 extends Controllers\User\Base
         $this->redirectLoggedOutUser('@login', [
             'redirect_uri' => $redirect_uri
         ]);
-
-        // get the user information
-        $uuid = $f3->get('uuid');
 
         $oAuth2Model = Models\OAuth2::instance();
         $appsMapper = $oAuth2Model->getAppsMapper();

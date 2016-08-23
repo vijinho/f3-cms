@@ -26,18 +26,15 @@ class Tokens extends Admin
      *
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function listing(\Base $f3, array $params)
+    public function listing(\Base $f3)
     {
-        $userData = $f3->get('user');
-
         $view = strtolower(trim(strip_tags($f3->get('REQUEST.view'))));
         $view = empty($view) ? 'list.phtml' : $view . '.phtml';
         $f3->set('REQUEST.view', $view);
 
-        $f3->set('results', $this->getListingResults($f3, $params, new Mappers\OAuth2Tokens));
+        $f3->set('results', $this->getListingResults($f3, new Mappers\OAuth2Tokens));
 
         $f3->set('breadcrumbs', [
             _('Admin') => 'admin',
@@ -54,18 +51,15 @@ class Tokens extends Admin
      *
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function search(\Base $f3, array $params)
+    public function search(\Base $f3)
     {
-        $userData = $f3->get('user');
-
         $view = strtolower(trim(strip_tags($f3->get('REQUEST.view'))));
         $view = empty($view) ? 'list.phtml' : $view . '.phtml';
         $f3->set('REQUEST.view', $view);
 
-        $f3->set('results', $this->getSearchResults($f3, $params, new Mappers\OAuth2Tokens));
+        $f3->set('results', $this->getSearchResults($f3, new Mappers\OAuth2Tokens));
 
         $f3->set('breadcrumbs', [
             _('Admin') => 'admin',
@@ -82,10 +76,9 @@ class Tokens extends Admin
      *
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function edit(\Base $f3, array $params)
+    public function edit(\Base $f3)
     {
         $this->redirectLoggedOutUser();
 
@@ -111,10 +104,9 @@ class Tokens extends Admin
      *
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function editPost(\Base $f3, array $params)
+    public function editPost(\Base $f3)
     {
         $this->csrf('@admin_tokens_list');
         $this->redirectLoggedOutUser();
@@ -172,10 +164,9 @@ class Tokens extends Admin
      *
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function delete(\Base $f3, array $params)
+    public function delete(\Base $f3)
     {
         $this->redirectLoggedOutUser();
 

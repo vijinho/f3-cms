@@ -26,13 +26,10 @@ class Config extends Admin
      *
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function listing(\Base $f3, array $params)
+    public function listing(\Base $f3)
     {
-        $userData = $f3->get('user');
-
         if (false == $f3->get('is_root')) {
             $this->notify(_('You do not have (root) permission!'), 'error');
             return $f3->reroute('@admin');
@@ -42,7 +39,7 @@ class Config extends Admin
         $view = empty($view) ? 'list.phtml' : $view . '.phtml';
         $f3->set('REQUEST.view', $view);
 
-        $f3->set('results', $this->getListingResults($f3, $params, new Mappers\ConfigData));
+        $f3->set('results', $this->getListingResults($f3, new Mappers\ConfigData));
 
         $f3->set('breadcrumbs', [
             _('Admin') => 'admin',
@@ -58,13 +55,10 @@ class Config extends Admin
      *
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function search(\Base $f3, array $params)
+    public function search(\Base $f3)
     {
-        $userData = $f3->get('user');
-
         if (false == $f3->get('is_root')) {
             $this->notify(_('You do not have (root) permission!'), 'error');
             return $f3->reroute('@admin');
@@ -74,7 +68,7 @@ class Config extends Admin
         $view = empty($view) ? 'list.phtml' : $view . '.phtml';
         $f3->set('REQUEST.view', $view);
 
-        $f3->set('results', $this->getSearchResults($f3, $params, new Mappers\ConfigData));
+        $f3->set('results', $this->getSearchResults($f3, new Mappers\ConfigData));
 
         $f3->set('breadcrumbs', [
             _('Admin') => 'admin',
@@ -91,10 +85,9 @@ class Config extends Admin
      *
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function delete(\Base $f3, array $params)
+    public function delete(\Base $f3)
     {
         $this->redirectLoggedOutUser();
 
@@ -128,10 +121,9 @@ class Config extends Admin
      *
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function edit(\Base $f3, array $params)
+    public function edit(\Base $f3)
     {
         $this->redirectLoggedOutUser();
 
@@ -165,10 +157,9 @@ class Config extends Admin
      *
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function editPost(\Base $f3, array $params)
+    public function editPost(\Base $f3)
     {
         $this->csrf('@admin_config_list');
         $this->redirectLoggedOutUser();
@@ -265,10 +256,10 @@ class Config extends Admin
                 break;
         }
 
+        if (!empty($fRules)) {
+            $this->filterRules(['value' => $fRules]);
+        }
         if (!empty($vRules)) {
-            if (!empty($fRules)) {
-                $this->filterRules(['value' => $fRules]);
-            }
             $this->validationRules(['value' => $vRules]);
             $errors = $this->validate(false, ['value' => $data['value']]);
             if (true !== $errors) {
@@ -315,10 +306,9 @@ class Config extends Admin
      *
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function add(\Base $f3, array $params)
+    public function add(\Base $f3)
     {
         $this->redirectLoggedOutUser();
 
@@ -349,10 +339,9 @@ class Config extends Admin
      *
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function addPost(\Base $f3, array $params)
+    public function addPost(\Base $f3)
     {
         $this->csrf('@admin_config_list');
         $this->redirectLoggedOutUser();

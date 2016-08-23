@@ -12,6 +12,10 @@ use FFCMS\{Traits, Controllers, Models, Mappers};
  */
 abstract class Base
 {
+    use Traits\Logger,
+        Traits\Audit,
+        Traits\Validation;
+
     /**
      * @var \Log log class
      */
@@ -33,10 +37,8 @@ abstract class Base
 
     /**
     * @param \Base $f3
-    * @param array $params
-    * @return void
     */
-    public function __construct(\Base $f3, array $params)
+    public function __construct(\Base $f3)
     {
         if (PHP_SAPI !== 'cli') {
             exit("This controller can only be executed in CLI mode.");
@@ -49,10 +51,9 @@ abstract class Base
 
     /**
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function beforeRoute(\Base $f3, array $params)
+    public function beforeRoute(\Base $f3)
     {
         $cli = $this->cli;
         $cli->blackBoldUnderline("CLI Script");
@@ -61,10 +62,9 @@ abstract class Base
 
     /**
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function afterRoute(\Base $f3, array $params)
+    public function afterRoute(\Base $f3)
     {
         $cli = $this->cli;
         $cli->shout('Finished.');

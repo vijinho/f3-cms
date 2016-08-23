@@ -16,6 +16,15 @@ use FFMVC\Helpers;
 trait ControllerSecurity
 {
     /**
+     * Create an internal URL
+     * Uses method from
+     * @see \FFCMS\Helpers\UrlHelper
+     * @param string $url
+     * @param array $params
+     */
+    abstract function url(string $url, array $params = []): string;
+
+    /**
      * Check for CSRF token, reroute if failed, otherwise generate new csrf token
      * Call this method from a controller method class to check and then set a new csrf token
      * then include $f3-get('csrf') as a hidden type in your form to be submitted

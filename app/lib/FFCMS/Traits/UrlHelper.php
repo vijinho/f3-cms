@@ -20,7 +20,7 @@ trait UrlHelper
     /**
      * Create an internal URL
      *
-     * @param type $url
+     * @param string $url
      * @param array $params
      */
     public function url(string $url, array $params = []): string

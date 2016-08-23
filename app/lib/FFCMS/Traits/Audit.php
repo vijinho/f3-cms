@@ -18,7 +18,6 @@ namespace FFCMS\Traits;
  */
 trait Audit
 {
-
     /**
      * @var \FFCMS\Mappers\Audit audit logging objects
      */
@@ -29,7 +28,7 @@ trait Audit
      *
      * @param array $data
      *
-     * @return boolean success
+     * @return bool success
      */
     public function audit($data)
     {

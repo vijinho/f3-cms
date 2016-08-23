@@ -7,15 +7,23 @@ namespace FFCMS\Traits;
  */
 trait ControllerMapper
 {
+    /**
+     * Create an internal URL
+     * Uses method from
+     * @see \FFCMS\Helpers\UrlHelper
+     * @param string $url
+     * @param array $params
+     */
+    abstract function url(string $url, array $params = []): string;
+
    /**
      * list objects (list is a reserved keyword) of mapper
      *
      * @param \Base $f3
-     * @param array $params
      * @param \FFCMS\Models\Mapper $m
      * @return array
      */
-    protected function &getListingResults(\Base $f3, array $params, \FFCMS\Mappers\Mapper $m): array
+    protected function &getListingResults(\Base $f3, \FFCMS\Mappers\Mapper $m): array
     {
         // set up paging limits
         $minPerPage = 5;
@@ -77,6 +85,7 @@ trait ControllerMapper
             $perPage = $rows;
         }
 
+        $pagination = [];
         $pagination['count'] = ceil($rows / $perPage);
 
         // too high page number?
@@ -143,11 +152,10 @@ trait ControllerMapper
      * search objects of given mapper
      *
      * @param \Base $f3
-     * @param array $params
      * @param \FFCMS\Models\Mapper $m
      * @return array $results
      */
-    protected function &getSearchResults(\Base $f3, array $params, \FFCMS\Mappers\Mapper $m): array
+    protected function &getSearchResults(\Base $f3, \FFCMS\Mappers\Mapper $m): array
     {
         // set up paging limits
         $minPerPage = 10;
@@ -254,6 +262,7 @@ trait ControllerMapper
             $perPage = $rows;
         }
 
+        $pagination = [];
         $pagination['count'] = (int) ceil($rows / $perPage);
 
         // too high page number?

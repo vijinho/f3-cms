@@ -18,10 +18,9 @@ class ForgotPassword extends User
      * forgot password page 1
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function forgotPasswordStep1(\Base $f3, array $params)
+    public function forgotPasswordStep1(\Base $f3)
     {
         $this->redirectLoggedInUser();
 
@@ -31,13 +30,12 @@ class ForgotPassword extends User
 
 
     /**
-     *  send email
+     * send email
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function forgotPasswordStep1Post(\Base $f3, array $params)
+    public function forgotPasswordStep1Post(\Base $f3)
     {
         $this->csrf();
         $this->redirectLoggedInUser();
@@ -128,15 +126,14 @@ class ForgotPassword extends User
      * link followed in forgot password email
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function forgotPasswordStep2(\Base $f3, array $params)
+    public function forgotPasswordStep2(\Base $f3)
     {
         $this->redirectLoggedInUser();
 
         if ($f3->get('REQUEST.code')) {
-            return $this->forgotPasswordStep2Post($f3, $params);
+            return $this->forgotPasswordStep2Post($f3);
         }
 
         $f3->set('form', $f3->get('REQUEST'));
@@ -149,10 +146,9 @@ class ForgotPassword extends User
      * posted data from forgot password reset code form
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function forgotPasswordStep2Post(\Base $f3, array $params)
+    public function forgotPasswordStep2Post(\Base $f3)
     {
         $this->csrf();
         $this->redirectLoggedInUser();
@@ -201,10 +197,9 @@ class ForgotPassword extends User
      * posted data from password reset form
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function forgotPasswordStep3(\Base $f3, array $params)
+    public function forgotPasswordStep3(\Base $f3)
     {
         $this->csrf();
         $this->redirectLoggedInUser();
@@ -276,7 +271,6 @@ class ForgotPassword extends User
 
         // remove password reset code now
         $usersDataMapper->erase();
-        $this->log($e);
 
         return $f3->reroute($this->url('@login', ['email' => $usersMapper->email]));
     }

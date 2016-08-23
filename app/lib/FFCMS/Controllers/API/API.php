@@ -160,12 +160,11 @@ class API
     protected $OAuthError = null;
 
     /**
-     * initialize with array of params, 'db' and 'logger' can be injected
+     * initialize
      *
-     * @param \Log $logger
-     * @param \DB\SQL $db
+     * @param \Base $f3
      */
-    public function __construct(\Base $f3, array $params)
+    public function __construct(\Base $f3)
     {
         $f3 = \Base::instance();
 
@@ -175,10 +174,10 @@ class API
         $this->oResponse = Helpers\Response::instance();
         $this->oAudit = Models\Audit::instance();
         $this->oUrlHelper = Helpers\Url::instance();
-        
+
         // finally execute init method if exists
         if (method_exists($this, 'init')) {
-            return $this->init($f3, $params);
+            $this->init($f3);
         }
     }
 
@@ -186,10 +185,9 @@ class API
      * compile and send the json response.
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function afterRoute(\Base $f3, array $params)
+    public function afterRoute(\Base $f3)
     {
         $this->params['headers'] = empty($this->params['headers']) ? [] : $this->params['headers'];
         $this->params['headers'] = [
@@ -362,11 +360,9 @@ class API
      *
      * Sets hive vars: user[] (mandatory), api_app[] (optional) and user_scopes[], user_groups[]
      *
-     * @param array $params optional params
-     *
      * @return boolean true/false on valid access credentials
      */
-    protected function validateAccess(array $params = [])
+    protected function validateAccess()
     {
         $this->dnsbl();
 
@@ -493,7 +489,7 @@ class API
         }
 
         $userAuthenticated = (is_array($user) || is_array($app));
-        if (!$userAuthenticated && empty($access_token)) {
+        if (!$userAuthenticated) {
             $this->failure('authentication_error', "Not possible to authenticate the request.", 400);
             $this->setOAuthError('invalid_credentials');
 
@@ -507,10 +503,9 @@ class API
      * catch-all
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function unknown(\Base $f3, array $params)
+    public function unknown(\Base $f3)
     {
         $this->setOAuthError('invalid_request');
         $this->failure('api_connection_error', 'Unknown API Request', 400);

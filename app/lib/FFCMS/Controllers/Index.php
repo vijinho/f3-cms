@@ -2,8 +2,6 @@
 
 namespace FFCMS\Controllers;
 
-use FFMVC\Helpers as Helpers;
-
 /**
  * Index Controller Class.
  *
@@ -17,10 +15,9 @@ class Index extends Base
      *
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function index(\Base $f3, array $params)
+    public function index(\Base $f3)
     {
         $f3->set('form', $f3->get('REQUEST'));
         echo \View::instance()->render('index/index.phtml');
