@@ -2,6 +2,10 @@
 
 Consider this a work-in-progress and an 'alpha' release.
 
+[![Travis CI Build](https://travis-ci.org/vijinho/f3-cms.svg?branch=dev-master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/vijinho/f3-cms/badges/quality-score.png?b=dev-master)](https://scrutinizer-ci.com/g/vijinho/f3-cms/?branch=dev-master)
+[![Code Coverage](https://scrutinizer-ci.com/g/vijinho/f3-cms/badges/coverage.png?b=dev-master)](https://scrutinizer-ci.com/g/vijinho/f3-cms/?branch=dev-master)
+
 ![f3-cms homepage screenshot](tmp/screenshot.png)
 
 Skeleton PHP 7 Fatfree-framework MVC CMS website codebase based on the simpler example project [f3-boilerplate](https://github.com/vijinho/f3-boilerplate).
