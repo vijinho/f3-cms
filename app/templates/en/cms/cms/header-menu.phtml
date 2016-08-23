@@ -1,0 +1,126 @@
+<?php
+$f3          = \Base::instance();
+$user        = $f3->get('user');
+$groups      = $f3->get('user_groups');
+$isAdmin     = $f3->get('is_admin');
+$breadcrumbs = $f3->get('breadcrumbs');
+?>
+
+<div class="navbar-fixed z-depth-2">
+    <nav>
+        <div class="nav-wrapper grey darken-3">
+            <a href="#" data-activates="side-menu" class="button-collapse"><i class="material-icons">menu</i></a>
+            <ul class="side-nav grey lighten-3" id="side-menu">
+                <ul class="">
+                    <li><a href="<?=$f3->alias('index') ?>">Home</a></li>
+                    <?php if (!empty($user)): ?>
+                        <li><a href="<?=$f3->alias('user') ?>">My Account</a></li>
+                        <li class="divider"></li>
+                        <?php if ($isAdmin): ?>
+                            <li><a href="<?=$f3->alias('admin') ?>">Admin</a></li>
+                        <?php endif ?>
+                    <?php endif ?>
+                    <li class="divider"></li>
+                    <?php if (empty($user)): ?>
+                        <li><a href="<?=$f3->alias('login') ?>" class="waves-effect waves-light btn blue darken-1">Login</a></li>
+                    <?php else: ?>
+                        <li><a href="<?=$f3->alias('logout') ?>">Logout</a></li>
+                    <?php endif ?>
+                </ul>
+            </ul>
+            <div class="row hide-on-small-and-down">
+                <div class="col m11">
+                    <ul class="right">
+                        <li><a href="<?=$f3->alias('index') ?>">Home</a></li>
+                        <?php if (!empty($user)): ?>
+                            <?php if ($isAdmin): ?>
+                                <li><a class="dropdown-button" href="#!" data-activates="admin-dropdown">Admin</a></li>
+                                <ul id="admin-dropdown" class="dropdown-content">
+                                    <li><a href="<?=$f3->alias('admin') ?>">Admin</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="<?=$f3->alias('admin_audit_list') ?>">Audit Trail</a></li>
+                                    <li><a href="<?=$f3->alias('admin_reports_list') ?>">Reports</a></li>
+                                    <li><a href="<?=$f3->alias('admin_config_list') ?>">Config</a></li>
+                                    <li><a href="<?=$f3->alias('admin_apps_list') ?>">Apps</a>
+                                    <li><a href="<?=$f3->alias('admin_tokens_list') ?>">Tokens</a>
+                                    <li><a href="<?=$f3->alias('admin_users_list') ?>">Users</a></li>
+                                </ul>
+                            <?php endif ?>
+                            <li><a class="dropdown-button" href="#!" data-activates="user-dropdown"><i class="material-icons right">perm_identity</i></a></li>
+                            <ul id="user-dropdown" class="dropdown-content">
+                                <li><a href="<?=$f3->alias('user') ?>">My Account</a></li>
+                                <li><a href="<?=$f3->alias('account') ?>">My Details</a></li>
+                                <li><a href="<?=$f3->alias('api_apps') ?>">My Apps</a></li>
+                                <li class="divider"></li>
+                                <li><a href="<?=$f3->alias('logout') ?>">Logout</a></li>
+                            </ul>
+                        <?php endif ?>
+                        <?php if (empty($user)): ?>
+                            <li>
+                                <button data-target="login-modal" class="waves-effect waves-light btn blue darken-1 modal-trigger">Login</button>
+                            </li>
+                        <?php endif ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+</div>
+
+<?php
+$login_url = \FFMVC\Helpers\Url::internal('@login', [
+    'redirect_uri' => $f3->get('REALM')
+]);
+?>
+<div id="login-modal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <div class="container">
+            <form method="post" action="<?=$login_url ?>">
+                <input type="hidden" name="csrf" value="<?=$f3->get('csrf') ?>">
+                <div class="row">
+                    <div class="col s12">
+                        <fieldset>
+
+                            <legend><i class="material-icons prefix large">account_circle</i></legend>
+
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix small">mail</i>
+                                <input required  class="validate" type="email" name="email" value="<?=$f3->get('form.email') ?>">
+                                <label for="email">Email</label>
+                            </div>
+
+                            <div class="input-field col s12">
+                                <i class="material-icons prefix small">vpn_key</i>
+                                <input required  class="validate" type="password" name="password">
+                                <label for="password">Password</label>
+                            </div>
+
+                            <div class="input-field col s12">
+                                <div class="row center-align">
+                                    <button class="waves-effect waves-light btn btn-large blue darken-1">Login</button>
+                                </div>
+                                <div class="right-align">
+                                    <a href="<?=$f3->alias('forgot_password_step1') ?>?email=<?=$f3->get('form.email') ?>">Forgot Password?</a>
+                                    <br><a href="<?=$f3->alias('register') ?>?email=<?=$f3->get('form.email') ?>">Register</a>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<?php if (!empty($breadcrumbs)): ?>
+    <nav class="blue darken-3 hide-on-small-and-down">
+        <div class="nav-wrapper">
+            <div class="col s12">
+                <?php foreach ($breadcrumbs as $text => $link): ?>
+                    <a href="<?=empty($link) ? '#' : (stripos($link, 'http') !== false ? $link : $f3->alias($link)) ?>" class="breadcrumb"><?=$text ?></a>
+                <?php endforeach ?>
+            </div>
+        </div>
+    </nav>
+    <?php
+ endif ?>

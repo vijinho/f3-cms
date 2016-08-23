@@ -1,0 +1,39 @@
+<?php
+$f3 = \Base::instance();
+$user = $f3->get('user');
+$title = 'CMS Admin';
+?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
+
+<div class="container">
+
+    <h1><?=$title ?></h1>
+
+    <ul>
+        <li><a href="<?=$f3->alias('phpinfo')?>">phpinfo</a></li>
+        <li><a href="<?=$f3->alias('admin_audit_list')?>">Audit Trail</a> - Audit history of changes to the database</li>
+        <li><a href="<?=$f3->alias('admin_config_list')?>">Config</a> - Website configuration data/options</li>
+        <li><a href="<?=$f3->alias('admin_reports_list')?>">Reports</a> - SQL reports, exportable as CSV</li>
+        <li><a href="<?=$f3->alias('admin_users_list')?>">Users</a> - Al website and cms users</li>
+        <li><a href="<?=$f3->alias('admin_usersdata_list')?>">Users Data</a> - Supplementary data of users</li>
+        <li><a href="<?=$f3->alias('admin_apps_list')?>">Apps</a> - Registered OAuth2 API apps of users</li>
+        <li><a href="<?=$f3->alias('admin_tokens_list')?>">Tokens</a> - Tokens granted to registered, approved apps</li>
+    </ul>
+
+    <h2>Documentation</h2>
+
+    <ul>
+        <?php $files = glob($f3->get('HOMEDIR') . '/docs/*.md'); ?>
+        <?php foreach ($files as $f): $f = basename($f, '.md'); ?>
+            <li><a href="/docs/<?=$f ?>" target="doc"><?=ucfirst(strtolower($f)) ?></a></li>
+        <?php endforeach ?>
+    </ul>
+
+
+</div>
+
+
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>

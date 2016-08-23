@@ -1,0 +1,54 @@
+<?php
+$f3 = \Base::instance();
+$title = 'Add Account Data';
+$f3->set('title', $title);
+?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
+
+<div class="container">
+
+    <h1><?=$title ?></h1>
+
+    <form method="post" action="<?=$f3->alias('admin_usersdata_add') ?>">
+        <input type="hidden" id="csrf" name="csrf" value="<?=$f3->get('csrf') ?>">
+        <input type="hidden" id="uuid" name="users_uuid" value="<?=$f3->get('form.users_uuid') ?>">
+
+        <fieldset>
+
+            <legend>Add</legend>
+
+            <div class="input-field col s12">
+                <input required  disabled class="validate" type="text" name="users_uuid" id="users_uuid" value="<?=$f3->get('form.users_uuid') ?>">
+                <label for="users_uuid">User UUID</label>
+            </div>
+
+            <div class="input-field col s12">
+                <input required class="validate" type="text" name="type" id="type" value="<?=$f3->get('form.type') ?>">
+                <label for="type">Type (text, textarea, url, email, html, markdown, ini, json, yaml, numeric, whole_number, integer, boolean, float, date)</label>
+            </div>
+
+            <div class="input-field col s12">
+                <input required  class="validate" type="text" name="key" id="key" value="<?=$f3->get('form.key') ?>">
+                <label for="key">Key (will be converted to a slug)</label>
+            </div>
+
+            <div class="input-field col s12">
+                <textarea required name="value" id="value" class="materialize-textarea"><?=$f3->get('form.value') ?></textarea>
+                <label for="value">Value</label>
+            </div>
+
+            <div class="center">
+                <button class="waves-effect waves-light btn btn-large green darken-1">Add Data</button>
+            </div>
+
+        </fieldset>
+
+    </form>
+
+</div>
+
+
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>

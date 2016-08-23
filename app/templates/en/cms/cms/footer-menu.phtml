@@ -1,0 +1,51 @@
+<?php
+$f3 = \Base::instance();
+$user = $f3->get('user');
+$groups = $f3->get('user_groups');
+?>
+<footer class="page-footer grey darken-1 z-depth-3">
+    <div class="container">
+        <div class="row">
+            <div class="col m4 hide-on-small-and-down">
+                <h5 class="grey-text text-lighten-2">Account</h5>
+                <ul>
+                <?php if (!empty($user)): ?>
+                    <li><a class="white-text"  href="<?=$f3->alias('user') ?>">My Account</a></li>
+                    <li><a class="white-text"  href="<?=$f3->alias('account') ?>">My Details</a></li>
+                    <li><a class="white-text"  href="<?=$f3->alias('logout') ?>">Logout</a></li>
+                <?php else: ?>
+                    <li><a class="white-text"  href="<?=$f3->alias('login') ?>">Login</a></li>
+                    <li><a class="white-text"  href="<?=$f3->alias('register') ?>">Register</a></li>
+                <?php endif ?>
+                </ul>
+            </div>
+            <div class="col s6 m4">
+                <h5 class="grey-text text-lighten-2">Organisation</h5>
+                <ul>
+                    <li><a class="white-text" href="#">Contact</a></li>
+                    <li><a class="white-text" href="#">About</a></li>
+                </ul>
+            </div>
+            <div class="col s6 m4">
+                <h5 class="grey-text text-lighten-2">Follow</h5>
+                <ul>
+                    <li><a class="white-text" href="<?=$f3->get('cfg.github-url') ?>"><i class="fa fa-github"></i>&nbsp;GitHub</a></li>
+                    <li><a class="white-text" href="<?=$f3->get('cfg.twitter-url') ?>"><i class="fa fa-twitter"></i>&nbsp;Twitter</a></li>
+                    <li><a class="white-text" href="<?=$f3->get('cfg.eyeem-url') ?>"><i class="fa fa-camera"></i>&nbsp;EyeEm</a></li>
+                    <li><a class="white-text" href="<?=$f3->get('cfg.instagram-url') ?>"><i class="fa fa-instagram"></i>&nbsp;Instagram</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer-copyright grey darken-2">
+        <div class="container">
+            <ul class="footer-copyright">
+                <li>&copy; <?=date('Y')?> <a href="<?=$f3->get('cfg.author-url') ?>" class="white-text text-lighten-3">Vijay Mahrra</a> All rights reserved.</li>
+                <li><a class="" href="#">Terms of Use</a></li>
+                <li><a class="" href="#">Privacy Policy</a></li>
+                <li><a class="" href="#">Legal Policies</a></li>
+            </ul>
+            <a class="grey-text text-lighten-4 right" href="#!">Sitemap</a>
+        </div>
+    </div>
+</footer>

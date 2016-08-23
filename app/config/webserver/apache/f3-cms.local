@@ -1,0 +1,343 @@
+<VirtualHost 127.0.0.1:80>
+    ServerName f3-cms.local
+
+    DocumentRoot /vhosts/f3-cms.local/www
+    ErrorLog "|/usr/sbin/rotatelogs /vhosts/f3-cms.local/tmp/logs/error.log 86400"
+    CustomLog "|/usr/sbin/rotatelogs /vhosts/f3-cms.local/tmp/logs/access.log 86400" common
+
+    DirectoryIndex index.php index.html index.htm
+
+    Options -MultiViews
+
+    # Serve resources with the proper media types (f.k.a. MIME types).
+    #
+    # https://www.iana.org/assignments/media-types/media-types.xhtml
+    # https://httpd.apache.org/docs/current/mod/mod_mime.html#addtype
+
+    <IfModule mod_mime.c>
+        AddType application/json                            json map
+        AddType application/xml                             atom rdf rss xml
+        AddType application/javascript                      js
+        AddType image/svg+xml                               svg svgz
+        AddType image/x-icon                                cur ico
+        AddType application/font-woff                       woff
+        AddType application/font-woff2                      woff2
+        AddType application/vnd.ms-fontobject               eot
+        AddType application/x-font-ttf                      ttc ttf
+        AddType font/opentype                               otf
+
+    </IfModule>
+
+    AddDefaultCharset utf-8
+    <IfModule mod_mime.c>
+        AddCharset utf-8 .atom \
+                         .css \
+                         .js \
+                         .json \
+                         .rdf \
+                         .rss \
+                         .xml \
+                         .txt
+    </IfModule>
+
+    <IfModule mod_rewrite.c>
+        RewriteEngine On
+        Options +FollowSymlinks
+    </IfModule>
+
+    <IfModule mod_rewrite.c>
+        RewriteEngine On
+        RewriteCond %{HTTPS} !=on
+        RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+        RewriteRule ^ http://%1%{REQUEST_URI} [R=301,L]
+    </IfModule>
+
+
+    # Protect website against clickjacking and other types of attacks by
+    # informing browsers not to display the web page content in any frame.
+    #
+    # https://cure53.de/xfo-clickjacking.pdf.
+    # https://tools.ietf.org/html/rfc7034
+    # http://blogs.msdn.com/b/ieinternals/archive/2010/03/30/combating-clickjacking-with-x-frame-options.aspx
+    # https://www.owasp.org/index.php/Clickjacking
+
+    <IfModule mod_headers.c>
+
+        Header set X-Frame-Options "DENY"
+
+        <FilesMatch "\.(appcache|atom|bbaw|bmp|crx|css|cur|eot|f4[abpv]|flv|geojson|gif|htc|ico|jpe?g|js|json(ld)?|m4[av]|manifest|map|mp4|oex|og[agv]|opus|otf|pdf|png|rdf|rss|safariextz|svgz?|swf|topojson|tt[cf]|txt|vcard|vcf|vtt|webapp|web[mp]|woff2?|xloc|xml|xpi)$">
+            Header unset X-Frame-Options
+        </FilesMatch>
+
+    </IfModule>
+
+    # Mitigate the risk of cross-site scripting and other content-injection
+    # attacks.
+    #
+    # http://www.html5rocks.com/en/tutorials/security/content-security-policy/
+    # http://www.w3.org/TR/CSP11/
+
+    <IfModule mod_headers.c>
+
+        # All HTML pages
+        Header set Content-Security-Policy "\
+    default-src 'self';\
+    font-src fonts.gstatic.com;\
+    script-src 'self';\
+    connect-src 'self';\
+    img-src 'self';\
+    img-src data: i.ytimg.com www.google-analytics.com;\
+    script-src 'unsafe-inline' www.google-analytics.com ajax.googleapis.com;\
+    style-src 'self' fonts.googleapis.com"
+
+        # The 404 page
+        <FilesMatch "404.html">
+            # Replace previous set header
+            Header set Content-Security-Policy "\
+    default-src 'self';\
+    style-src 'unsafe-inline'"
+        </FilesMatch>
+
+        <FilesMatch "\.(appcache|atom|crx|css|cur|eot|f4[abpv]|flv|gif|htc|ico|jpe?g|js|json(ld)?|m4[av]|manifest|map|mp4|oex|og[agv]|opus|otf|pdf|png|rdf|rss|safariextz|svgz?|swf|tt[cf]|vcf|vtt|webapp|web[mp]|woff|xml|xpi)$">
+            Header unset Content-Security-Policy
+        </FilesMatch>
+
+    </IfModule>
+
+    # Block access to directories without a default document.
+    <IfModule mod_autoindex.c>
+        Options -Indexes
+    </IfModule>
+
+    # Block access to files that can expose sensitive information.
+    <FilesMatch "(^#.*#|\.(bak|conf|dist|fla|in[ci]|log|psd|sh|sql|sw[op])|~)$">
+        <IfModule !mod_authz_core.c>
+            Order allow,deny
+            Deny from all
+            Satisfy All
+        </IfModule>
+    </FilesMatch>
+
+    # Force client-side SSL redirection.
+    #
+    # http://www.html5rocks.com/en/tutorials/security/transport-layer-security/
+    # https://tools.ietf.org/html/draft-ietf-websec-strict-transport-sec-14#section-6.1
+    # http://blogs.msdn.com/b/ieinternals/archive/2014/08/18/hsts-strict-transport-security-attacks-mitigations-deployment-https.aspx
+
+    <IfModule mod_headers.c>
+        Header always set Strict-Transport-Security "max-age=16070400"
+    </IfModule>
+
+    # Prevent some browsers from MIME-sniffing the response.
+    #
+    # http://www.slideshare.net/hasegawayosuke/owasp-hasegawa
+    # http://blogs.msdn.com/b/ie/archive/2008/07/02/ie8-security-part-v-comprehensive-protection.aspx
+    # https://msdn.microsoft.com/en-us/library/ie/gg622941.aspx
+    # https://mimesniff.spec.whatwg.org/
+
+    <IfModule mod_headers.c>
+        Header set X-Content-Type-Options "nosniff"
+    </IfModule>
+
+    # ----------------------------------------------------------------------
+    # | Reflected Cross-Site Scripting (XSS) attacks                       |
+    # ----------------------------------------------------------------------
+
+    # (1) Try to re-enable the cross-site scripting (XSS) filter built
+    #     into most web browsers.
+    #
+    #     The filter is usually enabled by default, but in some cases it
+    #     may be disabled by the user. However, in Internet Explorer for
+    #     example, it can be re-enabled just by sending the
+    #     `X-XSS-Protection` header with the value of `1`.
+    #
+    # (2) Prevent web browsers from rendering the web page if a potential
+    #     reflected (a.k.a non-persistent) XSS attack is detected by the
+    #     filter.
+    #
+    #     By default, if the filter is enabled and browsers detect a
+    #     reflected XSS attack, they will attempt to block the attack
+    #     by making the smallest possible modifications to the returned
+    #     web page.
+    #
+    #     Unfortunately, in some browsers (e.g.: Internet Explorer),
+    #     this default behavior may allow the XSS filter to be exploited,
+    #     thereby, it's better to inform browsers to prevent the rendering
+    #     of the page altogether, instead of attempting to modify it.
+    #
+    #     https://hackademix.net/2009/11/21/ies-xss-filter-creates-xss-vulnerabilities
+    #
+    # (!) Do not rely on the XSS filter to prevent XSS attacks! Ensure that
+    #     you are taking all possible measures to prevent XSS attacks, the
+    #     most obvious being: validating and sanitizing your website's inputs.
+    #
+    # http://blogs.msdn.com/b/ie/archive/2008/07/02/ie8-security-part-iv-the-xss-filter.aspx
+    # http://blogs.msdn.com/b/ieinternals/archive/2011/01/31/controlling-the-internet-explorer-xss-filter-with-the-x-xss-protection-http-header.aspx
+    # https://www.owasp.org/index.php/Cross-site_Scripting_%28XSS%29
+
+    <IfModule mod_headers.c>
+
+        #                           (1)    (2)
+        Header set X-XSS-Protection "1; mode=block"
+
+        <FilesMatch "\.(appcache|atom|bbaw|bmp|crx|css|cur|eot|f4[abpv]|flv|geojson|gif|htc|ico|jpe?g|js|json(ld)?|m4[av]|manifest|map|mp4|oex|og[agv]|opus|otf|pdf|png|rdf|rss|safariextz|svgz?|swf|topojson|tt[cf]|txt|vcard|vcf|vtt|webapp|web[mp]|woff2?|xloc|xml|xpi)$">
+            Header unset X-XSS-Protection
+        </FilesMatch>
+
+    </IfModule>
+
+
+    <IfModule mod_deflate.c>
+
+        # Force compression for mangled `Accept-Encoding` request headers
+        # https://developer.yahoo.com/blogs/ydn/pushing-beyond-gzipping-25601.html
+
+        <IfModule mod_setenvif.c>
+            <IfModule mod_headers.c>
+                SetEnvIfNoCase ^(Accept-EncodXng|X-cept-Encoding|X{15}|~{15}|-{15})$ ^((gzip|deflate)\s*,?\s*)+|[X~-]{4,13}$ HAVE_Accept-Encoding
+                RequestHeader append Accept-Encoding "gzip,deflate" env=HAVE_Accept-Encoding
+            </IfModule>
+        </IfModule>
+
+        # https://httpd.apache.org/docs/current/mod/mod_mime.html#addencoding
+
+        <IfModule mod_mime.c>
+            AddEncoding gzip              gz
+            AddEncoding gzip              svgz
+        </IfModule>
+
+        # Make Apache serve the Zopfli compressed version of the requested
+        # file if it exists on the server and the browser supports `gzip`
+        # compression
+        <IfModule mod_rewrite.c>
+            RewriteEngine On
+            ReWriteCond %{HTTP:accept-encoding} gzip
+            ReWriteCond %{REQUEST_FILENAME} !\.gz$
+            RewriteCond %{REQUEST_FILENAME}.gz -f
+            RewriteRule ^(.+)\.(css|html|ico|js|svg|txt|xml)$ $1.$2.gz [L]
+        </IfModule>
+
+        <FilesMatch "\.css\.gz$">
+            ForceType text/css
+        </FilesMatch>
+
+        <FilesMatch "\.html\.gz$">
+            ForceType text/html
+        </FilesMatch>
+
+        <FilesMatch "\.ico\.gz$">
+            ForceType image/x-icon
+        </FilesMatch>
+
+        <FilesMatch "\.js\.gz$">
+            ForceType application/javascript
+        </FilesMatch>
+
+        <FilesMatch "\.svg\.gz$">
+            ForceType image/svg+xml
+        </FilesMatch>
+
+        <FilesMatch "\.txt\.gz$">
+            ForceType text/plain
+        </FilesMatch>
+
+        <FilesMatch "\.xml\.gz$">
+            ForceType application/xml
+        </FilesMatch>
+
+        <IfModule mod_headers.c>
+            <FilesMatch "\.(css|html|ico|js|svg|txt|xml)\.gz$">
+                Header merge Vary "Accept-Encoding"
+            </FilesMatch>
+        </IfModule>
+
+        # Compress all output labeled with one of the following media types.
+        # https://httpd.apache.org/docs/current/mod/mod_filter.html#addoutputfilterbytype
+        AddOutputFilterByType DEFLATE "application/javascript" \
+                                      "application/json" \
+                                      "application/manifest+json" \
+                                      "application/vnd.ms-fontobject" \
+                                      "application/x-font-ttf" \
+                                      "application/xml" \
+                                      "font/opentype" \
+                                      "image/svg+xml" \
+                                      "image/vnd.microsoft.icon" \
+                                      "text/css" \
+                                      "text/html" \
+                                      "text/plain"
+
+    </IfModule>
+
+    # Remove `ETags` as resources are sent with far-future expires headers.
+    #
+    # https://developer.yahoo.com/performance/rules.html#etags
+    # https://tools.ietf.org/html/rfc7232#section-2.3
+
+    # `FileETag None` doesn't work in all cases.
+    <IfModule mod_headers.c>
+        Header unset ETag
+    </IfModule>
+
+    FileETag None
+
+    # Serve resources with far-future expires headers.
+    # https://httpd.apache.org/docs/current/mod/mod_expires.html
+
+    <IfModule mod_expires.c>
+
+        ExpiresActive on
+        ExpiresDefault                                      "access plus 1 month"
+        ExpiresByType text/css                              "access plus 1 year"
+        ExpiresByType application/json                      "access plus 0 seconds"
+        ExpiresByType application/xml                       "access plus 0 seconds"
+        ExpiresByType text/xml                              "access plus 0 seconds"
+        ExpiresByType image/x-icon                          "access plus 1 week"
+        ExpiresByType text/html                             "access plus 1 hour"
+        ExpiresByType application/javascript                "access plus 1 year"
+
+    </IfModule>
+
+    <IfModule mod_php7.c>
+        php_value log_errors Off
+        php_value display_errors Off
+        php_value html_errors Off
+        php_value display_startup_errors Off
+        php_value ignore_repeated_errors On
+        php_value ignore_repeated_source On
+
+        php_value upload_max_filesize 1024M
+        php_value memory_limit 256M
+        php_value post_max_size 1024M
+
+
+        php_value default_socket_timeout 90
+        php_value max_execution_time 600
+        php_value max_input_time 600
+
+        php_value register_argc_argv Off
+
+        php_value session.use_cookies 1
+        php_value session.use_only_cookies 0
+        php_value session.use_trans_sid 0
+        php_value session.cookie_lifetime 86400
+        php_value session.auto_start 0
+
+        php_value short_open_tag On
+        php_value default_charset utf-8
+        php_value allow_url_fopen On
+        php_value expose_php Off
+        php_value zlib.output_compression Off
+        php_value zend.ze1_compatibility_mode Off
+        php_value register_argc_argv Off
+        php_value register_globals Off
+    </IfModule>
+
+    RewriteRule ^(tmp)\/|\.ini$ - [R=404]
+    #do not automatically minify
+    #RewriteRule ^(.*\.(css|js))$ min/index.php?f=$1&debug=0 [L,NC]
+    RewriteCond %{REQUEST_FILENAME} !-l
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule .* index.php [L,QSA,E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+</VirtualHost>

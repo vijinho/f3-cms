@@ -1,9 +1,16 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+jQuery(function ($) {
+    $(".dropdown-button").dropdown();
+    $(".button-collapse").sideNav();
+    // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+    $('.modal-trigger').leanModal();
+    $('select').material_select();
+});
 
-(function() {
-    console.log('f3-boilerplate');
-}());
+function confirmUrl(url, message) {
+    if (undefined === message) {
+        message = 'Are you sure?';
+    }
+    if (confirm(message)) {
+        document.location = url;
+    }
+}

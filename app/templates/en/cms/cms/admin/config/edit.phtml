@@ -1,0 +1,79 @@
+<?php
+$f3 = \Base::instance();
+$title = 'Edit Config Data';
+$f3->set('title', $title);
+?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
+
+<div class="container">
+
+    <h1><?=$title ?></h1>
+
+    <form method="post" action="<?=$f3->alias('admin_config_edit') ?>">
+        <input type="hidden" id="csrf" name="csrf" value="<?=$f3->get('csrf') ?>">
+        <input type="hidden" id="uuid" name="uuid" value="<?=$f3->get('form.uuid') ?>">
+
+        <fieldset>
+
+            <legend>Edit</legend>
+
+            <div class="input-field col s12">
+                <input required disabled class="validate" type="text" name="uuid" id="uuid" value="<?=$f3->get('form.uuid') ?>">
+                <label for="uuid">UUID</label>
+            </div>
+
+            <div class="input-field col s12">
+                <textarea required name="description" id="description" class="materialize-textarea"><?=$f3->get('form.description') ?></textarea>
+                <label for="description">Description</label>
+            </div>
+
+            <div class="input-field col s12">
+                <input required disabled class="validate" type="text" name="key" id="key" value="<?=$f3->get('form.key') ?>">
+                <label for="key">Key</label>
+            </div>
+
+            <div class="input-field col s12">
+                <input required disabled class="validate" type="text" name="type" id="type" value="<?=$f3->get('form.type') ?>">
+                <label for="type">Type</label>
+            </div>
+
+            <div class="input-field col s12">
+                <?php switch ($f3->get('form.type')):
+                    case 'url': ?>
+                        <input required class="validate" type="url" name="value" id="value" value="<?=$f3->get('form.value') ?>">
+                        <label for="value">Value (url)</label>
+
+                    <?php break; case 'email': ?>
+                        <input required class="validate" type="email" name="value" id="value" value="<?=$f3->get('form.value') ?>">
+                        <label for="value">Value (email)</label>
+
+                    <?php break; case 'text': ?>
+                        <input required class="validate" type="text" name="value" id="value" value="<?=$f3->get('form.value') ?>">
+                        <label for="value">Value (text)</label>
+
+                    <?php break; default: case 'textarea': ?>
+                        <textarea required name="value" id="value" class="materialize-textarea"><?=$f3->get('form.value') ?></textarea>
+                        <label for="value">Value (text area)</label>
+                <?php endswitch ?>
+            </div>
+
+            <div class="input-field col s12">
+                <textarea name="options" id="options" class="materialize-textarea"><?=$f3->get('form.options') ?></textarea>
+                <label for="options">Options</label>
+            </div>
+
+            <div class="center">
+                <button class="waves-effect waves-light btn btn-large green darken-1">Update Data</button>
+            </div>
+
+        </fieldset>
+
+    </form>
+
+</div>
+
+
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>

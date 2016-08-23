@@ -1,0 +1,25 @@
+<?php $f3 = \Base::instance() ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title><?=empty($title) ? 'f3-cms admin' : $title ?></title>
+    <meta name="description" content="<?=empty($description) ? '' : $description ?>">
+    <meta name="keywords" content="<?=empty($keywords) ? '' : $keywords ?>">
+    <?php /* <link rel="alternate" type="application/rss+xml" href="/rss.xml" title="RSS"> */ ?>
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0">
+    <meta name="HandheldFriendly" content="True"/>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<?php if ($f3->get('app.env') == 'production'): ?>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+    <?php else: ?>
+        <link type="text/css" rel="stylesheet" href="/css/materialize.min.css"  media="screen,projection"/>
+<?php endif ?>
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="icon" type="image/png" href="/img/favicon.png">
+</head>
+<body>

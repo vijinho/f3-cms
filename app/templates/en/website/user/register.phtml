@@ -1,0 +1,71 @@
+<?php
+$f3 = \Base::instance();
+$title = 'Register';
+$f3->set('title', $title);
+?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
+
+<div class="container">
+
+    <h1><?=$title ?></h1>
+
+    <form method="post" action="<?=$f3->alias('register') ?>">
+        <input type="hidden" id="csrf" name="csrf" value="<?=$f3->get('csrf') ?>">
+
+        <fieldset>
+
+            <legend><i class="material-icons prefix large">lock</i></legend>
+
+            <div class="input-field col s12">
+                <i class="material-icons prefix">mail</i>
+                <input required  class="validate" type="email" name="email" id="email" value="<?=$f3->get('form.email') ?>">
+                <label for="email">Email</label>
+            </div>
+            <div class="input-field col s12">
+                <i class="material-icons prefix">vpn_key</i>
+                <input required  class="validate" type="password" name="password" id="password" autocomplete="off" value="<?=$f3->get('form.password') ?>">
+                <label for="password">Password</label>
+            </div>
+            <div class="input-field col s12">
+                <i class="material-icons prefix">vpn_key</i>
+                <input required  class="validate" type="password" name="confirm_password" id="confirm_password" autocomplete="off" value="<?=$f3->get('form.confirm_password') ?>">
+                <label for="confirm_password">Confirm Password</label>
+            </div>
+
+        </fieldset>
+
+        <fieldset>
+
+            <legend><i class="material-icons prefix large">account_circle</i></legend>
+
+            <div class="input-field col s12">
+                <label for="firstname">First Name</label>
+                <input required  class="validate" type="text" name="firstname" id="firstname" value="<?=$f3->get('form.firstname') ?>">
+            </div>
+            <div class="input-field col s12">
+                <input required  class="validate" type="text" name="lastname" id="lastname"  value="<?=$f3->get('form.lastname') ?>">
+                <label for="lastname">Last Name(s)</label>
+            </div>
+            <div class="input-field col s12">
+                <input required  class="validate" type="text" name="password_question" id="password_question" value="<?=$f3->get('form.password_question') ?>">
+                <label for="password_question">Password Hint Question</label>
+            </div>
+            <div class="input-field col s12">
+                <input required  class="validate" type="text" name="password_answer" id="password_answer"  value="<?=$f3->get('form.password_answer') ?>">
+                <label for="password_answer">Password Hint Answer</label>
+            </div>
+
+        </fieldset>
+
+        <div class="center">
+            <button type="submit" class="waves-effect waves-light btn btn-large green" id="register" name="register">Complete Registration</button>
+        </div>
+    </form>
+
+</div>
+
+
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>

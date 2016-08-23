@@ -1,0 +1,50 @@
+<?php
+$f3    = \Base::instance();
+$title = 'Edit App Token';
+$f3->set('title', $title);
+?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
+
+<div class="container">
+
+    <h1><?=$title ?></h1>
+
+    <div class="row">
+
+        <div class="col s12">
+
+            <form method="post" action="<?=$f3->alias('admin_tokens_edit') ?>">
+                <input type="hidden" id="csrf" name="csrf" value="<?=$f3->get('form.csrf') ?>">
+                <input type="hidden" id="client_id" name="uuid" value="<?=$f3->get('form.uuid') ?>">
+
+                <fieldset>
+
+                    <legend>Token</legend>
+
+                    <div class="input-field col s12">
+                        <input required  class="validate" type="text" name="expires" id="expires" value="<?=$f3->get('form.expires') ?>">
+                        <label for="expires">Expires</label>
+                    </div>
+
+                    <div class="input-field col s12">
+                        <input required  class="validate" type="text" name="scope" id="scope" value="<?=$f3->get('form.scope') ?>">
+                        <label for="scope">Scope</label>
+                    </div>
+
+                </fieldset>
+
+                <div class="center">
+                    <button class="waves-effect waves-light btn btn-large blue darken-1">Update App Token</button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+
+</div>
+
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>

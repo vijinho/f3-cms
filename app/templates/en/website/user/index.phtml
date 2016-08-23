@@ -1,0 +1,22 @@
+<?php
+$f3 = \Base::instance();
+$user = $f3->get('user');
+$title = 'Hello ' . $user['firstname'] . '!';
+?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
+
+<div class="container">
+
+    <h1><?=$title ?></h1>
+
+    <ul>
+        <li><a href="<?=$f3->alias('account')?>">My Account</a></li>
+        <li><a href="<?=$f3->alias('api_apps')?>">My Apps</a></li>
+    </ul>
+
+</div>
+
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>

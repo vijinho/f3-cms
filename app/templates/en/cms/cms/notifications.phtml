@@ -1,0 +1,30 @@
+<?php
+$f3 = \Base::instance();
+// display all messages
+$notifications = $notifications = \FFMVC\Helpers\Notifications::get();
+if (is_array($notifications)):
+    $colours = [
+        'success' => 'green lighten-5',
+        'error'   => 'white',
+        'warning' => 'white',
+        'info'    => 'white',
+        'debug'   => 'white'
+    ];
+    $icons = [
+        'success' => 'done',
+        'error'   => 'error',
+        'warning' => 'report_problem',
+        'info'    => 'info_outline',
+        'debug'   => 'new_releases'
+    ];
+    echo '<div class="collection">';
+    foreach ($notifications as $type => $msgs):
+        $icon = $icons[$type];
+        $colour = $colours[$type];
+        foreach ($msgs as $notification):
+            echo '<div class="collection-item dismissable valign-wrapper ' . $colour . '"><i class="material-icons prefix small valign">' . $icon . '</i>&nbsp;' . $notification . '</div>';
+        endforeach;
+    endforeach;
+    echo '</div>';
+endif;
+?>

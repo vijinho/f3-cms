@@ -1,0 +1,66 @@
+<?php
+$f3    = \Base::instance();
+$title = 'Login';
+$f3->set('title', $title);
+
+$url = \FFMVC\Helpers\Url::internal('@login',
+    [
+    'redirect_uri' => $f3->get('form.redirect_uri')
+    ]);
+?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
+
+<div class="container">
+
+    <h1><?=$title ?></h1>
+
+    <form method="post" action="<?=$url ?>">
+
+        <input type="hidden" id="csrf" name="csrf" value="<?=$f3->get('csrf') ?>">
+        <input type="hidden" id="redirect_uri" name="redirect_uri" value="<?=$f3->encode($f3->get('redirect_uri')) ?>">
+
+        <div class="row">
+
+            <div class="col s12">
+
+                <fieldset>
+
+                    <legend><i class="material-icons prefix large">account_circle</i></legend>
+
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix small">mail</i>
+                        <input required  class="validate" type="email" name="email" id="email"  value="<?=$f3->get('form.email') ?>">
+                        <label for="email">Email</label>
+                    </div>
+
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix small">vpn_key</i>
+                        <input required  class="validate" type="password" name="password" id="password" >
+                        <label for="password">Password</label>
+                    </div>
+
+                    <div class="input-field col s12">
+                        <div class="row center-align">
+                            <button type="submit" class="waves-effect waves-light btn btn-large blue darken-1" id="login">Login</button>
+                        </div>
+                        <div class="right-align">
+                            <a href="<?=$f3->alias('forgot_password_step1') ?>?email=<?=$f3->get('form.email') ?>">Forgot Password?</a>
+                            <br><a href="<?=$f3->alias('register') ?>?email=<?=$f3->get('form.email') ?>">Register</a>
+                        </div>
+                    </div>
+
+
+                </fieldset>
+
+            </div>
+        </div>
+
+    </form>
+
+</div>
+
+
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>

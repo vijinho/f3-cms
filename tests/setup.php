@@ -1,5 +1,5 @@
 <?php
-namespace App;
+namespace FFCMS;
 
 /**
  * Load, configure, test environment, return database handle to it
@@ -19,7 +19,6 @@ function &setup()
 
     // bootstrap initial environment
     $f3 = \Base::instance();
-
     \FFMVC\App::start();
 
     // override db params for test
@@ -28,8 +27,8 @@ function &setup()
     $httpDSN = $f3->get('db.dsn_test');
     if (!empty($httpDSN)) {
         $dbParams = $f3->get('db');
-        $params = \FFMVC\Helpers\DB::instance()->parseHttpDsn($httpDSN);
-        $params['dsn'] = \FFMVC\Helpers\DB::instance()->createDbDsn($params);
+        $params = \FFMVC\Helpers\DB::parseHttpDsn($httpDSN);
+        $params['dsn'] = \FFMVC\Helpers\DB::createDbDsn($params);
         $dbParams = array_merge($dbParams, $params);
         $f3->set('db', $dbParams);
     }
@@ -80,7 +79,7 @@ function &setup()
             $queries[] = 'SET FOREIGN_KEY_CHECKS = 1';
             $db->exec($queries);
         }
-        \App\Setup::database($dice);
+        \FFCMS\Setup::database($dice);
         \Registry::set('db', $db);
     } catch (\PDOException $e) {
         throw($e);

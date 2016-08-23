@@ -1,0 +1,26 @@
+<?php
+$f3 = \Base::instance();
+$title = 'App Request';
+$f3->set('title', $title);
+$user = $f3->get('user');
+$returnUrl = $f3->get('returnUrl');
+?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
+
+<div class="container">
+
+    <h1><?=$title ?></h1>
+
+    <?php if (!empty($returnUrl)): ?>
+        <p>You have allowed access to the app.</p>
+        <a href="<?=$returnUrl ?>">Return to the app.</a>
+    <?php else: ?>
+        <p>Unable to proceed.</p>
+    <?php endif ?>
+
+</div>
+
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>

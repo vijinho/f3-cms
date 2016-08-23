@@ -1,5 +1,5 @@
 If you want to give me some feedback or make a suggestion, create an [issue on
-GitHub](https://github.com/vijinho/f3-boilerplate/issues/new).
+GitHub](https://github.com/vijinho/f3-cms/issues/new).
 
 If you want to get your hands dirty, great! Here's a couple of
 steps/guidelines:

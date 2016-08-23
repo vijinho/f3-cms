@@ -1,0 +1,50 @@
+<?php
+$f3 = \Base::instance();
+$title = 'App Request';
+$f3->set('title', $title);
+$user = $f3->get('user');
+?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
+
+<div class="container">
+
+    <h1><?=$title ?></h1>
+    <img src="/img/oauth.png">
+
+    <?php if ($f3->get('errors')): ?>
+
+    <p>There was a problem with the app that sent you here.</p>
+
+    <?php else: ?>
+
+    <p>
+        <?=$user['firstname']?> <?=$user['lastname']?>,
+        a third party app would like to:
+    </p>
+    <ul>
+        <?php foreach ($f3->get('permissions') as $permission): ?>
+        <li><?=$permission ?></li>
+        <?php endforeach ?>
+    </ul>
+    <p>
+    By clicking "Allow", you allow this app to use your information in accordance with their respective terms of service and privacy policies. You can change this and other Account Permissions at any time.
+    </p>
+    <form action="<?=$f3->get('confirmUrl') ?>" method="POST">
+        <input type="hidden" id="csrf" name="csrf" value="<?=$f3->get('csrf') ?>">
+        <input type="hidden" id="response_type" name="response_type" value="<?=$f3->get('form.response_type') ?>">
+
+        <div class="center">
+            <button class="waves-effect waves-light btn btn-large green darken-1">Allow</button>
+            <a href="<?=$f3->get('denyUrl') ?>" class="btn btn-large red">Deny</a>
+        </div>
+
+    </form>
+
+    <?php endif ?>
+
+</div>
+
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>

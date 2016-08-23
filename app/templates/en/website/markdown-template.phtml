@@ -2,9 +2,9 @@
 $title = 'Documentation';
 $f3->set('title', $title);
 ?>
-<?=\View::instance()->render('/header.phtml'); ?>
-<?=\View::instance()->render('/header-menu.phtml'); ?>
-<?=\View::instance()->render('/notifications.phtml'); ?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
 
 <div class="container">
 
@@ -14,5 +14,5 @@ $f3->set('title', $title);
 
 </div>
 
-<?=\View::instance()->render('/footer-menu.phtml'); ?>
-<?=\View::instance()->render('/footer.phtml'); ?>
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>

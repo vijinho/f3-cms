@@ -1,0 +1,64 @@
+<?php
+$f3 = \Base::instance();
+$title = 'Add Report';
+$f3->set('title', $title);
+?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
+
+<div class="container">
+
+    <h1><?=$title ?></h1>
+
+    <form method="post" action="<?=$f3->alias('admin_reports_add') ?>">
+        <input type="hidden" id="csrf" name="csrf" value="<?=$f3->get('csrf') ?>">
+        <input type="hidden" id="uuid" name="uuid" value="<?=$f3->get('form.uuid') ?>">
+
+        <fieldset>
+
+            <legend>New</legend>
+
+            <div class="input-field col s12">
+                <input required class="validate" type="text" name="name" id="name" value="<?=$f3->get('form.name') ?>">
+                <label for="name">Name</label>
+            </div>
+
+            <div class="input-field col s12">
+                <input required class="validate" type="text" name="key" id="key" value="<?=$f3->get('form.key') ?>">
+                <label for="key">Key</label>
+            </div>
+
+            <div class="input-field col s12">
+                <textarea required name="description" id="description" class="materialize-textarea"><?=$f3->get('form.description') ?></textarea>
+                <label for="description">Description</label>
+            </div>
+
+            <div class="input-field col s12">
+                <textarea required name="query" id="query" class="materialize-textarea"><?=$f3->get('form.query') ?></textarea>
+                <label for="query">Query</label>
+            </div>
+
+            <div class="input-field col s12">
+                <textarea name="options" id="options" class="materialize-textarea"><?=$f3->get('form.options') ?></textarea>
+                <label for="options">Options</label>
+            </div>
+
+            <div class="input-field col s12">
+                <input required  class="validate" type="text" name="groups" id="groups" value="<?=$f3->get('form.groups') ?>">
+                <label for="groups">Groups</label>
+            </div>
+
+            <div class="center">
+                <button class="waves-effect waves-light btn btn-large green darken-1">Add Report</button>
+            </div>
+
+        </fieldset>
+
+    </form>
+
+</div>
+
+
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>

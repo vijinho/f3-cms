@@ -1,0 +1,30 @@
+<?php
+$f3 = \Base::instance();
+$title = 'App Request Callback';
+$f3->set('title', $title);
+$user = $f3->get('user');
+?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
+
+<div class="container">
+
+    <h1><?=$title ?></h1>
+
+    <?php if ($f3->get('retrieveTokenURL')): ?>
+    <p>
+        Retrieve token URL: <a href="<?=$f3->get('retrieveTokenURL') ?>"><?=$f3->get('retrieveTokenURL') ?></a>
+        Normally you will want to do this using basic authentication rather than passing in the query string!
+    </p>
+    <?php endif ?>
+
+    <h1 class="h2">Request</h2>
+    <pre>
+    <?php print_r($f3->get('form')) ?>
+    </pre>
+
+</div>
+
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>

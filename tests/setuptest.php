@@ -2,7 +2,7 @@
 <?php
 declare (strict_types=1);
 
-namespace App;
+namespace FFCMS;
 
 if (PHP_SAPI !== 'cli') {
     die("This can only be executed in CLI mode.");
@@ -19,16 +19,14 @@ try {
     throw($e);
 }
 
+// load the first user
 $test = new \Test;
-
-// insert tests here from f3
-// https://fatfreeframework.com/test
-// https://fatfreeframework.com/unit-testing
-
-// This is where the tests begin
+$usersModel = new Models\Users;
+$usersMapper = $usersModel->getMapper();
+$usersMapper->load(['email = ?', $f3->get('email.from')]);
 $test->expect(
-    count($db->exec('SHOW TABLES')),
-    'Tables exist?''
+    is_int($usersMapper->id) && $usersMapper->id == 1,
+    'Default user was created successfully.'
 );
 
 // Display the results; not MVC but let's keep it simple

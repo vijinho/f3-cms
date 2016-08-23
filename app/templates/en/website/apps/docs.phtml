@@ -1,0 +1,24 @@
+<?php
+$f3 = \Base::instance();
+$title = 'User API Documentation';
+$f3->set('title', $title);
+?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
+
+<div class="container">
+
+    <h1><?=$title ?></h1>
+
+    <h1 class="h2">Your API Credentials</h2>
+    <p>Client Id: <tt><?=$f3->get('user.email') ?></tt></p>
+    <p>Access Token: <tt><?=$f3->get('user.access_token') ?></tt></p>
+    <p>Refresh Token: <tt><?=$f3->get('user.refresh_token') ?></tt></p>
+
+    <?=$f3->get('html') ?>
+
+</div>
+
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>

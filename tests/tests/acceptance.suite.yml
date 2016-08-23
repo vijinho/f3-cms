@@ -1,0 +1,16 @@
+# Codeception Test Suite Configuration
+#
+# Suite for acceptance tests.
+# Perform tests in browser using the WebDriver or PhpBrowser.
+# If you need both WebDriver and PHPBrowser tests - create a separate suite.
+
+class_name: AcceptanceTester
+modules:
+    enabled:
+        - Db:
+        - PhpBrowser:
+            url: https://f3-cms.local/en
+        - REST:
+            url: http://localhost/api/v1
+            depends: PhpBrowser
+        - \Helper\Acceptance

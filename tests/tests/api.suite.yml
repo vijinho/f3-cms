@@ -1,0 +1,8 @@
+class_name: ApiTester
+modules:
+    enabled:
+        - \Helper\Api
+        - REST:
+            url: https://f3-cms.local/api/v1
+            depends: PhpBrowser
+            part: Json

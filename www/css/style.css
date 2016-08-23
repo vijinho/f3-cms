@@ -1,8 +1,29 @@
-/* @import "//fonts.googleapis.com/css?family=Raleway"; */
-body {
-    margin-top: 50px;
+fieldset {
+    margin-bottom: 1rem;
 }
-legend {
-    background-color: #eee;
-    padding: 15px;
+
+ul.footer-copyright {
+    display: inline;
+    font-size: 0.85rem;
+}
+
+ul.footer-copyright > li {
+    display: inline-block;
+    list-style-type: disc;
+}
+
+ul.footer-copyright > li > a {
+    color: white;
+}
+
+.text-small {
+    font-size: 0.75rem;
+}
+
+.text-tiny {
+    font-size: 0.6rem;
+}
+
+.pagination li a {
+    padding: 0 9px;
 }

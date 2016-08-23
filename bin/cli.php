@@ -1,1 +1,1 @@
-../app/lib/App/CLI.php
+../app/lib/FFCMS/CLI.php

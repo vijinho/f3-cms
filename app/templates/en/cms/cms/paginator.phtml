@@ -1,0 +1,58 @@
+<?php // pagniation rendering for admin views of 'pagination', 'objects'
+$f3 = \Base::instance();
+$results = $f3->ref('results');
+$p =& $results['pagination'];
+?>
+<?php
+// setup paging link numbers
+$page = $p['page'];
+
+// setup first/last pages as no links if the same as current
+$p['url_first'] = $p['url_first'] == $p['url_current'] ? '' : $p['url_first'];
+$p['url_last'] = $p['url_last'] == $p['url_current'] ? '' : $p['url_last'];
+
+// set the first page number link to -2 from current
+$startNumber = $p['page'] - 2;
+if ($startNumber < 1) {
+    $startNumber = 1;
+}
+
+// jump back
+$jumpBack = $startNumber - 3;
+if ($jumpBack < 1) {
+    $jumpBack = 0;
+}
+$p['url_jump_back'] = empty($jumpBack) ? '' : $p['url_base'] . '&page=' . $jumpBack;
+
+// set the lats page number link to +4 from current
+$endNumber = $startNumber + 4;
+if ($endNumber > $p['pages']) {
+    $endNumber = $p['pages'];
+}
+
+// jump forward
+$jumpForward = $endNumber + 3;
+if ($jumpForward > $p['pages']) {
+    $jumpForward = null;
+}
+$p['url_jump_forward'] = empty($jumpForward) ? '' : $p['url_base'] . '&page=' . $jumpForward;
+?>
+<div class="row">
+    <div class="col s12">
+
+        <ul class="pagination">
+            <li><a <?=empty($p['url_first']) ? '' : 'href=' . $p['url_first'] ?> <?=empty($p['url_first']) ? 'class="disabled"' : '' ?>><i class="material-icons">skip_previous</i></a></li>
+            <li><a <?=empty($p['url_jump_back']) ? '' : 'href=' . $p['url_jump_back'] ?> <?=empty($p['url_jump_back']) ? 'class="disabled"' : '' ?>><i class="material-icons">fast_rewind</i></a></li>
+            <li><a <?=empty($p['url_previous']) ? '' : 'href=' . $p['url_previous'] ?> <?=empty($p['url_previous']) ? 'class="disabled"' : '' ?>><i class="material-icons">chevron_left</i></a></li>
+
+            <?php for ($i = $startNumber; $i <= $endNumber; $i++): ?>
+                <li class="<?=($i == $p['page']) ? 'active' : 'waves-effect' ?>"><a href="<?=$p['url_base'] . '&page=' . $i ?>"><?=$i ?></a></li>
+            <?php endfor ?>
+
+            <li><a <?=empty($p['url_next']) ? '' : 'href=' . $p['url_next'] ?> <?=empty($p['url_next']) ? 'class="disabled"' : '' ?>><i class="material-icons">chevron_right</i></a></li>
+            <li><a <?=empty($p['url_jump_forward']) ? '' : 'href=' . $p['url_jump_forward'] ?> <?=empty($p['url_jump_forward']) ? 'class="disabled"' : '' ?>><i class="material-icons">fast_forward</i></a></li>
+            <li><a <?=empty($p['url_last']) ? '' : 'href=' . $p['url_last'] ?> <?=empty($p['url_last']) ? 'class="disabled"' : '' ?>><i class="material-icons">skip_next</i></a></li>
+        </ul>
+
+    </div>
+</div>

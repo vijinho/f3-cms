@@ -1,7 +1,7 @@
 <?php
 declare (strict_types=1);
 
-namespace App;
+namespace FFCMS;
 
 /**
  * Load, configure, run application
@@ -42,11 +42,11 @@ function boot()
     ]]);
 
     // auto-create database if options set
-    \App\Setup::database($dice);
+    \FFCMS\Setup::database($dice);
 
     // run the main application
-    require_once 'lib/App/App.php';
-    $app = $dice->create('App\\App');
+    require_once 'lib/FFCMS/App.php';
+    $app = $dice->create('FFCMS\\App');
     $app->Main();
 }
 

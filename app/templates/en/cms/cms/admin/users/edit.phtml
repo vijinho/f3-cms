@@ -1,0 +1,86 @@
+<?php
+$f3 = \Base::instance();
+$title = 'Edit Account Details';
+$f3->set('title', $title);
+?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
+
+<div class="container">
+
+    <h1><?=$title ?></h1>
+
+    <form method="post" action="<?=$f3->alias('admin_users_edit') ?>">
+        <input type="hidden" id="csrf" name="csrf" value="<?=$f3->get('csrf') ?>">
+        <input type="hidden" id="uuid" name="uuid" value="<?=$f3->get('form.uuid') ?>">
+
+        <fieldset>
+
+            <legend><i class="material-icons prefix large">account_circle</i></legend>
+
+            <div class="input-field col s12">
+                <input required  class="validate" type="email" name="email" id="email"  value="<?=$f3->get('form.email') ?>">
+                <label for="email">Email</label>
+            </div>
+            <div class="input-field col s12">
+                <input required  class="validate" type="text" name="firstname" id="firstname" value="<?=$f3->get('form.firstname') ?>">
+                <label for="firstname">First Name(s)</label>
+            </div>
+            <div class="input-field col s12">
+                <input required  class="validate" type="text" name="lastname" id="lastname"  value="<?=$f3->get('form.lastname') ?>">
+                <label for="lastname">Last Name(s)</label>
+            </div>
+            <div class="input-field col s12">
+                <input required  class="validate" type="text" name="password_question" id="password_question" value="<?=$f3->get('form.password_question') ?>">
+                <label for="password_question">Password Hint Question</label>
+            </div>
+            <div class="input-field col s12">
+                <input required  class="validate" type="text" name="password_answer" id="password_answer"  value="<?=$f3->get('form.password_answer') ?>">
+                <label for="password_answer">Password Hint Answer</label>
+            </div>
+            <div class="input-field col s12">
+                <input required  class="validate" type="text" name="groups" id="groups"  value="<?=$f3->get('form.groups') ?>">
+                <label for="groups">Group Membership (one or more of: user,api,admin)</label>
+            </div>
+            <div class="input-field col s12">
+                <input required  class="validate" type="text" name="status" id="status"  value="<?=$f3->get('form.status') ?>">
+                <label for="status">Account Status (one of: registered,confirmed,suspended,closed,cancelled)</label>
+            </div>
+
+            <div class="center">
+                <button class="waves-effect waves-light btn btn-large green darken-1">Update Details</button>
+            </div>
+
+        </fieldset>
+
+        <fieldset>
+
+            <legend><i class="material-icons prefix large">lock</i></legend>
+
+            <div class="input-field col s12">
+                <i class="material-icons prefix">vpn_key</i>
+                <input type="password" name="password" id="password" autocomplete="off" >
+                <label for="password">New Password</label>
+            </div>
+
+            <div class="input-field col s12">
+                <i class="material-icons prefix">vpn_key</i>
+                <input type="password" name="confirm_password" id="confirm_password" autocomplete="off">
+                <label for="confirm_password">Confirm New Password</label>
+            </div>
+
+
+            <div class="center">
+                <button class="waves-effect waves-light btn btn-large green darken-1">Change Password</button>
+            </div>
+
+        </fieldset>
+
+    </form>
+
+</div>
+
+
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>

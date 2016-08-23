@@ -1,0 +1,36 @@
+<?php
+$f3 = \Base::instance();
+$title = 'View Audit Entry';
+$f3->set('title', $title);
+$data = $f3->get('data');
+?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
+
+<div class="container">
+
+    <h1><?=$title ?></h1>
+
+    <table class="table-responsive">
+        <thead>
+            <tr>
+    <?php foreach ($data as $field => $value): ?>
+                <th><?=$field ?></th>
+    <?php endforeach ?>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+    <?php foreach ($data as $field => $value): ?>
+                <td><?=$value ?></td>
+    <?php endforeach ?>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+
+
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>

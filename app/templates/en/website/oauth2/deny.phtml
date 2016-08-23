@@ -1,0 +1,22 @@
+<?php
+$f3 = \Base::instance();
+$title = 'App Request';
+$f3->set('title', $title);
+$user = $f3->get('user');
+?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
+
+<div class="container">
+
+    <h1><?=$title ?></h1>
+
+    <p>You have denied access to the app.</p>
+
+    <a href="<?=$f3->get('denyUrl') ?>">Return to the app.</a>
+
+</div>
+
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>

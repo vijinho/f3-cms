@@ -1,0 +1,185 @@
+<?php
+$f3 = \Base::instance();
+$uh = FFMVC\Helpers\Url::instance();
+
+$user    = $f3->get('user');
+$title   = 'Users';
+$results = $f3->ref('results');
+$p       = & $results['pagination'];
+$fields  = $p['fields'];
+
+if (!empty($p['results'])) {
+    $excludeFields = ['id', 'password'];
+    $listFields    = array_diff($fields, $excludeFields);
+}
+?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
+
+<div class="container">
+
+    <h1><a href="<?=$f3->alias('admin_users_list') ?>"><?=$title ?></a></h1>
+
+    <div class="row">
+        <div class="col s12">
+
+            <nav>
+                <div class="nav-wrapper grey lighten-3 black-text">
+                    <form action="<?=$f3->alias('admin_users_search') ?>" action="GET">
+                        <input type="hidden" name="search_type" value="fuzzy">
+                        <div class="input-field">
+                            <input required class="required" id="search" name="search" type="search" value="<?=$f3->get('form.search') ?>">
+                            <label for="search"><i class="material-icons">search</i></label>
+                            <i class="material-icons">close</i>
+                        </div>
+                    </form>
+                </div>
+            </nav>
+
+        </div>
+    </div>
+
+    <?php if (empty($p['results'])): ?>
+
+        <p>No results available.</p>
+
+        <a href="<?=$f3->alias('admin_users_list') ?>" class="waves-effect waves-light btn btn-medium blue">List all users</a>
+
+    <?php else: ?>
+
+        <div class="center-align">
+            <?=\View::instance()->render('cms/paginator.phtml'); ?>
+        </div>
+
+        <div class="row">
+            <div class="col s12">
+
+                <table class="responsive-table">
+                    <tr>
+                        <?php foreach ($listFields as $field): ?>
+                            <th data-field="<?=$field ?>"><?=$field ?></th>
+                        <?php endforeach ?>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($results['objects'] as $k => $o):  //unset($results['objects'][$k]);  ?>
+                            <tr>
+                                <?php foreach ($listFields as $field):
+                                        $v = $o[$field];
+                                        $link = '';
+                                    switch ($field) {
+                                        case 'created':
+                                        case 'login_last':
+                                            $v = substr(date('r', strtotime($v)), 0, -6);
+                                            $class = 'text-small';
+                                            break;
+                                        case 'uuid':
+                                            if ($field == 'users_uuid') {
+                                                $link = $uh->internal('@admin_users_search', [
+                                                    'search' => $o['users_uuid'],
+                                                    'search_fields' => 'uuid',
+                                                    'type' => 'exact',
+                                                ]);
+                                            }
+                                            $class = "text-tiny";
+                                            break;
+                                        case 'email':
+                                            $link = 'mailto:' . $o['email'];
+                                        default:
+                                            $class = '';
+                                    }
+                                    $class = empty($class) ? '' : ' class="' . $class . '"';
+                                    ?>
+                                    <td>
+                                        <p<?=$class ?>>
+                                        <?php if (empty($link)): ?>
+                                            <?=$v ?>
+                                        <?php else: ?>
+                                            <a href="<?=$link ?>"><?=$v ?></a>
+                                        <?php endif ?>
+                                        </p>
+                                    </td>
+                                <?php endforeach ?>
+                                <td>
+                                    <a href="<?=$f3->alias('admin_users_edit') . '?uuid=' . $o['uuid'] ?>" class="waves-effect waves-light btn btn-small blue">Edit</a>
+
+                                    <a href="<?=
+                                    $uh->internal('@admin_usersdata_search', [
+                                        'search'        => $o['uuid'],
+                                        'search_fields' => 'users_uuid',
+                                        'type'          => 'exact',
+                                        'order'         => 'key',
+                                        'fields'        => ''
+                                    ]);
+                                    ?>" class="btn btn btn-medium grey">Data</a>
+
+                                    <a href="<?=
+                                    $uh->internal('@admin_usersdata_add', [
+                                        'users_uuid'        => $o['uuid']
+                                    ]);
+                                    ?>" class="btn btn btn-medium grey">Add Data</a>
+
+                                    <a href="<?=
+                                    $uh->internal('@admin_audit_search', [
+                                        'search'        => $o['uuid'],
+                                        'search_fields' => 'users_uuid',
+                                        'type'          => 'exact',
+                                        'order'         => 'created DESC',
+                                        'fields'        => ''
+                                    ]);
+                                    ?>" class="btn btn btn-medium grey">Audit</a>
+
+                                    <a href="<?=
+                                    $uh->internal('@admin_apps_search', [
+                                        'search'        => $o['uuid'],
+                                        'search_fields' => 'users_uuid',
+                                        'type'          => 'exact',
+                                        'order'         => 'created DESC',
+                                        'fields'        => ''
+                                    ]);
+                                    ?>" class="btn btn btn-medium grey">Apps</a>
+
+                                    <a href="<?=
+                                    $uh->internal('@admin_tokens_search', [
+                                        'search'        => $o['uuid'],
+                                        'search_fields' => 'users_uuid',
+                                        'type'          => 'exact',
+                                        'order'         => 'created DESC',
+                                        'fields'        => ''
+                                    ]);
+                                    ?>" class="btn btn btn-medium grey">Tokens</a>
+
+                                    <a href="<?=
+                                    $uh->internal('@admin_reports_search', [
+                                        'search'        => $o['uuid'],
+                                        'search_fields' => 'users_uuid',
+                                        'type'          => 'exact',
+                                        'order'         => 'created DESC',
+                                        'fields'        => ''
+                                    ]);
+                                    ?>" class="btn btn btn-medium grey">Reports</a>
+
+                                    <a onclick="confirmUrl('<?=$f3->alias('admin_users_delete') . '?uuid=' . $o['uuid'] ?>')" class="waves-effect waves-light btn btn-small red">Delete</a>
+
+                                </td>
+                            </tr>
+                            <?php endforeach ?>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+
+        <div>
+        <?=\View::instance()->render('cms/paginator.phtml'); ?>
+        </div>
+
+        <p>Showing <?=$p['results_from'] ?> - <?=$p['results_to'] ?> out of <?=$p['results'] ?> results.</p>
+
+<?php endif ?>
+
+</div>
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>

@@ -1,69 +1,6 @@
-# Apache Server Configs | MIT License
-# https://github.com/h5bp/server-configs-apache
-
-# ######################################################################
-# # ERRORS                                                             #
-# ######################################################################
-
-# ----------------------------------------------------------------------
-# | Custom error messages/pages                                        |
-# ----------------------------------------------------------------------
-
-# Customize what Apache returns to the client in case of an error.
-# https://httpd.apache.org/docs/current/mod/core.html#errordocument
-
-ErrorDocument 404 /404.html
-
-# ----------------------------------------------------------------------
-# | Error prevention                                                   |
-# ----------------------------------------------------------------------
-
-# Disable the pattern matching based on filenames.
-#
-# This setting prevents Apache from returning a 404 error as the result
-# of a rewrite when the directory with the same name does not exist.
-#
-# https://httpd.apache.org/docs/current/content-negotiation.html#multiviews
+DirectoryIndex index.php index.html index.htm
 
 Options -MultiViews
-
-
-# ######################################################################
-# # INTERNET EXPLORER                                                  #
-# ######################################################################
-
-# ----------------------------------------------------------------------
-# | Document modes                                                     |
-# ----------------------------------------------------------------------
-
-# Force Internet Explorer 8/9/10 to render pages in the highest mode
-# available in the various cases when it may not.
-#
-# https://hsivonen.fi/doctype/#ie8
-#
-# (!) Starting with Internet Explorer 11, document modes are deprecated.
-#
-# https://msdn.microsoft.com/en-us/library/ie/bg182625.aspx#docmode
-# http://blogs.msdn.com/b/ie/archive/2014/04/02/stay-up-to-date-with-enterprise-mode-for-internet-explorer-11.aspx
-
-<IfModule mod_headers.c>
-
-    Header set X-UA-Compatible "IE=edge"
-
-    <FilesMatch "\.(appcache|atom|bbaw|bmp|crx|css|cur|eot|f4[abpv]|flv|geojson|gif|htc|ico|jpe?g|js|json(ld)?|m4[av]|manifest|map|mp4|oex|og[agv]|opus|otf|pdf|png|rdf|rss|safariextz|svgz?|swf|topojson|tt[cf]|txt|vcard|vcf|vtt|webapp|web[mp]|woff2?|xloc|xml|xpi)$">
-        Header unset X-UA-Compatible
-    </FilesMatch>
-
-</IfModule>
-
-
-# ######################################################################
-# # MEDIA TYPES AND CHARACTER ENCODINGS                                #
-# ######################################################################
-
-# ----------------------------------------------------------------------
-# | Media types                                                        |
-# ----------------------------------------------------------------------
 
 # Serve resources with the proper media types (f.k.a. MIME types).
 #
@@ -71,54 +8,20 @@ Options -MultiViews
 # https://httpd.apache.org/docs/current/mod/mod_mime.html#addtype
 
 <IfModule mod_mime.c>
-
-  # Data interchange
     AddType application/json                            json map
     AddType application/xml                             atom rdf rss xml
-
-  # JavaScript
     AddType application/javascript                      js
-
-  # Media files
     AddType image/svg+xml                               svg svgz
     AddType image/x-icon                                cur ico
-
-  # Web fonts
     AddType application/font-woff                       woff
     AddType application/font-woff2                      woff2
     AddType application/vnd.ms-fontobject               eot
-
-    # Browsers usually ignore the font media types and simply sniff
-    # the bytes to figure out the font type.
-    # https://mimesniff.spec.whatwg.org/#matching-a-font-type-pattern
-    #
-    # However, Blink and WebKit based browsers will show a warning
-    # in the console if the following font types are served with any
-    # other media types.
-
     AddType application/x-font-ttf                      ttc ttf
     AddType font/opentype                               otf
 
 </IfModule>
 
-# ----------------------------------------------------------------------
-# | Character encodings                                                |
-# ----------------------------------------------------------------------
-
-# Serve all resources labeled as `text/html` or `text/plain`
-# with the media type `charset` parameter set to `UTF-8`.
-#
-# https://httpd.apache.org/docs/current/mod/core.html#adddefaultcharset
-
 AddDefaultCharset utf-8
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# Serve the following file types with the media type `charset`
-# parameter set to `UTF-8`.
-#
-# https://httpd.apache.org/docs/current/mod/mod_mime.html#addcharset
-
 <IfModule mod_mime.c>
     AddCharset utf-8 .atom \
                      .css \
@@ -130,37 +33,10 @@ AddDefaultCharset utf-8
                      .txt
 </IfModule>
 
-
-# ######################################################################
-# # REWRITES                                                           #
-# ######################################################################
-
-# ----------------------------------------------------------------------
-# | Rewrite engine                                                     |
-# ----------------------------------------------------------------------
-
-# (1) Turn on the rewrite engine (this is necessary in order for
-#     the `RewriteRule` directives to work).
-#     https://httpd.apache.org/docs/current/mod/mod_rewrite.html#RewriteEngine
-#
-# (2) Enable the `FollowSymLinks` option if it isn't already.
-#     https://httpd.apache.org/docs/current/mod/core.html#options
-
 <IfModule mod_rewrite.c>
-
-    # (1)
     RewriteEngine On
-
-    # (2)
     Options +FollowSymlinks
-
 </IfModule>
-
-# ----------------------------------------------------------------------
-# | Suppressing the `www.` at the beginning of URLs                    |
-# ----------------------------------------------------------------------
-
-# Rewrite `www.example.com` → `example.com`
 
 <IfModule mod_rewrite.c>
     RewriteEngine On
@@ -169,14 +45,6 @@ AddDefaultCharset utf-8
     RewriteRule ^ http://%1%{REQUEST_URI} [R=301,L]
 </IfModule>
 
-
-# ######################################################################
-# # SECURITY                                                           #
-# ######################################################################
-
-# ----------------------------------------------------------------------
-# | Clickjacking                                                       |
-# ----------------------------------------------------------------------
 
 # Protect website against clickjacking and other types of attacks by
 # informing browsers not to display the web page content in any frame.
@@ -195,10 +63,6 @@ AddDefaultCharset utf-8
     </FilesMatch>
 
 </IfModule>
-
-# ----------------------------------------------------------------------
-# | Content Security Policy (CSP)                                      |
-# ----------------------------------------------------------------------
 
 # Mitigate the risk of cross-site scripting and other content-injection
 # attacks.
@@ -233,51 +97,12 @@ style-src 'unsafe-inline'"
 
 </IfModule>
 
-# ----------------------------------------------------------------------
-# | File access                                                        |
-# ----------------------------------------------------------------------
-
 # Block access to directories without a default document.
-
 <IfModule mod_autoindex.c>
     Options -Indexes
 </IfModule>
 
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-# Block access to all hidden files and directories with the exception of
-# the visible content from within the `/.well-known/` hidden directory.
-#
-# These types of files usually contain user preferences or the preserved
-# state of an utility, and can include rather private places like, for
-# example, the `.git` or `.svn` directories.
-#
-# The `/.well-known/` directory represents the standard (RFC 5785) path
-# prefix for "well-known locations" (e.g.: `/.well-known/manifest.json`,
-# `/.well-known/keybase.txt`), and therefore, access to its visible
-# content should not be blocked.
-#
-# https://www.mnot.net/blog/2010/04/07/well-known
-# https://tools.ietf.org/html/rfc5785
-
-<IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteCond %{REQUEST_URI} "!(^|/)\.well-known/([^./]+./?)+$" [NC]
-    RewriteCond %{SCRIPT_FILENAME} -d [OR]
-    RewriteCond %{SCRIPT_FILENAME} -f
-    RewriteRule "(^|/)\." - [F]
-</IfModule>
-
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
 # Block access to files that can expose sensitive information.
-#
-# (!) Update the `<FilesMatch>` regular expression from below to
-# include any files that might end up on your production server and
-# can expose sensitive information about your website. These files may
-# include: configuration files, files that contain metadata about the
-# project (e.g.: project dependencies), build scripts, etc..
-
 <FilesMatch "(^#.*#|\.(bak|conf|dist|fla|in[ci]|log|psd|sh|sql|sw[op])|~)$">
     <IfModule !mod_authz_core.c>
         Order allow,deny
@@ -286,10 +111,6 @@ style-src 'unsafe-inline'"
     </IfModule>
 </FilesMatch>
 
-# ----------------------------------------------------------------------
-# | HTTP Strict Transport Security (HSTS)                              |
-# ----------------------------------------------------------------------
-#
 # Force client-side SSL redirection.
 #
 # http://www.html5rocks.com/en/tutorials/security/transport-layer-security/
@@ -299,10 +120,6 @@ style-src 'unsafe-inline'"
 <IfModule mod_headers.c>
     Header always set Strict-Transport-Security "max-age=16070400"
 </IfModule>
-
-# ----------------------------------------------------------------------
-# | Reducing MIME type security risks                                  |
-# ----------------------------------------------------------------------
 
 # Prevent some browsers from MIME-sniffing the response.
 #
@@ -363,14 +180,6 @@ style-src 'unsafe-inline'"
 </IfModule>
 
 
-# ######################################################################
-# # WEB PERFORMANCE                                                    #
-# ######################################################################
-
-# ----------------------------------------------------------------------
-# | Compression                                                        |
-# ----------------------------------------------------------------------
-
 <IfModule mod_deflate.c>
 
     # Force compression for mangled `Accept-Encoding` request headers
@@ -383,19 +192,6 @@ style-src 'unsafe-inline'"
         </IfModule>
     </IfModule>
 
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-    # Map the following filename extensions to the specified
-    # encoding type in order to make Apache serve the file types
-    # with the appropriate `Content-Encoding` response header
-    # (do note that this will NOT make Apache compress them!).
-    #
-    # If these files types would be served without an appropriate
-    # `Content-Enable` response header, client applications (e.g.:
-    # browsers) wouldn't know that they first need to uncompress
-    # the response, and thus, wouldn't be able to understand the
-    # content.
-    #
     # https://httpd.apache.org/docs/current/mod/mod_mime.html#addencoding
 
     <IfModule mod_mime.c>
@@ -403,12 +199,9 @@ style-src 'unsafe-inline'"
         AddEncoding gzip              svgz
     </IfModule>
 
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
     # Make Apache serve the Zopfli compressed version of the requested
     # file if it exists on the server and the browser supports `gzip`
     # compression
-
     <IfModule mod_rewrite.c>
         RewriteEngine On
         ReWriteCond %{HTTP:accept-encoding} gzip
@@ -451,11 +244,8 @@ style-src 'unsafe-inline'"
         </FilesMatch>
     </IfModule>
 
-    # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
     # Compress all output labeled with one of the following media types.
     # https://httpd.apache.org/docs/current/mod/mod_filter.html#addoutputfilterbytype
-
     AddOutputFilterByType DEFLATE "application/javascript" \
                                   "application/json" \
                                   "application/manifest+json" \
@@ -471,10 +261,6 @@ style-src 'unsafe-inline'"
 
 </IfModule>
 
-# ----------------------------------------------------------------------
-# | ETags                                                              |
-# ----------------------------------------------------------------------
-
 # Remove `ETags` as resources are sent with far-future expires headers.
 #
 # https://developer.yahoo.com/performance/rules.html#etags
@@ -487,10 +273,6 @@ style-src 'unsafe-inline'"
 
 FileETag None
 
-# ----------------------------------------------------------------------
-# | Expires headers                                                    |
-# ----------------------------------------------------------------------
-
 # Serve resources with far-future expires headers.
 # https://httpd.apache.org/docs/current/mod/mod_expires.html
 
@@ -498,27 +280,17 @@ FileETag None
 
     ExpiresActive on
     ExpiresDefault                                      "access plus 1 month"
-
-  # CSS
     ExpiresByType text/css                              "access plus 1 year"
-
-  # Data interchange
     ExpiresByType application/json                      "access plus 0 seconds"
     ExpiresByType application/xml                       "access plus 0 seconds"
     ExpiresByType text/xml                              "access plus 0 seconds"
-
-  # Favicon (cannot be renamed!) and cursor images
     ExpiresByType image/x-icon                          "access plus 1 week"
-
-  # HTML
     ExpiresByType text/html                             "access plus 1 hour"
-
-  # JavaScript
     ExpiresByType application/javascript                "access plus 1 year"
 
 </IfModule>
 
-<IfModule mod_php5.c>
+<IfModule mod_php7.c>
     php_value log_errors Off
     php_value display_errors Off
     php_value html_errors Off
@@ -526,14 +298,14 @@ FileETag None
     php_value ignore_repeated_errors On
     php_value ignore_repeated_source On
 
-    php_value upload_max_filesize 256M
-    php_value memory_limit 1024M
-    php_value post_max_size 256M
-    
+    php_value upload_max_filesize 1024M
+    php_value memory_limit 256M
+    php_value post_max_size 1024M
 
-    php_value default_socket_timeout 900
-    php_value max_execution_time 900
-    php_value max_input_time 900
+
+    php_value default_socket_timeout 90
+    php_value max_execution_time 600
+    php_value max_input_time 600
 
     php_value register_argc_argv Off
 
@@ -552,9 +324,6 @@ FileETag None
     php_value register_argc_argv Off
     php_value register_globals Off
 </IfModule>
-
-
-RewriteEngine On
 
 RewriteRule ^(tmp)\/|\.ini$ - [R=404]
 #do not automatically minify
