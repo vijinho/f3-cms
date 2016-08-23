@@ -1,4 +1,6 @@
-# f3-cms
+# f3-cms - WORK-IN-PROGRESS!
+
+Consider this a work-in-progress and an 'alpha' release.
 
 ![f3-cms homepage screenshot](tmp/screenshot.png)
 
