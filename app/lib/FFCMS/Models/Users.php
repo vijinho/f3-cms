@@ -79,7 +79,7 @@ class Users extends DB
      * Get the user mapper by UUID
      *
      * @param string $uuid User UUID
-     * @return FFCMS\Mappers\User
+     * @return \FFCMS\Mappers\Users
      */
     public function &getUserByUUID(string $uuid)
     {
@@ -93,7 +93,7 @@ class Users extends DB
      * Get the user mapper by email address
      *
      * @param string $email email address
-     * @return FFCMS\Mappers\User
+     * @return \FFCMS\Mappers\Users
      */
     public function &getUserByEmail(string $email)
     {
@@ -107,7 +107,7 @@ class Users extends DB
      * Fetch the users data, optionally only by specified keys
      *
      * @param string $uuid
-     * @param array $keys
+     * @param string[] $keys
      * @return array $data
      */
     public function getUserDetails(string $uuid, array $keys = []): array
@@ -271,7 +271,7 @@ class Users extends DB
      * $data['value'] is automatically encoded or serialized if array/object
      *
      * @param array $data existing data to update
-     * @return array $data newly saved data
+     * @return Users $data newly saved data
      */
     public function saveKey(array $data = [])
     {

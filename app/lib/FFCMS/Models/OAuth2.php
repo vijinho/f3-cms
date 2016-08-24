@@ -2,7 +2,6 @@
 
 namespace FFCMS\Models;
 
-use FFMVC\Helpers;
 use FFCMS\{Traits, Mappers};
 
 /**
@@ -82,7 +81,7 @@ class OAuth2 extends DB
      * Get users list of apps
      *
      * @param string $uuid the user uuid
-     * @return array $data new user data
+     * @return \DB\SQL\Mapper[] $data new user data
      */
     public function getUserApps($uuid)
     {

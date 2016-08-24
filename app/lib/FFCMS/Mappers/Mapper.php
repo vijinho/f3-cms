@@ -2,8 +2,8 @@
 
 namespace FFCMS\Mappers;
 
-use FFMVC\Helpers;
 use FFCMS\Traits;
+use FFMVC\Helpers;
 
 /**
  * Base Database Mapper Class extends f3's DB\SQL\Mapper
