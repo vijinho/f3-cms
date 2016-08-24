@@ -29,7 +29,12 @@ class Users extends DB
     const STATUSES = ['registered', 'confirmed', 'suspended', 'cancelled', 'closed'];
 
     /**
-     * @var \FFCMS\Mappers\UsersData  mapper for user
+     * @var \FFCMS\Mappers\Users user mapper
+     */
+    public $mapper;
+
+    /**
+     * @var \FFCMS\Mappers\UsersData  mapper for user's data
      */
     protected $dataMapper;
 

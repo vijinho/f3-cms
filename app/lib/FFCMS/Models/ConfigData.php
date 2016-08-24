@@ -15,6 +15,11 @@ use FFCMS\{Traits, Mappers};
 class ConfigData extends DB
 {
     /**
+     * @var \FFCMS\Mappers\ConfigData
+     */
+    public $mapper;
+
+    /**
      * initialize with array of params, 'db' and 'logger' can be injected
      *
      * @param \Log $logger
@@ -51,7 +56,7 @@ class ConfigData extends DB
 
         // execute query, count results
         $results = $m->load($sql);
-        $count = $results->count();
+        $count = count($results);
         if ($count == 0) {
             return $data;
         }

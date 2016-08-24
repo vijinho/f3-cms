@@ -78,7 +78,7 @@ abstract class DB extends Base
 
     /**
      * Get the associated mapper for the table
-     * @return type
+     * @return \FFCMS\Mappers\Mapper
      */
     public function &getMapper()
     {
