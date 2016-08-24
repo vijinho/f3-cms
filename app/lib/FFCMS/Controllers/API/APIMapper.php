@@ -171,7 +171,7 @@ abstract class APIMapper extends API
      * Check permissions and load the mapper with the object in the URL param @id
      * if the user is an admin
      *
-     * @param object $f3
+     * @param \Base $f3
      * @param param $params
      * @param string $idField the field used for the unique id to load by
      * @param string $defaultId defaule value to use if not found
