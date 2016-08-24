@@ -103,10 +103,13 @@ tools:
     # Copy/Paste Detector
     # https://github.com/sebastianbergmann/phpcpd
     php_cpd:
-        enabled: true
+        enabled: false
         excluded_dirs:
             - lib
             - tests
+            - bin
+            - data
+            - www
 
     # Analyzes the size and structure of a PHP project.
     # https://pdepend.org
