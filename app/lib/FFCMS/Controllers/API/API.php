@@ -360,7 +360,7 @@ class API
      *
      * Sets hive vars: user[] (mandatory), api_app[] (optional) and user_scopes[], user_groups[]
      *
-     * @return boolean true/false on valid access credentials
+     * @return null|boolean true/false on valid access credentials
      */
     protected function validateAccess()
     {
