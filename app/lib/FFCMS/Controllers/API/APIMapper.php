@@ -65,22 +65,14 @@ abstract class APIMapper extends API
     {
         parent::__construct($f3);
 
-        $f3 = \Base::instance();
-
         // guess the table name from the class name if not specified as a class member
-        $class = strrchr(get_class($this), '\\');
-        $class = \UTF::instance()->substr($class,1);
-        if (empty($this->table)) {
-            $table = $f3->snakecase($class);
-        } else {
-            $table = $this->table;
-        }
-        $this->table = $table;
+        $class = \UTF::instance()->substr(strrchr(get_class($this), '\\'),1);
+        $this->table = empty($this->table) ? $f3->snakecase($class) : $this->table;
         $mapperClass = "\FFCMS\Mappers\\" . $class;
 
         if (class_exists($mapperClass) && $this instanceof APIMapper) {
-            $this->mapper = new $mapperClass;
             $this->mapperClass = $mapperClass;
+            $this->mapper = new $this->mapperClass;
         }
     }
 

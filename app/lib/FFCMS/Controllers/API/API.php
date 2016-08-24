@@ -155,7 +155,7 @@ class API
     /**
      * The OAuth Error to return if an OAuthError occurs.
      *
-     * @var array OAuthError
+     * @var boolean|array OAuthError
      */
     protected $OAuthError = null;
 
@@ -190,32 +190,25 @@ class API
     public function afterRoute(\Base $f3)
     {
         $this->params['headers'] = empty($this->params['headers']) ? [] : $this->params['headers'];
-        $this->params['headers'] = [
-            'Version' => $f3->get('api.version'),
-        ];
-
-        $data = [];
+        $this->params['headers']['Version'] = $f3->get('api.version');
 
         // if an OAuthError is set, return that too
+        $data = [];
         if (!empty($this->OAuthError)) {
             $data['error'] = $this->OAuthError;
         }
 
         if (count($this->errors)) {
-            ksort($this->errors);
             foreach ($this->errors as $code => $message) {
                 $data['error']['errors'][] = [
                     'code' => $code,
                     'message' => $message
                 ];
             }
+            ksort($this->errors);
         }
 
-        if (is_array($this->data)) {
-            $data = array_merge($data, $this->data);
-        }
-
-        $this->oResponse->json($data, $this->params);
+        $this->oResponse->json(array_merge($data, $this->data), $this->params);
     }
 
     /**
@@ -255,13 +248,11 @@ class API
      */
     public function setOAuthError(string $code)
     {
-        $error = $this->getOAuthErrorType($code);
-
-        $this->OAuthError = $error;
+        $this->OAuthError = $this->getOAuthErrorType($code);
 
         // only set https status if not set anywhere else
         if (!empty($this->params['http_status']) && $this->params['http_status'] !== 200) {
-            return $error;
+            return $this->OAuthError;
         }
 
         switch ($code) {
@@ -285,7 +276,7 @@ class API
                 break;
         }
 
-        return $error;
+        return $this->OAuthError;
     }
 
     /**
@@ -364,22 +355,18 @@ class API
      */
     protected function validateAccess()
     {
-        $this->dnsbl();
+        $this->dnsbl(); // always check if dns blacklisted
 
         $f3 = \Base::instance();
 
-        // if forcing access to https die
+        // return if forcing access to https and not https
         if ('http' == $f3->get('SCHEME') && !empty($f3->get('api.https'))) {
             $this->failure('api_connection_error', "Connection only allowed via HTTPS!", 400);
             $this->setOAuthError('unauthorized_client');
             return;
         }
 
-        $usersModel = Models\Users::instance();
-        $usersMapper = $usersModel->getMapper();
-
         $oAuth2Model = Models\OAuth2::instance();
-        $appsMapper = $oAuth2Model->getAppsMapper();
         $tokensMapper = $oAuth2Model->getTokensMapper();
 
         // get token from request to set the user and app
@@ -388,33 +375,35 @@ class API
         $token = $f3->get('REQUEST.access_token');
         if (!empty($token)) {
             $tokensMapper->load(['token = ?', $token]);
-            // check token is not out-of-date
+            // token does not exist!
             if (null == $tokensMapper->uuid) {
                 $this->failure('authentication_error', "The token does not exist!", 401);
                 $this->setOAuthError('invalid_grant');
                 return false;
             }
+            // check token is not out-of-date
             if (time() > strtotime($tokensMapper->expires)) {
                 $this->failure('authentication_error', "The token expired!", 401);
                 $this->setOAuthError('invalid_grant');
                 return false;
             }
-            if (null !== $tokensMapper->users_uuid) {
-                $usersModel->getUserByUUID($tokensMapper->users_uuid);
-            }
+        }
+
+        // if token found load the user for the token
+        $usersModel = Models\Users::instance();
+        if (null !== $tokensMapper->users_uuid) {
+            $usersModel->getUserByUUID($tokensMapper->users_uuid);
         }
 
         // login with client_id and client_secret in request
         $clientId = $f3->get('REQUEST.client_id');
         $clientSecret = $f3->get('REQUEST.client_secret');
-        if (!empty($clientId) && !empty($clientSecret)
-                && $this->authenticateClientIdSecret($clientId, $clientSecret)) {
-            $appLogin = true;
-        }
+
+        $appLogin = (!empty($clientId) && !empty($clientSecret)
+                && $this->authenticateClientIdSecret($clientId, $clientSecret));
 
         // check if login via http basic auth
-        $phpAuthUser = $f3->get('REQUEST.PHP_AUTH_USER');
-        if (!empty($phpAuthUser)) {
+        if (!empty($f3->get('REQUEST.PHP_AUTH_USER'))) {
             // try to login as email:password
             if ($this->basicAuthenticateLoginPassword()) {
                 $email = $f3->get('REQUEST.PHP_AUTH_USER');
@@ -424,25 +413,26 @@ class API
             }
         }
 
-        // login with app credentials?  client_id/client_secret?
-        // if so fetch app information
+        // login with app credentials: client_id/client_secret?
+        // if so fetch app and user information
+        $usersMapper = $usersModel->getMapper();
+        $appsMapper = $oAuth2Model->getAppsMapper();
         if (!empty($appLogin)) {
             // set app in f3
             $data = $appsMapper->cast();
-            unset($data['id']);
             $f3->set('api_app', $data);
-            // load the user by app user uuid
             $usersMapper->load(['uuid = ?', $appsMapper->users_uuid]);
         }
 
         // check user has api access enabled
         // has to have 'api' in group
+        $groups = empty($usersMapper->groups) ? [] : preg_split("/[\s,]+/", $usersMapper->groups);
         $f3->set('is_admin', 0);
         if (empty($token)) {
-            $groups = empty($usersMapper->groups) ? [] : preg_split("/[\s,]+/", $usersMapper->groups);
             if (!in_array('api', $groups)) {
+                // clear authorized app as user doesn't have access
                 $usersMapper->reset();
-                $f3->clear('api_app'); // clear authorized app as user doesn't have access
+                $f3->clear('api_app');
             }
             if (in_array('admin', $groups)) {
                 $f3->set('is_admin', 1);
@@ -452,8 +442,6 @@ class API
         // fetch user information if available
         if (null !== $usersMapper->uuid) {
             $data = $usersMapper->cast();
-            unset($data['id']);
-            unset($data['password']);
             $f3->set('user', $data);
             $f3->set('uuid', $f3->set('uuid', $usersMapper->uuid));
         }
@@ -467,9 +455,9 @@ class API
         }
 
         // get the scopes, this might have come from the token auth
-        $scopes = [];
+        $scope = $f3->get('REQUEST.scope');
+        $scopes = empty($scope) ? [] : preg_split("/[\s,]+/", $scope);
         if (!empty($tokensMapper->users_uuid)) {
-            $scopes = empty($request['scope']) ? [] : preg_split("/[\s,]+/", $request['scope']);
             $f3->set('user_scopes', $scopes);
             // also check the token is valid
             if (!$appLogin && time() > strtotime($tokensMapper->expires)) {
@@ -480,12 +468,10 @@ class API
         }
 
         // set user groups
+        $f3->set('is_admin', in_array('admin', $groups));
         $groups = empty($usersMapper->groups) ? [] : preg_split("/[\s,]+/", $usersMapper->groups);
         if (!empty($groups)) {
             $f3->set('user_groups', $groups);
-        }
-        if (in_array('admin', $groups)) {
-            $f3->set('is_admin', 1);
         }
 
         $userAuthenticated = (is_array($user) || is_array($app));
