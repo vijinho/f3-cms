@@ -38,10 +38,9 @@ class Admin extends Controllers\User\Base
     /**
      *
      *
-     * @param \Base $f3
      * @return void
      */
-    public function index(\Base $f3)
+    public function index()
     {
         $this->redirectLoggedOutUser();
 
@@ -52,10 +51,9 @@ class Admin extends Controllers\User\Base
     /**
      *
      *
-     * @param \Base $f3
      * @return void
      */
-    public function phpinfo(\Base $f3)
+    public function phpinfo()
     {
         phpinfo();
     }

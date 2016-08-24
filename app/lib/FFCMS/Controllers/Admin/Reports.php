@@ -123,7 +123,7 @@ class Reports extends Admin
      * @param \Base $f3
      * @return void
      */
-    public function editPost(\Base $f3
+    public function editPost(\Base $f3)
     {
         $this->csrf('@admin_reports_list');
         $this->redirectLoggedOutUser();

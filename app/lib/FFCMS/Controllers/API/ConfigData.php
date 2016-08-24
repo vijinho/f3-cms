@@ -127,10 +127,9 @@ class ConfigData extends APIMapper
      * Create new data
      *
      * @param \Base $f3
-     * @param array $params
      * @return void
      */
-    public function post(\Base $f3, array $params)
+    public function post(\Base $f3)
     {
         $isAdmin = $f3->get('isAdmin');
         if (!$isAdmin) {

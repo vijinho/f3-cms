@@ -30,7 +30,7 @@ abstract class DB extends Base
     public $mapperClass;
 
     /**
-     * @var \FFCMS\Mapper for class
+     * @var \FFCMS\Mappers\Mapper for class
      */
     public $mapper;
 

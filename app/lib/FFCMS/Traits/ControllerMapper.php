@@ -14,7 +14,7 @@ trait ControllerMapper
      * @param string $url
      * @param array $params
      */
-    abstract function url(string $url, array $params = []): string;
+    abstract public function url(string $url, array $params = []): string;
 
    /**
      * list objects (list is a reserved keyword) of mapper

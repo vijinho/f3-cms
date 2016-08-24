@@ -22,7 +22,7 @@ trait ControllerSecurity
      * @param string $url
      * @param array $params
      */
-    abstract function url(string $url, array $params = []): string;
+    abstract public function url(string $url, array $params = []): string;
 
     /**
      * Check for CSRF token, reroute if failed, otherwise generate new csrf token

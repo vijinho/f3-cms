@@ -22,12 +22,10 @@ abstract class Base
         Traits\Validation;
 
     /**
-     * @param \Base $f3
+     * init
      */
-    public function __construct(\Base $f3)
+    public function __construct()
     {
-        $f3 = \Base::instance();
-
         $this->oUrlHelper = Helpers\Url::instance();
         $this->oNotification = Helpers\Notifications::instance();
         $this->oLog = \Registry::get('logger');

@@ -78,7 +78,7 @@ abstract class APIMapper extends API
         $this->table = $table;
         $mapperClass = "\FFCMS\Mappers\\" . $class;
 
-        if (class_exists($mapperClass)) {
+        if (class_exists($mapperClass) && $this instanceof APIMapper) {
             $this->mapper = new $mapperClass;
             $this->mapperClass = $mapperClass;
         }

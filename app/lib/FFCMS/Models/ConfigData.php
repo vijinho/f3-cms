@@ -14,7 +14,6 @@ use FFCMS\{Traits, Mappers};
  */
 class ConfigData extends DB
 {
-
     /**
      * initialize with array of params, 'db' and 'logger' can be injected
      *

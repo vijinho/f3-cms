@@ -106,9 +106,10 @@ class Reports extends APIMapper
      * Replace data
      *
      * @param \Base $f3
+     * @param array $params
      * @return void
      */
-    public function put(\Base $f3)
+    public function put(\Base $f3, array $params)
     {
         $m = $this->getIdObjectIfAdmin($f3, $params, 'uuid', $f3->get('id'));
         if (!is_object($m) || null == $m->uuid) {

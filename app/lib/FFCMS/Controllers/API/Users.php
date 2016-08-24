@@ -101,9 +101,10 @@ class Users extends APIMapper
      * Update user details - normal user can
      *
      * @param \Base $f3
+     * @param array $params
      * @return void
      */
-    public function patch(\Base $f3)
+    public function patch(\Base $f3, array $params)
     {
         $isAdmin = $f3->get('is_admin');
         // should return a pre-existing object

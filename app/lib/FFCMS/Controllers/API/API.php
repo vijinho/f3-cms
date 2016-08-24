@@ -52,28 +52,28 @@ class API
     /**
      * response data.
      *
-     * @var data
+     * @var array data
      */
     protected $data = [];
 
     /**
      * response params.
      *
-     * @var params
+     * @var array params
      */
     protected $params = [];
 
     /**
      * response helper object.
      *
-     * @var \\FFMVC\Helpers\Response response
+     * @var \FFMVC\Helpers\Response response
      */
     protected $oResponse;
 
     /**
-     * db.
+     * database instance
      *
-     * @var db
+     * @var \DB\SQL db
      */
     protected $db;
 
@@ -502,10 +502,9 @@ class API
     /**
      * catch-all
      *
-     * @param \Base $f3
      * @return void
      */
-    public function unknown(\Base $f3)
+    public function unknown()
     {
         $this->setOAuthError('invalid_request');
         $this->failure('api_connection_error', 'Unknown API Request', 400);
