@@ -371,7 +371,6 @@ class API
 
         // get token from request to set the user and app
         // override if anything in basic auth or client_id/secret after
-        $appLogin = false;
         $token = $f3->get('REQUEST.access_token');
         if (!empty($token)) {
             $tokensMapper->load(['token = ?', $token]);
