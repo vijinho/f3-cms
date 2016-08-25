@@ -31,7 +31,7 @@ class Users extends Mapper
      */
     public function get(\Base $f3, array $params)
     {
-        $isAdmin = $f3->get('is_admin');
+        $isAdmin = $f3->get('isAdmin');
         $m = $this->getIdObjectIfUser($f3, $params, 'uuid', $f3->get('uuid'));
         if (!is_object($m) || null == $m->uuid) {
             return;
@@ -40,7 +40,7 @@ class Users extends Mapper
             return $this->setOAuthError('access_denied');
         }
         // return raw data for object?
-        $adminView = $f3->get('is_admin') && 'admin' == $f3->get('REQUEST.view');
+        $adminView = $f3->get('isAdmin') && 'admin' == $f3->get('REQUEST.view');
         $this->data = $adminView ? $m->castFields($f3->get('REQUEST.fields')) : $m->exportArray($f3->get('REQUEST.fields'));
     }
 
@@ -95,7 +95,7 @@ class Users extends Mapper
             ]);
 
             // return raw data for object?
-            $adminView = $f3->get('is_admin') && 'admin' == $f3->get('REQUEST.view');
+            $adminView = $f3->get('isAdmin') && 'admin' == $f3->get('REQUEST.view');
             $this->data = $adminView ? $m->castFields($f3->get('REQUEST.fields')) : $m->exportArray($f3->get('REQUEST.fields'));
         }
     }
@@ -110,7 +110,7 @@ class Users extends Mapper
      */
     public function patch(\Base $f3, array $params)
     {
-        $isAdmin = $f3->get('is_admin');
+        $isAdmin = $f3->get('isAdmin');
         // should return a pre-existing object
         $m = $this->getIdObjectIfUser($f3, $params, 'uuid', $f3->get('uuid'));
         if (!is_object($m) || null == $m->uuid) {
@@ -174,7 +174,7 @@ class Users extends Mapper
     public function post(\Base $f3)
     {
         // must be an admin
-        $isAdmin = $f3->get('is_admin');
+        $isAdmin = $f3->get('isAdmin');
         if (!$isAdmin) {
             $this->failure('authentication_error', "User does not have permission.", 401);
             return $this->setOAuthError('access_denied');

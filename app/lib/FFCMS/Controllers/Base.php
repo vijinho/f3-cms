@@ -63,10 +63,10 @@ abstract class Base
         // fetch the user groups
         $user = $usersMapper->cast();
         $user['groups'] = empty($user['groups']) ? [] : preg_split("/[\s,]+/", $user['groups']);
-        $user['api_enabled'] = (int) in_array('api', $user['groups']);
-        $f3->set('user_groups', $user['groups']);
-        $f3->set('is_admin', in_array('admin', $user['groups']));
-        $f3->set('is_root', in_array('root', $user['groups']));
+        $user['apiEnabled'] = (int) in_array('api', $user['groups']);
+        $f3->set('userScopes', $user['groups']);
+        $f3->set('isAdmin', in_array('admin', $user['groups']));
+        $f3->set('isRoot', in_array('root', $user['groups']));
 
         // fetch addtional information for the user
         $usersData = $usersModel->getUserDetails($usersMapper->uuid, [

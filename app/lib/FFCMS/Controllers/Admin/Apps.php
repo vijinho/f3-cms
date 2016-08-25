@@ -17,7 +17,7 @@ class Apps extends Admin
     /**
      * For admin listing and search results
      */
-    use Traits\ControllerMapper;
+    use Traits\SearchController;
 
     protected $template_path = 'cms/admin/apps/';
 
@@ -108,7 +108,7 @@ class Apps extends Admin
         $this->csrf('@admin_apps_list');
         $this->redirectLoggedOutUser();
 
-        if (false == $f3->get('is_root')) {
+        if (false == $f3->get('isRoot')) {
             $this->notify(_('You do not have (root) permission!'), 'error');
             return $f3->reroute('@admin');
         }
@@ -176,7 +176,7 @@ class Apps extends Admin
     {
         $this->redirectLoggedOutUser();
 
-        if (false == $f3->get('is_root')) {
+        if (false == $f3->get('isRoot')) {
             $this->notify(_('You do not have (root) permission!'), 'error');
             return $f3->reroute('@admin_apps_list');
         }

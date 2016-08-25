@@ -28,7 +28,7 @@ class Admin extends Controllers\User\Base
         parent::beforeRoute($f3, $params);
 
         // non-admin user gets logged out
-        if (false == $f3->get('is_admin')) {
+        if (false == $f3->get('isAdmin')) {
             $f3->reroute('@logout');
         }
 

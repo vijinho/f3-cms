@@ -17,7 +17,7 @@ class Config extends Admin
     /**
      * For admin listing and search results
      */
-    use Traits\ControllerMapper;
+    use Traits\SearchController;
 
     protected $template_path = 'cms/admin/config/';
 
@@ -30,7 +30,7 @@ class Config extends Admin
      */
     public function listing(\Base $f3)
     {
-        if (false == $f3->get('is_root')) {
+        if (false == $f3->get('isRoot')) {
             $this->notify(_('You do not have (root) permission!'), 'error');
             return $f3->reroute('@admin');
         }
@@ -59,7 +59,7 @@ class Config extends Admin
      */
     public function search(\Base $f3)
     {
-        if (false == $f3->get('is_root')) {
+        if (false == $f3->get('isRoot')) {
             $this->notify(_('You do not have (root) permission!'), 'error');
             return $f3->reroute('@admin');
         }
@@ -91,7 +91,7 @@ class Config extends Admin
     {
         $this->redirectLoggedOutUser();
 
-        if (false == $f3->get('is_root')) {
+        if (false == $f3->get('isRoot')) {
             $this->notify(_('You do not have (root) permission!'), 'error');
             return $f3->reroute('@admin_config_list');
         }
@@ -127,7 +127,7 @@ class Config extends Admin
     {
         $this->redirectLoggedOutUser();
 
-        if (false == $f3->get('is_root')) {
+        if (false == $f3->get('isRoot')) {
             $this->notify(_('You do not have (root) permission!'), 'error');
             return $f3->reroute('@admin');
         }
@@ -164,7 +164,7 @@ class Config extends Admin
         $this->csrf('@admin_config_list');
         $this->redirectLoggedOutUser();
 
-        if (false == $f3->get('is_root')) {
+        if (false == $f3->get('isRoot')) {
             $this->notify(_('You do not have (root) permission!'), 'error');
             return $f3->reroute('@admin');
         }
@@ -312,7 +312,7 @@ class Config extends Admin
     {
         $this->redirectLoggedOutUser();
 
-        if (false == $f3->get('is_root')) {
+        if (false == $f3->get('isRoot')) {
             $this->notify(_('You do not have (root) permission!'), 'error');
             return $f3->reroute('@admin');
         }
@@ -346,7 +346,7 @@ class Config extends Admin
         $this->csrf('@admin_config_list');
         $this->redirectLoggedOutUser();
 
-        if (false == $f3->get('is_root')) {
+        if (false == $f3->get('isRoot')) {
             $this->notify(_('You do not have (root) permission!'), 'error');
             return $f3->reroute('@admin');
         }

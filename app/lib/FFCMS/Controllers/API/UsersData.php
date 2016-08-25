@@ -72,7 +72,7 @@ class UsersData extends Mapper
             ]);
 
             // return raw data for object?
-            $adminView = $f3->get('is_admin') && 'admin' == $f3->get('REQUEST.view');
+            $adminView = $f3->get('isAdmin') && 'admin' == $f3->get('REQUEST.view');
             $this->data = $adminView ? $m->castFields($f3->get('REQUEST.fields')) : $m->exportArray($f3->get('REQUEST.fields'));
         }
     }
@@ -87,7 +87,7 @@ class UsersData extends Mapper
      */
     public function patch(\Base $f3, array $params)
     {
-        $isAdmin = $f3->get('is_admin');
+        $isAdmin = $f3->get('isAdmin');
         $m = $this->getIdObjectIfUser($f3, $params, 'uuid', $params['id']);
         if (!is_object($m) || null == $m->uuid) {
             return;
@@ -115,7 +115,7 @@ class UsersData extends Mapper
      */
     public function put(\Base $f3, array $params)
     {
-        $isAdmin = $f3->get('is_admin');
+        $isAdmin = $f3->get('isAdmin');
         $m = $this->getIdObjectIfUser($f3, $params, 'uuid', $params['id']);
         if (!is_object($m) || null == $m->uuid) {
             return;
@@ -143,7 +143,7 @@ class UsersData extends Mapper
      */
     public function post(\Base $f3, array $params)
     {
-        $isAdmin = $f3->get('is_admin');
+        $isAdmin = $f3->get('isAdmin');
         if ($isAdmin && !empty($params) && array_key_exists('id', $params)) {
             $users_uuid = $params['id'];
         } elseif (!$isAdmin) {

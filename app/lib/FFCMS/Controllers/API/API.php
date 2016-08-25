@@ -341,7 +341,7 @@ class API
      *
      * Or by URL query string param - ?access_token=$access_token
      *
-     * Sets hive vars: user[] (mandatory), api_app[] (optional) and user_scopes[], user_groups[]
+     * Sets hive vars: user[] (mandatory), api_app[] (optional) and user_scopes[], userScopes[]
      *
      * @return null|boolean true/false on valid access credentials
      */
@@ -418,7 +418,7 @@ class API
         // check user has api access enabled
         // has to have 'api' in group
         $groups = empty($usersMapper->groups) ? [] : preg_split("/[\s,]+/", $usersMapper->groups);
-        $f3->set('is_admin', 0);
+        $f3->set('isAdmin', 0);
         if (empty($token)) {
             if (!in_array('api', $groups)) {
                 // clear authorized app as user doesn't have access
@@ -426,7 +426,7 @@ class API
                 $f3->clear('api_app');
             }
             if (in_array('admin', $groups)) {
-                $f3->set('is_admin', 1);
+                $f3->set('isAdmin', 1);
             }
         }
 
@@ -459,10 +459,10 @@ class API
         }
 
         // set user groups
-        $f3->set('is_admin', in_array('admin', $groups));
+        $f3->set('isAdmin', in_array('admin', $groups));
         $groups = empty($usersMapper->groups) ? [] : preg_split("/[\s,]+/", $usersMapper->groups);
         if (!empty($groups)) {
-            $f3->set('user_groups', $groups);
+            $f3->set('userScopes', $groups);
         }
 
         $userAuthenticated = (is_array($user) || is_array($app));

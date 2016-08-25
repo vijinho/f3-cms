@@ -3,9 +3,9 @@
 namespace FFCMS\Traits;
 
 /**
- * Controller methods which utilise a mapper
+ * Controller Methods which utilise a mapper to search and list results
  */
-trait ControllerMapper
+trait SearchController
 {
     /**
      * Create an internal URL
@@ -17,10 +17,17 @@ trait ControllerMapper
     abstract public function url(string $url, array $params = []): string;
 
 
-    public static function checkOrderField(string $order = null, array $allFields = []): array
+    /**
+     * Check the order by field is valid and return it corrected
+     *
+     * @param string $order order field in form of: "field1 ASC/DESC,field 2 ASC/DESC.."
+     * @param array $allFields the list of fields which are valid to order by
+     * @return string $validFields
+     */
+    public static function checkOrderField(string $order = null, array $allFields = []): string
     {
         if (empty($order)) {
-            return [];
+            return join(',', $allFields);
         }
 
         $orderClauses = empty($order) ? [] : preg_split("/[,]/", $order);
@@ -40,28 +47,36 @@ trait ControllerMapper
             }
             $orderClauses[$k] = $field[0] . ' ' . $field[1];
         }
+        ksort($orderClauses);
         $order = join(',', $orderClauses);
 
         return $order;
     }
 
 
-    public static function checkFieldsExist(array $checkFieldsExist = [], array $fieldsList = [])
+    /**
+     * Check the fields exist and return only the existing ones
+     *
+     * @param array $checkFieldsExist [id => 'field1,field2'...]
+     * @param array $fieldsList the list of fields which are valid
+     * @param string|null $users_uuid uuid of user to get results for
+     * @return array $validFields
+     */
+    public static function checkFieldsExist(array $checkFieldsExist = [], array $fieldsList = []): array
     {
-        $f3 = \Base::instance();
         // fields to return and fields to search - validate
         $validFields = [];
-        foreach ($checkFieldsExist as $fieldsList) {
+        foreach ($checkFieldsExist as $id => $fields) {
             if (empty($fields)) {
                 continue;
             }
             $fields = empty($fields) ? [] : preg_split("/[,]/", $fields);
             foreach ($fields as $k => $field) {
-                if (!in_array($field, $allFields)) {
+                if (!in_array($field, $fieldsList)) {
                     unset($fields[$k]);
                 }
             }
-            $validFields[$fieldsList] = join(',', $fields);
+            $validFields[$id] = join(',', $fields);
         }
         return $validFields;
     }
@@ -74,7 +89,7 @@ trait ControllerMapper
      * @param \FFCMS\Mappers\Mapper $m
      * @return array
      */
-    protected function &getListingResults(\Base $f3, \FFCMS\Mappers\Mapper $m): array
+    protected function &getListingResults(\Base $f3, \FFCMS\Mappers\Mapper $m, string $users_uuid = null): array
     {
         // set up paging limits
         $minPerPage = 5;
@@ -92,9 +107,6 @@ trait ControllerMapper
             $page = 1;
         }
 
-        // validate order field
-        $order = $f3->get('REQUEST.order');
-
         // fetch data (paging is 0 based)
         $allFields = $m->fields();
 
@@ -107,7 +119,15 @@ trait ControllerMapper
 
         // count rows
         $data = [];
-        $rows = $m->count();
+
+        // count rows
+        $isAdmin = $f3->get('isAdmin');
+        $rows = 0;
+        if  (in_array('users_uuid', $allFields) && !empty($users_uuid)) {
+            $rows = $m->count(['users_uuid = ?', $users_uuid]);
+        } elseif ($isAdmin && empty($users_uuid)) {
+            $rows = $m->count();
+        }
         if ($rows < 1) {
             return $data;
         }
@@ -164,15 +184,25 @@ trait ControllerMapper
             'view' => $f3->get('REQUEST.view')
         ];
 
-        // fetch results
-        $m->load('', [
-            'order' => $order,
-            'offset' => (1 == $page) ? 0 : ($page - 1) * $perPage,
-            'limit' => $perPage
-        ]);
 
+        // fetch results
+        if ($isAdmin && empty($users_uuid)) {
+            $m->load('', [
+                'order' => $order,
+                'offset' => (1 == $page) ? 0 : ($page - 1) * $perPage,
+                'limit' => $perPage
+            ]);
+        } else {
+            $m->load(['users_uuid = ?', $users_uuid], [
+                'order' => $order,
+                'offset' => (1 == $page) ? 0 : ($page - 1) * $perPage,
+                'limit' => $perPage
+            ]);
+        }
+
+        $adminView = $isAdmin || ($isAdmin && 'admin' == $f3->get('REQUEST.view'));
         do {
-            $data['objects'][] = $m->castFields($fields);
+            $data['objects'][] = $adminView ? $m->castFields($fields) : $m->exportArray($fields);
         }
         while ($m->skip());
 
@@ -184,9 +214,10 @@ trait ControllerMapper
      *
      * @param \Base $f3
      * @param \FFCMS\Mappers\Mapper $m
+     * @param string|null $users_uuid uuid of user to get results for
      * @return array $results
      */
-    protected function &getSearchResults(\Base $f3, \FFCMS\Mappers\Mapper $m): array
+    protected function &getSearchResults(\Base $f3, \FFCMS\Mappers\Mapper $m, string $users_uuid = null): array
     {
         // set up paging limits
         $minPerPage = 10;
@@ -240,8 +271,16 @@ trait ControllerMapper
             }
         }
 
+
         // get total results
-        $query = 'SELECT COUNT(*) AS results FROM ' . $db->quotekey($m->table()) . ' WHERE ' . join(' OR ', $sqlClauses);
+        $isAdmin = $f3->get('isAdmin');
+        $query = 'SELECT COUNT(*) AS results FROM ' . $db->quotekey($m->table()) . ' WHERE ';
+        if  (in_array('users_uuid', $allFields) && !empty($users_uuid)) {
+            $query .= ' users_uuid = ' . $db->quote($users_uuid)  . ' AND ('.  join(' OR ', $sqlClauses) . ')';
+        } elseif ($isAdmin && empty($users_uuid)) {
+            $query .= join(' OR ', $sqlClauses);
+        }
+
         $data = [];
         $rows = $db->exec($query);
         $rows = (int) $rows[0]['results'];
@@ -306,12 +345,20 @@ trait ControllerMapper
             'view' => $f3->get('REQUEST.view')
         ];
 
+
         // retrieve results
-        $query = 'SELECT * FROM ' . $db->quotekey($m->table()) . ' WHERE ' . join(' OR ', $sqlClauses);
+        $query = 'SELECT * FROM ' . $db->quotekey($m->table()) . ' WHERE ';
+        if (empty($users_uuid)) {
+             $query .= join(' OR ', $sqlClauses);
+        } else {
+             $query .= ' users_uuid = ' . $db->quote($users_uuid)  . ' AND ('.  join(' OR ', $sqlClauses) . ')';
+        }
         $query .= sprintf(' LIMIT %d,%d', (1 == $page) ? 0 : ($page - 1) * $perPage, $perPage);
+
+        $adminView = $isAdmin || ($isAdmin && 'admin' == $f3->get('REQUEST.view'));
         $results = $db->exec($query);
         foreach ($results as $row) {
-            $data['objects'][] = $m->castFields($fields, $row);
+            $data['objects'][] = $adminView ? $m->castFields($fields, $row) : $m->exportArray($fields, $row);
         }
 
         return $data;

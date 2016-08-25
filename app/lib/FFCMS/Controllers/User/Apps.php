@@ -96,7 +96,7 @@ class Apps extends Controllers\User\Base
         $appsMapper->users_uuid = $f3->get('uuid');
 
         // admin group auto-approved
-        $groups = $f3->get('user_groups');
+        $groups = $f3->get('userScopes');
         $appsMapper->status = in_array('admin', $groups) ? 'approved' : 'registered';
 
         if ($appsMapper->validateSave()) {
