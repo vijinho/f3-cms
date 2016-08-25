@@ -38,7 +38,7 @@ abstract class APIMapper extends API
     protected $mapperClass;
 
     /**
-     * @var \FFMVC\Models\Mapper mapper for class
+     * @var \FFMVC\Mappers\Mapper mapper for class
      */
     protected $mapper;
 
@@ -74,15 +74,7 @@ abstract class APIMapper extends API
             $this->mapperClass = $mapperClass;
             $this->mapper = new $this->mapperClass;
         }
-    }
-
-    /**
-     *
-     * @param \Base $f3
-     * @return void
-     */
-    public function init(\Base $f3)
-    {
+        
         $this->isAuthorised = $this->validateAccess();
         if (empty($this->isAuthorised)) {
             return $this->setOAuthError('invalid_grant');
@@ -413,6 +405,7 @@ abstract class APIMapper extends API
         ksort($urlParams);
 
         // previous page url
+        $pagination = [];
         $prevPage = (1 > $page - 1 ) ? null : $page - 1;
         $nextPage = (1 + $page> $pagination['count']) ? null : $page + 1;
 
@@ -544,7 +537,7 @@ abstract class APIMapper extends API
         $fields = empty($validFields['fields']) ? join(',', $allFields) : $validFields['fields'];
 
         // validated fields to search in, use all if empty
-        $searchFields = empty($fields) ? join(',', $allFields) : $validFields['searchFields'];
+        $searchFields = empty($searchFields['search_fields']) ? join(',', $allFields) : $validFields['search_fields'];
 
         // get search type
         $search = $f3->get('REQUEST.search');

@@ -85,7 +85,6 @@ class OAuth2 extends DB
      */
     public function getUserApps($uuid)
     {
-        $f3 = \Base::instance();
         $appsMapper = $this->getAppsMapper();
         return $appsMapper->find(['users_uuid = ?', $uuid]);
     }

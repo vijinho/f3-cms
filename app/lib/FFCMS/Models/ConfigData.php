@@ -38,7 +38,6 @@ class ConfigData extends DB
      */
     public function getValues(array $keys = []): array
     {
-        $f3 = \Base::instance();
         $db = \Registry::get('db');
         $m = $this->getMapper();
         $data = [];

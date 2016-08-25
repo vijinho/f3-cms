@@ -16,7 +16,6 @@ class Users extends APIMapper
 {
     protected $adminOnly = false;
 
-
     /**
      * Display the authorised user or
      * if an admin, the user specified in the url /@id or  param ?id=

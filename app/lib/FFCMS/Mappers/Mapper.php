@@ -13,7 +13,7 @@ use FFMVC\Helpers;
  * @license GPLv3 (http://www.gnu.org/licenses/gpl-3.0.html)
  * @link https://fatfreeframework.com/sql-mapper
  * @link https://github.com/Wixel/GUMP
- *
+ * @property string $created
  */
 
 // abstract class Magic implements ArrayAccess

@@ -45,7 +45,6 @@ class Audit extends APIMapper
         }
 
         // load pre-existing value
-        $db = \Registry::get('db');
         $m = $this->getMapper();
 
         // copy data and validate

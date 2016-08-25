@@ -170,7 +170,6 @@ class Tokens extends Admin
     {
         $this->redirectLoggedOutUser();
 
-        $user = $f3->get('user');
         if (false == $f3->get('is_root')) {
             $this->notify(_('You do not have (root) permission!'), 'error');
             return $f3->reroute('@admin_tokens_list');

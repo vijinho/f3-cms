@@ -24,14 +24,10 @@ abstract class Base extends \Prefab
      */
     public function __construct(array $params = [], \Log $logger = null)
     {
-        $f3 = \Base::instance();
-
         if (is_object($logger)) {
             \Registry::set('logger', $logger);
         }
         $this->oLog = \Registry::get('logger');
-
-        $f3 = \Base::instance();
 
         if (!array_key_exists('oLog', $params)) {
             $this->oLog = \Registry::get('logger');
@@ -43,6 +39,6 @@ abstract class Base extends \Prefab
 
         // save default validation rules and filter rules in-case we add rules
         $this->validationRulesDefault = $this->validationRules;
-        $this->filterRulesDefault = $this->filterRules;
+        $this->filterRulesDefault     = $this->filterRules;
     }
 }

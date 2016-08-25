@@ -55,9 +55,9 @@ trait Validation
     /**
      * Errors from last validation run
      *
-     * @var array
+     * @var bool|array
      */
-    protected $validationErrors = [];
+    protected $validationErrors;
 
 
     /**

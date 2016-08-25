@@ -90,10 +90,10 @@ class UsersData extends Admin
 
         $uuid = $f3->get('REQUEST.uuid');
         $usersModel = Models\Users::instance();
-        $dataMapper = $usersModel->getDataMapper();
-        $dataMapper->load(['uuid = ?', $uuid]);
+        $mapper = $usersModel->getDataMapper();
+        $mapper->load(['uuid = ?', $uuid]);
 
-        if (null == $dataMapper->id) {
+        if (null == $mapper->id) {
             $this->notify(_('The entry no longer exists!'), 'error');
             return $f3->reroute('@admin_users_lists');
         }
@@ -101,12 +101,12 @@ class UsersData extends Admin
         $f3->set('breadcrumbs', [
             _('Admin') => 'admin',
             _('Users') => $this->url('@admin_users_search', [
-                'search' => $dataMapper->users_uuid,
+                'search' => $mapper->users_uuid,
                 'search_fields' => 'uuid',
                 'type' => 'exact',
                 ]),
             _('Data') => $this->url('@admin_usersdata_search', [
-                'search' => $dataMapper->users_uuid,
+                'search' => $mapper->users_uuid,
                 'search_fields' => 'users_uuid',
                 'order' => 'key',
                 'type' => 'exact',
@@ -114,7 +114,7 @@ class UsersData extends Admin
             _('Edit') => '',
         ]);
 
-        $f3->set('form', $dataMapper->cast());
+        $f3->set('form', $mapper->cast());
         echo \View::instance()->render($this->template_path . 'edit.phtml');
     }
 
@@ -140,10 +140,10 @@ class UsersData extends Admin
         // get current user details
         $uuid = $f3->get('REQUEST.uuid');
         $usersModel = Models\Users::instance();
-        $dataMapper = $usersModel->getDataMapper();
-        $dataMapper->load(['uuid = ?', $uuid]);
+        $mapper = $usersModel->getDataMapper();
+        $mapper->load(['uuid = ?', $uuid]);
 
-        if (null == $dataMapper->id) {
+        if (null == $mapper->id) {
             $this->notify(_('The entry no longer exists!'), 'error');
             return $f3->reroute('@admin_usersdata_list');
         }
@@ -151,12 +151,12 @@ class UsersData extends Admin
         $f3->set('breadcrumbs', [
             _('Admin') => 'admin',
             _('Users') => $this->url('@admin_users_search', [
-                'search' => $dataMapper->users_uuid,
+                'search' => $mapper->users_uuid,
                 'search_fields' => 'uuid',
                 'type' => 'exact',
                 ]),
             _('Data') => $this->url('@admin_usersdata_search', [
-                'search' => $dataMapper->users_uuid,
+                'search' => $mapper->users_uuid,
                 'search_fields' => 'users_uuid',
                 'order' => 'key',
                 'type' => 'exact',
@@ -164,7 +164,7 @@ class UsersData extends Admin
             _('Edit') => '',
         ]);
 
-        $oldMapper = clone $dataMapper;
+        $oldMapper = clone $mapper;
 
         // only allow updating of these fields
         $data = $f3->get('REQUEST');
@@ -185,9 +185,6 @@ class UsersData extends Admin
             }
         }
 
-
-        // type check for filtering and validation
-        $fRules = 'trim|sanitize_string';
         // type check for filtering and validation
         $fRules = 'trim|sanitize_string';
         switch ($mapper->type) {
@@ -235,10 +232,10 @@ class UsersData extends Admin
                 break;
         }
 
+        if (!empty($fRules)) {
+            $this->filterRules(['value' => $fRules]);
+        }
         if (!empty($vRules)) {
-            if (!empty($fRules)) {
-                $this->filterRules(['value' => $fRules]);
-            }
             $this->validationRules(['value' => $vRules]);
             $errors = $this->validate(false, ['value' => $data['value']]);
             if (true !== $errors) {
@@ -252,31 +249,31 @@ class UsersData extends Admin
         // update required fields to check from ones which changed
         // validate the entered data
         $data['uuid'] = $uuid;
-        $dataMapper->copyfrom($data);
-        $dataMapper->validationRequired($fields);
-        $errors = $dataMapper->validate(false);
+        $mapper->copyfrom($data);
+        $mapper->validationRequired($fields);
+        $errors = $mapper->validate(false);
         if (is_array($errors)) {
-            $this->notify(['warning' => $dataMapper->validationErrors($errors)]);
+            $this->notify(['warning' => $mapper->validationErrors($errors)]);
             $f3->set('form', $f3->get('REQUEST'));
             echo \View::instance()->render($view);
             return;
         }
 
         // no change, do nothing
-        if ($dataMapper->cast() === $oldMapper->cast()) {
+        if ($mapper->cast() === $oldMapper->cast()) {
             $this->notify(_('There was nothing to change!'), 'info');
             return $f3->reroute('@admin_usersdata_list');
         }
 
         // reset usermapper and copy in valid data
-        $dataMapper->load(['uuid = ?', $data['uuid']]);
-        $dataMapper->copyfrom($data);
-        if ($dataMapper->validateSave()) {
+        $mapper->load(['uuid = ?', $data['uuid']]);
+        $mapper->copyfrom($data);
+        if ($mapper->validateSave()) {
             $this->audit([
-                'users_uuid' => $dataMapper->users_uuid,
+                'users_uuid' => $mapper->users_uuid,
                 'event' => 'Users Data Updated',
                 'old' => $oldMapper->cast(),
-                'new' => json_encode($dataMapper->cast(), JSON_PRETTY_PRINT)
+                'new' => json_encode($mapper->cast(), JSON_PRETTY_PRINT)
             ]);
             $this->notify(_('The account data was updated!'), 'success');
         } else {
@@ -286,7 +283,7 @@ class UsersData extends Admin
             return;
         }
 
-        $f3->reroute('@admin_usersdata_search' . '?search=' . $dataMapper->uuid);
+        $f3->reroute('@admin_usersdata_search' . '?search=' . $mapper->uuid);
     }
 
 
@@ -307,9 +304,9 @@ class UsersData extends Admin
 
         $users_uuid = $f3->get('REQUEST.users_uuid');
         $usersModel = Models\Users::instance();
-        $dataMapper = $usersModel->getDataMapper();
+        $mapper = $usersModel->getDataMapper();
 
-        $data = $dataMapper->cast();
+        $data = $mapper->cast();
         $data['users_uuid'] = $users_uuid;
 
         $f3->set('breadcrumbs', [
@@ -353,7 +350,7 @@ class UsersData extends Admin
 
         $users_uuid = $f3->get('REQUEST.users_uuid');
         $usersModel = Models\Users::instance();
-        $dataMapper = $usersModel->getDataMapper();
+        $mapper = $usersModel->getDataMapper();
 
         $f3->set('breadcrumbs', [
             _('Admin') => 'admin',
@@ -371,7 +368,7 @@ class UsersData extends Admin
             _('Add') => '',
         ]);
 
-        $oldMapper = clone $dataMapper;
+        $oldMapper = clone $mapper;
         $oldMapper->load(['users_uuid = ?', $users_uuid]);
 
         // only allow updating of these fields
@@ -396,31 +393,31 @@ class UsersData extends Admin
         // update required fields to check from ones which changed
         // validate the entered data
         $data['users_uuid'] = $users_uuid;
-        $dataMapper->copyfrom($data);
-        $dataMapper->validationRequired($fields);
-        $errors = $dataMapper->validate(false);
+        $mapper->copyfrom($data);
+        $mapper->validationRequired($fields);
+        $errors = $mapper->validate(false);
         if (is_array($errors)) {
-            $this->notify(['warning' => $dataMapper->validationErrors($errors)]);
+            $this->notify(['warning' => $mapper->validationErrors($errors)]);
             $f3->set('form', $f3->get('REQUEST'));
             echo \View::instance()->render($view);
             return;
         }
 
         // no change, do nothing
-        if ($dataMapper->cast() === $oldMapper->cast()) {
+        if ($mapper->cast() === $oldMapper->cast()) {
             $this->notify(_('There was nothing to change!'), 'info');
             return $f3->reroute('@admin_usersdata_list');
         }
 
         // reset usermapper and copy in valid data
-        $dataMapper->load(['uuid = ?', $dataMapper->uuid]);
-        $dataMapper->copyfrom($data);
-        if ($dataMapper->validateSave()) {
+        $mapper->load(['uuid = ?', $mapper->uuid]);
+        $mapper->copyfrom($data);
+        if ($mapper->validateSave()) {
             $this->audit([
-                'users_uuid' => $dataMapper->users_uuid,
+                'users_uuid' => $mapper->users_uuid,
                 'event' => 'Users Data Updated',
                 'old' => $oldMapper->cast(),
-                'new' => json_encode($dataMapper->cast(), JSON_PRETTY_PRINT)
+                'new' => json_encode($mapper->cast(), JSON_PRETTY_PRINT)
             ]);
             $this->notify(_('The account data was updated!'), 'success');
         } else {
@@ -430,7 +427,7 @@ class UsersData extends Admin
             return;
         }
 
-        $f3->reroute('@admin_usersdata_edit' . '?uuid=' . $dataMapper->uuid);
+        $f3->reroute('@admin_usersdata_edit' . '?uuid=' . $mapper->uuid);
     }
 
 

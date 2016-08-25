@@ -153,15 +153,8 @@ class OAuth2 extends Controllers\User\Base
         }
 
             // validate response_type - only one type is allowed anyway
-        switch ($request['response_type']) {
-
-            case 'token':
-                $request['response_type'] = 'token';
-                break;
-
-            default:
-            case 'code':
-                $request['response_type'] = 'code';
+        if ('code' !== $request['response_type']) {
+            $request['response_type'] = 'token';
         }
         $f3->set('REQUEST.response_type', $request['response_type']);
 
@@ -311,13 +304,6 @@ class OAuth2 extends Controllers\User\Base
                 break;
 
             case 'code':
-                $data = [
-                    'users_uuid' => $f3->get('uuid'),
-                    'client_id' => $clientId,
-                    'token' => null,
-                    'type' => 'code',
-                    'scope' => $scope
-                ];
                 $tokensMapper->expires = Helpers\Time::database(time() + $f3->get('oauth2.expires_code'));
                 break;
 
@@ -332,7 +318,6 @@ class OAuth2 extends Controllers\User\Base
         } else {
             $this->notify(_('Access granted to') . ' ' . $appsMapper->name, 'success');
 
-            $user = $f3->get('user');
             $this->audit([
                 'event' => 'App Access Granted',
             ]);
@@ -411,7 +396,6 @@ class OAuth2 extends Controllers\User\Base
 
         $f3->set('denyUrl', $url);
 
-        $user = $f3->get('user');
         $this->audit([
             'event' => 'App Access Denied',
         ]);

@@ -19,7 +19,7 @@ namespace FFCMS\Traits;
 trait Audit
 {
     /**
-     * @var \FFCMS\Mappers\Audit audit logging objects
+     * @var \FFCMS\Models\Audit audit logging objects
      */
     protected $oAudit;
 

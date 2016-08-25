@@ -112,7 +112,6 @@ class Users extends DB
      */
     public function getUserDetails(string $uuid, array $keys = []): array
     {
-        $f3 = \Base::instance();
         $db = \Registry::get('db');
 
         $data = [];

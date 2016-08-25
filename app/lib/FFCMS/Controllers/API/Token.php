@@ -25,30 +25,23 @@ class Token extends API
      */
     public function token(\Base $f3)
     {
-        $grant = $f3->get('REQUEST.grant_type');
-
-        switch ($grant) {
+        switch ($f3->get('REQUEST.grant_type')) {
 
             case 'authorization_code': // exchange auth code for access token
                 return $this->code($f3);
-                break;
 
             case 'client_credentials': // client app gets a token for itself
                 return $this->credentials($f3);
-                break;
 
             case 'password': // client app passes end-user username and password to get token
                 return $this->password($f3);
-                break;
 
             case 'refresh_token': // refresh access token using refresh token
                 return $this->refresh($f3);
-                break;
 
             default:
                 $this->failure('api_connnection_error', "Grant type should be one of: (authorization_code, client_credentials, password, refresh_token)", 400);
                 $this->setOAuthError('unsupported_grant_type');
-                break;
         }
     }
 
@@ -65,7 +58,7 @@ class Token extends API
     protected function code(\Base $f3)
     {
         // this requires a valid client_id/secret
-        if (!$this->validateAccess()) {
+        if (empty($this->validateAccess())) {
             return;
         }
 
@@ -90,8 +83,6 @@ class Token extends API
         $tokensMapper = $oAuth2Model->getTokensMapper();
 
         // get the app's authorized app token
-        $uuid = $f3->get('uuid');
-        $app = $f3->get('api_app');
         $tokensMapper->load(['client_id = ? AND users_uuid = ? AND token = ?',
                 $appsMapper->client_id, $appsMapper->users_uuid, $code]);
         if (null == $tokensMapper->users_uuid) {
@@ -114,10 +105,10 @@ class Token extends API
         $tokensMapper->validateSave();
 
         $this->audit([
-            'users_uuid' => $m->users_uuid,
-            'actor' => $m->client_id,
+            'users_uuid' => $tokensMapper->users_uuid,
+            'actor' => $tokensMapper->client_id,
             'event' => 'Token Updated via API',
-            'new' => $m->cast()
+            'new' => $tokensMapper->cast()
         ]);
 
         // check if there's already a refresh token for the client/user combination
@@ -164,7 +155,7 @@ class Token extends API
     protected function credentials(\Base $f3)
     {
         // this requires a valid client_id/secret
-        if (!$this->validateAccess()) {
+        if (empty($this->validateAccess())) {
             return;
         }
 
@@ -182,8 +173,6 @@ class Token extends API
         $tokensMapper = $oAuth2Model->getTokensMapper();
 
         // get the app's authorized app token if it exists
-        $uuid = $f3->get('uuid');
-        $app = $f3->get('api_app');
         $tokensMapper->load(['client_id = ? AND users_uuid = ? AND '.$db->quotekey('type').' = "access_token"',
                 $appsMapper->client_id, $appsMapper->users_uuid]);
         if (null == $tokensMapper->users_uuid) {
@@ -299,8 +288,6 @@ class Token extends API
         }
 
         // get the app users authorized app token if it exists
-        $uuid = $f3->get('uuid');
-        $app = $f3->get('api_app');
         $tokensMapper->load(['client_id = ? AND users_uuid = ? AND '.$db->quotekey('type').' = "access_token"',
                 $appsMapper->client_id, $usersMapper->uuid]);
         if (null == $tokensMapper->users_uuid) {
@@ -357,7 +344,7 @@ class Token extends API
      */
     public function revoke(\Base $f3)
     {
-        if (!$this->validateAccess()) {
+        if (empty($this->validateAccess())) {
             return;
         }
 
@@ -379,7 +366,6 @@ class Token extends API
 
         // fetch models now
         $oAuth2Model = Models\OAuth2::instance();
-        $appsMapper = $oAuth2Model->getAppsMapper();
 
         // check refresh token exists
         $tokensMapper = $oAuth2Model->getTokensMapper();
@@ -399,6 +385,7 @@ class Token extends API
         }
 
         // revoke the token, delete it
+        $revoked = [];
         $revoked[$tokensMapper->type][] = $tokensMapper->token;
         $tokensMapper->erase();
 
@@ -432,7 +419,6 @@ class Token extends API
     {
         // fetch models now
         $oAuth2Model = Models\OAuth2::instance();
-        $appsMapper = $oAuth2Model->getAppsMapper();
         $tokensMapper = $oAuth2Model->getTokensMapper();
         $db = \Registry::get('db');
 
@@ -445,7 +431,7 @@ class Token extends API
         }
 
         // if no client_id/secret,, fetch app information
-        if (!$this->validateAccess()) {
+        if (empty($this->validateAccess())) {
             // the spec says we need client_id and client_password to do this
             $this->failure('authentication_error', "Unable to authenticate client!", 401);
             $this->setOAuthError('invalid_grant');
@@ -461,7 +447,6 @@ class Token extends API
         }
 
         // get the app users authorized app
-        $uuid = $f3->get('uuid');
         $app = $f3->get('api_app');
 
         // check refresh token exists

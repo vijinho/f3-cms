@@ -174,11 +174,6 @@ class API
         $this->oResponse = Helpers\Response::instance();
         $this->oAudit = Models\Audit::instance();
         $this->oUrlHelper = Helpers\Url::instance();
-
-        // finally execute init method if exists
-        if (method_exists($this, 'init')) {
-            $this->init($f3);
-        }
     }
 
     /**
@@ -289,8 +284,6 @@ class API
      */
     public function basicAuthenticateLoginPassword(): bool
     {
-        $f3 = \Base::instance();
-
         $auth = new \Auth(new \DB\SQL\Mapper(\Registry::get('db'), 'users', ['email', 'password'], 30), [
             'id' => 'email',
             'pw' => 'password',
@@ -314,7 +307,6 @@ class API
         if (empty($clientId) || empty($clientSecret)) {
             return false;
         }
-        $f3 = \Base::instance();
         $oAuth2Model = Models\OAuth2::instance();
         $appsMapper = $oAuth2Model->getAppsMapper();
         $appsMapper->load(['client_id = ? AND client_secret = ?',

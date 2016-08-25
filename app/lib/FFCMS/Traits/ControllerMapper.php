@@ -219,7 +219,7 @@ trait ControllerMapper
         $fields = empty($validFields['fields']) ? join(',', $allFields) : $validFields['fields'];
 
         // validated fields to search in, use all if empty
-        $searchFields = empty($searchFields) ? join(',', $allFields) : $validFields['searchFields'];
+        $searchFields = empty($validFields['search_fields']) ? join(',', $allFields) : $validFields['search_fields'];
         // get search type
         $search = $f3->get('REQUEST.search');
         if (!empty($search)) {
@@ -244,12 +244,7 @@ trait ControllerMapper
         }
 
         // get total results
-        $query = 'SELECT COUNT(*) AS results FROM ' . $db->quotekey($m->table()) . ' WHERE ';
-        if (empty($users_uuid)) {
-             $query .= join(' OR ', $sqlClauses);
-        } else {
-             $query .= ' users_uuid = ' . $db->quote($users_uuid)  . ' AND ('.  join(' OR ', $sqlClauses) . ')';
-        }
+        $query = 'SELECT COUNT(*) AS results FROM ' . $db->quotekey($m->table()) . ' WHERE ' . join(' OR ', $sqlClauses);
         $data = [];
         $rows = $db->exec($query);
         $rows = (int) $rows[0]['results'];

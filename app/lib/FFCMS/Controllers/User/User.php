@@ -24,7 +24,6 @@ class User extends Base
     public function index(\Base $f3)
     {
         $this->redirectLoggedOutUser();
-        $userData = $f3->get('user');
 
         $f3->set('form', $f3->get('REQUEST'));
         echo \View::instance()->render('user/index.phtml');
@@ -44,7 +43,6 @@ class User extends Base
 
         // url if login failed
         $view = 'user/login.phtml';
-        $loginUrl = $this->url('@login', $f3->get('REQUEST'));
 
         // filter input vars of request
         $usersModel = Models\Users::instance();
