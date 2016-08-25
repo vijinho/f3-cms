@@ -17,6 +17,11 @@ class Users extends APIMapper
     protected $adminOnly = false;
 
     /**
+     * @var \FFMVC\Mappers\Users mapper for class
+     */
+    protected $mapper;
+
+    /**
      * Display the authorised user or
      * if an admin, the user specified in the url /@id or  param ?id=
      *

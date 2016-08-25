@@ -74,10 +74,10 @@ abstract class APIMapper extends API
             $this->mapperClass = $mapperClass;
             $this->mapper = new $this->mapperClass;
         }
-        
+
         $this->isAuthorised = $this->validateAccess();
         if (empty($this->isAuthorised)) {
-            return $this->setOAuthError('invalid_grant');
+            $this->setOAuthError('invalid_grant');
         }
 
         $deny = false;
@@ -89,7 +89,7 @@ abstract class APIMapper extends API
         $this->isAuthorised = empty($deny);
         if ($deny) {
             $this->failure('authentication_error', "User does not have permission.", 401);
-            return $this->setOAuthError('access_denied');
+            $this->setOAuthError('access_denied');
         }
     }
 
@@ -537,7 +537,7 @@ abstract class APIMapper extends API
         $fields = empty($validFields['fields']) ? join(',', $allFields) : $validFields['fields'];
 
         // validated fields to search in, use all if empty
-        $searchFields = empty($searchFields['search_fields']) ? join(',', $allFields) : $validFields['search_fields'];
+        $searchFields = empty($validFields['search_fields']) ? join(',', $allFields) : $validFields['search_fields'];
 
         // get search type
         $search = $f3->get('REQUEST.search');

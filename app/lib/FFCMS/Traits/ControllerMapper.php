@@ -20,7 +20,7 @@ trait ControllerMapper
      * list objects (list is a reserved keyword) of mapper
      *
      * @param \Base $f3
-     * @param \FFCMS\Models\Mapper $m
+     * @param \FFCMS\Mappers\Mapper $m
      * @return array
      */
     protected function &getListingResults(\Base $f3, \FFCMS\Mappers\Mapper $m): array
@@ -152,7 +152,7 @@ trait ControllerMapper
      * search objects of given mapper
      *
      * @param \Base $f3
-     * @param \FFCMS\Models\Mapper $m
+     * @param \FFCMS\Mappers\Mapper $m
      * @return array $results
      */
     protected function &getSearchResults(\Base $f3, \FFCMS\Mappers\Mapper $m): array
@@ -310,12 +310,7 @@ trait ControllerMapper
         ];
 
         // retrieve results
-        $query = 'SELECT * FROM ' . $db->quotekey($m->table()) . ' WHERE ';
-        if (empty($users_uuid)) {
-             $query .= join(' OR ', $sqlClauses);
-        } else {
-             $query .= ' users_uuid = ' . $db->quote($users_uuid)  . ' AND ('.  join(' OR ', $sqlClauses) . ')';
-        }
+        $query = 'SELECT * FROM ' . $db->quotekey($m->table()) . ' WHERE ' . join(' OR ', $sqlClauses);
         $query .= sprintf(' LIMIT %d,%d', (1 == $page) ? 0 : ($page - 1) * $perPage, $perPage);
         $results = $db->exec($query);
         foreach ($results as $row) {
