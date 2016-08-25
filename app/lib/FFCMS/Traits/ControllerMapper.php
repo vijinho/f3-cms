@@ -16,6 +16,57 @@ trait ControllerMapper
      */
     abstract public function url(string $url, array $params = []): string;
 
+
+    public static function checkOrderField(string $order = null, array $allFields = []): array
+    {
+        if (empty($order)) {
+            return [];
+        }
+
+        $orderClauses = empty($order) ? [] : preg_split("/[,]/", $order);
+        foreach ($orderClauses as $k => $field) {
+            // split into field, asc/desc
+            $field = preg_split("/[\s]+/", trim($field));
+            if (!in_array($field[0], $allFields)) {
+                // invalid field
+                unset($orderClauses[$k]);
+                continue;
+            } elseif (count($field) == 1) {
+                $field[1] = 'asc';
+            } elseif (count($field) == 2) {
+                if (!in_array($field[1], ['asc', 'desc'])) {
+                    $field[1] = 'asc';
+                }
+            }
+            $orderClauses[$k] = $field[0] . ' ' . $field[1];
+        }
+        $order = join(',', $orderClauses);
+
+        return $order;
+    }
+
+
+    public static function checkFieldsExist(array $checkFieldsExist = [], array $fieldsList = [])
+    {
+        $f3 = \Base::instance();
+        // fields to return and fields to search - validate
+        $validFields = [];
+        foreach ($checkFieldsExist as $fieldsList) {
+            if (empty($fields)) {
+                continue;
+            }
+            $fields = empty($fields) ? [] : preg_split("/[,]/", $fields);
+            foreach ($fields as $k => $field) {
+                if (!in_array($field, $allFields)) {
+                    unset($fields[$k]);
+                }
+            }
+            $validFields[$fieldsList] = join(',', $fields);
+        }
+        return $validFields;
+    }
+
+
    /**
      * list objects (list is a reserved keyword) of mapper
      *
@@ -43,35 +94,16 @@ trait ControllerMapper
 
         // validate order field
         $order = $f3->get('REQUEST.order');
-        $orderClauses = empty($order) ? [] : preg_split("/[,]/", $order);
-        $allFields = $m->fields();
-        foreach ($orderClauses as $k => $field) {
-            // split into field, asc/desc
-            $field = preg_split("/[\s]+/", trim($field));
-            if (!in_array($field[0], $allFields)) {
-                // invalid field
-                unset($orderClauses[$k]);
-                continue;
-            } elseif (count($field) == 1) {
-                $field[1] = 'asc';
-            } elseif (count($field) == 2) {
-                if (!in_array($field[1], ['asc', 'desc'])) {
-                    $field[1] = 'asc';
-                }
-            }
-            $orderClauses[$k] = $field[0] . ' ' . $field[1];
-        }
-        $order = join(',', $orderClauses);
 
-        // fields to return - validate
-        $fields = $f3->get('REQUEST.fields');
-        $fields = empty($fields) ? [] : preg_split("/[,]/", $fields);
-        foreach ($fields as $k => $field) {
-            if (!in_array($field, $allFields)) {
-                unset($fields[$k]);
-            }
-        }
-        $fields = join(',', empty($fields) ? $m->fields() : $fields);
+        // fetch data (paging is 0 based)
+        $allFields = $m->fields();
+
+        // validate order field
+        $order = self::checkOrderField($f3->get('REQUEST.order'), $allFields);
+
+        // validated fields to return
+        $validFields = self::checkFieldsExist([$f3->get('REQUEST.fields')], $allFields);
+        $fields = empty($validFields['fields']) ? join(',', $allFields) : $validFields['fields'];
 
         // count rows
         $data = [];
@@ -147,7 +179,6 @@ trait ControllerMapper
         return $data;
     }
 
-
     /**
      * search objects of given mapper
      *
@@ -177,49 +208,15 @@ trait ControllerMapper
         $allFields = $m->fields();
 
         // validate order field
-        $order = $f3->get('REQUEST.order');
-        if (!empty($order)) {
-            $orderClauses = empty($order) ? [] : preg_split("/[,]/", $order);
-            foreach ($orderClauses as $k => $field) {
-                // split into field, asc/desc
-                $field = preg_split("/[\s]+/", trim($field));
-                if (!in_array($field[0], $allFields)) {
-                    // invalid field
-                    unset($orderClauses[$k]);
-                    continue;
-                } elseif (count($field) == 1) {
-                    $field[1] = 'asc';
-                } elseif (count($field) == 2) {
-                    if (!in_array($field[1], ['asc', 'desc'])) {
-                        $field[1] = 'asc';
-                    }
-                }
-                $orderClauses[$k] = $field[0] . ' ' . $field[1];
-            }
-            $order = join(',', $orderClauses);
-        }
-
-        // fields to return and fields to search - validate
-        $validFields = [];
-        foreach (['fields', 'search_fields'] as $fieldsList) {
-            $fields = $f3->get('REQUEST.' . $fieldsList);
-            if (empty($fields)) {
-                continue;
-            }
-            $fields = empty($fields) ? [] : preg_split("/[,]/", $fields);
-            foreach ($fields as $k => $field) {
-                if (!in_array($field, $allFields)) {
-                    unset($fields[$k]);
-                }
-            }
-            $validFields[$fieldsList] = join(',', $fields);
-        }
+        $order = self::checkOrderField($f3->get('REQUEST.order'), $allFields);
+        $validFields = self::checkFieldsExist([$f3->get('REQUEST.fields'), $f3->get('REQUEST.search_fields')], $allFields);
 
         // validated fields to return
         $fields = empty($validFields['fields']) ? join(',', $allFields) : $validFields['fields'];
 
         // validated fields to search in, use all if empty
         $searchFields = empty($validFields['search_fields']) ? join(',', $allFields) : $validFields['search_fields'];
+
         // get search type
         $search = $f3->get('REQUEST.search');
         if (!empty($search)) {
