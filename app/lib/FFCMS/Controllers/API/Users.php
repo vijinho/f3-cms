@@ -127,7 +127,7 @@ class Users extends Mapper
 
         if (!$isAdmin) {
             $fields[] = 'status';
-            $fields[] = 'groups';
+            $fields[] = 'scopes';
         }
 
         return $this->save($f3, $fields);

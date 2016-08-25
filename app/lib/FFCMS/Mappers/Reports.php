@@ -12,7 +12,7 @@ namespace FFCMS\Mappers;
  * @property int    $id
  * @property string $uuid
  * @property string $users_uuid
- * @property string $groups
+ * @property string $scopes
  * @property string $key
  * @property string $name
  * @property string $description
@@ -30,7 +30,7 @@ class Reports extends Mapper
     public $fieldsVisible = [
         'uuid'        => 'id',
         'users_uuid'  => 'user_id',
-        'groups'      => true,
+        'scopes'      => true,
         'key'         => true,
         'name'        => true,
         'description' => true,
@@ -58,7 +58,7 @@ class Reports extends Mapper
     public $filterRules = [
         'uuid'        => 'trim|sanitize_string|lower',
         'users_uuid'  => 'trim|sanitize_string|lower',
-        'groups'      => 'trim|sanitize_string|lower',
+        'scopes'      => 'trim|sanitize_string|lower',
         'key'         => 'trim|sanitize_string|lower|slug',
         'name'        => 'trim|sanitize_string',
         'description' => 'trim|sanitize_string',
@@ -75,7 +75,7 @@ class Reports extends Mapper
     public $validationRules = [
         'uuid'        => 'exact_len,36|alpha_dash',
         'users_uuid'  => 'exact_len,36|alpha_dash',
-        'groups'      => 'max_len,64',
+        'scopes'      => 'max_len,64',
         'key'         => 'max_len,255',
         'name'        => 'max_len,255',
         'description' => 'max_len,1024',

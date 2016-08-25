@@ -152,7 +152,7 @@ CREATE TABLE `reports` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` char(36) NOT NULL COMMENT 'UUID',
   `users_uuid` char(36) NOT NULL COMMENT 'User UUID',
-  `groups` varchar(64) NOT NULL DEFAULT 'user' COMMENT 'Account Groups',
+  `scopes` varchar(64) NOT NULL DEFAULT 'user' COMMENT 'Account Scopes',
   `key` varchar(255) NOT NULL COMMENT 'Key',
   `name` varchar(255) NOT NULL COMMENT 'Name',
   `description` text COMMENT 'Description',
@@ -179,7 +179,7 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL COMMENT 'Email',
   `firstname` varchar(128) NOT NULL COMMENT 'First Name(s)',
   `lastname` varchar(128) NOT NULL COMMENT 'Last Name(s)',
-  `groups` varchar(64) NOT NULL DEFAULT 'user' COMMENT 'Account Groups',
+  `scopes` varchar(64) NOT NULL DEFAULT 'user' COMMENT 'Account Scopes',
   `status` varchar(32) NOT NULL DEFAULT 'NEW' COMMENT 'Account Status',
   `password_question` varchar(255) NOT NULL COMMENT 'Password Hint Question',
   `password_answer` varchar(255) NOT NULL COMMENT 'Password Hint Answer',
@@ -194,7 +194,7 @@ CREATE TABLE `users` (
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 
-INSERT INTO `users` (`id`, `uuid`, `password`, `email`, `firstname`, `lastname`, `groups`, `status`, `password_question`, `password_answer`, `created`, `login_count`, `login_last`)
+INSERT INTO `users` (`id`, `uuid`, `password`, `email`, `firstname`, `lastname`, `scopes`, `status`, `password_question`, `password_answer`, `created`, `login_count`, `login_last`)
 VALUES
 	(1,'acb84996-3013-3687-98d7-d4afe6833794','37ot5p82l42s4','vijay@yoyo.org','Root','Beer','user,api,admin,root','confirmed','1+1=?','2','2016-08-20 21:22:45',0,'0000-00-00 00:00:00');
 

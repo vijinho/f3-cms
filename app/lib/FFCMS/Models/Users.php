@@ -16,11 +16,11 @@ use FFCMS\{Traits, Mappers};
 class Users extends DB
 {
     /**
-     * the comma-separated list of groups a user can belong to
+     * the comma-separated list of scopes a user can belong to
      *
-     * @const array GROUPS
+     * @const array SCOPES
      */
-    const GROUPS = ['root', 'admin', 'api', 'user'];
+    const SCOPES = ['root', 'admin', 'api', 'user'];
 
     /**
      * the different type of account status
@@ -155,9 +155,9 @@ class Users extends DB
             throw new \FFCMS\Exception($msg);
         }
 
-        // set user groups
-        $groups = empty($usersMapper->groups) ? [] : preg_split("/[\s,]+/", $usersMapper->groups);
-        if (!in_array('user', $groups) || in_array($usersMapper->status, ['closed', 'suspended', 'cancelled'])) {
+        // set user scopes
+        $scopes = empty($usersMapper->scopes) ? [] : preg_split("/[\s,]+/", $usersMapper->scopes);
+        if (!in_array('user', $scopes) || in_array($usersMapper->status, ['closed', 'suspended', 'cancelled'])) {
             $msg = sprintf(_("User %s %s denied login because account group is not in 'user' or account status is in 'closed,suspended,cancelled'."),
                     $usersMapper->firstname, $usersMapper->lastname);
             throw new \FFCMS\Exception($msg);
@@ -225,8 +225,8 @@ class Users extends DB
             $m->status = 'registered';
         }
 
-        if (empty($m->groups)) {
-            $m->groups = 'user';
+        if (empty($m->scopes)) {
+            $m->scopes = 'user';
         }
 
         return $m;

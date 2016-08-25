@@ -37,7 +37,7 @@ class Setup
                 $usersMapper->firstname         = 'Root';
                 $usersMapper->lastname          = 'Beer';
                 $usersMapper->status            = 'confirmed';
-                $usersMapper->groups            = 'user,api,admin,root';
+                $usersMapper->scopes            = 'user,api,admin,root';
                 $usersMapper->password_question = '1+1=?';
                 $usersMapper->password_answer   = '2';
                 $usersMapper->password          = 'admin';

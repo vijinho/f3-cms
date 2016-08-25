@@ -168,7 +168,7 @@ class Reports extends Admin
         $data = $f3->get('REQUEST');
         $fields = [
             'users_uuid',
-            'groups',
+            'scopes',
             'key',
             'name',
             'description',
@@ -311,7 +311,7 @@ class Reports extends Admin
         // only allow updating of these fields
         $data = $f3->get('REQUEST');
         $fields = [
-            'groups',
+            'scopes',
             'key',
             'name',
             'description',

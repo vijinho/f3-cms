@@ -150,7 +150,7 @@ class Users extends Admin
             'lastname',
             'password_question',
             'password_answer',
-            'groups',
+            'scopes',
             'status',
         ];
 

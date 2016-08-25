@@ -417,15 +417,15 @@ class API
 
         // check user has api access enabled
         // has to have 'api' in group
-        $groups = empty($usersMapper->groups) ? [] : preg_split("/[\s,]+/", $usersMapper->groups);
+        $scopes = empty($usersMapper->scopes) ? [] : preg_split("/[\s,]+/", $usersMapper->scopes);
         $f3->set('isAdmin', 0);
         if (empty($token)) {
-            if (!in_array('api', $groups)) {
+            if (!in_array('api', $scopes)) {
                 // clear authorized app as user doesn't have access
                 $usersMapper->reset();
                 $f3->clear('api_app');
             }
-            if (in_array('admin', $groups)) {
+            if (in_array('admin', $scopes)) {
                 $f3->set('isAdmin', 1);
             }
         }
@@ -458,11 +458,11 @@ class API
             }
         }
 
-        // set user groups
-        $f3->set('isAdmin', in_array('admin', $groups));
-        $groups = empty($usersMapper->groups) ? [] : preg_split("/[\s,]+/", $usersMapper->groups);
-        if (!empty($groups)) {
-            $f3->set('userScopes', $groups);
+        // set user scopes
+        $f3->set('isAdmin', in_array('admin', $scopes));
+        $scopes = empty($usersMapper->scopes) ? [] : preg_split("/[\s,]+/", $usersMapper->scopes);
+        if (!empty($scopes)) {
+            $f3->set('userScopes', $scopes);
         }
 
         $userAuthenticated = (is_array($user) || is_array($app));

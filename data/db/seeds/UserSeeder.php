@@ -18,7 +18,7 @@ class UserSeeder extends AbstractSeed
             'registered', // initial registration
             'confirmed', // user has confirmed email address - needed for api access
         ];
-        $groups = ['admin', 'user', 'api', 'user,api', 'admin,user,api'];
+        $scopes = ['admin', 'user', 'api', 'user,api', 'admin,user,api'];
         for ($i = 0; $i < $max; $i++) {
             $data[] = [
                 'uuid' => $faker->uuid,
@@ -26,7 +26,7 @@ class UserSeeder extends AbstractSeed
                 'email' => $faker->email,
                 'firstname' => $faker->firstName,
                 'lastname' => $faker->lastName,
-                'groups' => $groups[rand(0,4)],
+                'scopes' => $scopes[rand(0,4)],
                 'status' => $statuses[rand(0,4)],
                 'password_question' => $faker->sentence(10, true),
                 'password_answer' => $faker->sentence(3),

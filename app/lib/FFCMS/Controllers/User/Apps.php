@@ -96,8 +96,8 @@ class Apps extends Controllers\User\Base
         $appsMapper->users_uuid = $f3->get('uuid');
 
         // admin group auto-approved
-        $groups = $f3->get('userScopes');
-        $appsMapper->status = in_array('admin', $groups) ? 'approved' : 'registered';
+        $scopes = $f3->get('userScopes');
+        $appsMapper->status = in_array('admin', $scopes) ? 'approved' : 'registered';
 
         if ($appsMapper->validateSave()) {
             $this->notify(_('Your new app has been registered!'), 'success');

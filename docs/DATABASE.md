@@ -104,7 +104,7 @@ CREATE TABLE `config_data` (
 ### users
 
 * Used to store application user information
-* 'groups' is a comma-separated list of groups the user belongs to, e.g. user (default), api (for api-access), admin (for admin access) etc
+* 'scopes' is a comma-separated list of scopes the user belongs to, e.g. user (default), api (for api-access), admin (for admin access) etc
 * The users table should only contain the absolute minimum data required for a user to sign-up to the application - any other supplemental data should be stored elsewhere, e.g. in the  users_data table
 
 ```
@@ -115,7 +115,7 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL COMMENT 'Email',
   `firstname` varchar(128) NOT NULL COMMENT 'First Name(s)',
   `lastname` varchar(128) NOT NULL COMMENT 'Last Name(s)',
-  `groups` varchar(64) NOT NULL DEFAULT 'user' COMMENT 'Account Groups',
+  `scopes` varchar(64) NOT NULL DEFAULT 'user' COMMENT 'Account Scopes',
   `status` varchar(32) NOT NULL DEFAULT 'NEW' COMMENT 'Account Status',
   `password_question` varchar(255) NOT NULL COMMENT 'Password Hint Question',
   `password_answer` varchar(255) NOT NULL COMMENT 'Password Hint Answer',
@@ -217,7 +217,7 @@ CREATE TABLE `reports` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` varchar(36) NOT NULL COMMENT 'UUID',
   `users_uuid` varchar(36) NOT NULL COMMENT 'User UUID',
-  `groups` varchar(64) NOT NULL DEFAULT 'user' COMMENT 'Account Groups',
+  `scopes` varchar(64) NOT NULL DEFAULT 'user' COMMENT 'Account Scopes',
   `key` varchar(255) NOT NULL COMMENT 'Key',
   `name` varchar(255) NOT NULL COMMENT 'Name',
   `description` text COMMENT 'Description',

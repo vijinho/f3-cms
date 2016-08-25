@@ -60,13 +60,13 @@ abstract class Base
             return;
         }
 
-        // fetch the user groups
+        // fetch the user scopes
         $user = $usersMapper->cast();
-        $user['groups'] = empty($user['groups']) ? [] : preg_split("/[\s,]+/", $user['groups']);
-        $user['apiEnabled'] = (int) in_array('api', $user['groups']);
-        $f3->set('userScopes', $user['groups']);
-        $f3->set('isAdmin', in_array('admin', $user['groups']));
-        $f3->set('isRoot', in_array('root', $user['groups']));
+        $user['scopes'] = empty($user['scopes']) ? [] : preg_split("/[\s,]+/", $user['scopes']);
+        $user['apiEnabled'] = (int) in_array('api', $user['scopes']);
+        $f3->set('userScopes', $user['scopes']);
+        $f3->set('isAdmin', in_array('admin', $user['scopes']));
+        $f3->set('isRoot', in_array('root', $user['scopes']));
 
         // fetch addtional information for the user
         $usersData = $usersModel->getUserDetails($usersMapper->uuid, [

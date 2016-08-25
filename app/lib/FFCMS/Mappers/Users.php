@@ -15,7 +15,7 @@ namespace FFCMS\Mappers;
  * @property string $email
  * @property string $firstname
  * @property string $lastname
- * @property string $groups
+ * @property string $scopes
  * @property string $status
  * @property string $password_question
  * @property string $password_answer
@@ -36,7 +36,7 @@ class Users extends Mapper
         'email'             => true,
         'firstname'         => true,
         'lastname'          => true,
-        'groups'            => false,
+        'scopes'            => false,
         'status'            => true,
         'password_question' => true,
         'password_answer'   => true,
@@ -70,7 +70,7 @@ class Users extends Mapper
         'email'             => 'trim|sanitize_string|sanitize_email|lower',
         'firstname'         => 'trim|sanitize_string',
         'lastname'          => 'trim|sanitize_string',
-        'groups'            => 'trim|sanitize_string|lower',
+        'scopes'            => 'trim|sanitize_string|lower',
         'status'            => 'trim|sanitize_string|lower',
         'password_question' => 'trim|sanitize_string',
         'password_answer'   => 'trim|sanitize_string',
@@ -91,7 +91,7 @@ class Users extends Mapper
         'email'             => 'valid_email|max_len,255',
         'firstname'         => 'valid_name|max_len,128',
         'lastname'          => 'max_len,128',
-        'groups'            => 'max_len,64',
+        'scopes'            => 'max_len,64',
         'status'            => 'max_len,32',
         'password_question' => 'max_len,255',
         'password_answer'   => 'max_len,255',

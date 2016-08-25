@@ -16,7 +16,7 @@ The API requires the client is authenticated.
 Authentication using `email:password` if:
 
 - you have registered on the website (like any other user)
-- your have had API access approved (users table entry has 'api' in groups column)
+- your have had API access approved (users table entry has 'api' in scopes column)
 
 ##### Request
 
@@ -127,7 +127,7 @@ curl -k -u '{client_id:client_secret}' -X GET \
     "email": "bwilkinson@gmail.com",
     "firstname": "Olaf",
     "lastname": "Lockman",
-    "groups": "api",
+    "scopes": "api",
     "status": "confirmed",
     "password_question": "Officiis recusandae incidunt ut voluptas amet mollitia est iusto facere doloribus et dolor dolores.",
     "password_answer": "Aperiam cumque id.",
@@ -420,7 +420,7 @@ curl -k -G -X PATCH -u "{client_id}:{client_secret}" \
         -d lastname=Baggio \
         -d email=roberto.baggio@example.com \
         -d status=registered -d password=arse123 \
-        -d groups='admin,api' \
+        -d scopes='admin,api' \
         -d password_question='Italian?' \
         -d password_answer="Si" \
         -d login_last="2014-12-01"
@@ -898,7 +898,7 @@ Retrieve audit record 26bb5c63-4f16-3c35-bdcf-714af5381f92
     "event": "USER_REGISTERED",
     "description": "New user Vijay Mahrra registration.",
     "old": null,
-    "new": "{\n    \"id\": 1,\n    \"uuid\": \"da00f425-7c57-38df-b598-8040904ea98a\",\n    \"password\": \"sbo95g5lhzac\",\n    \"email\": \"vijay@yoyo.org\",\n    \"firstname\": \"Vijay\",\n    \"lastname\": \"Mahrra\",\n    \"groups\": \"user\",\n    \"status\": \"registered\",\n    \"password_question\": \"Favourite colour?\",\n    \"password_answer\": \"Pink\",\n    \"created\": \"2016-07-23 19:29:52\",\n    \"login_count\": 0,\n    \"login_last\": null\n}",
+    "new": "{\n    \"id\": 1,\n    \"uuid\": \"da00f425-7c57-38df-b598-8040904ea98a\",\n    \"password\": \"sbo95g5lhzac\",\n    \"email\": \"vijay@yoyo.org\",\n    \"firstname\": \"Vijay\",\n    \"lastname\": \"Mahrra\",\n    \"scopes\": \"user\",\n    \"status\": \"registered\",\n    \"password_question\": \"Favourite colour?\",\n    \"password_answer\": \"Pink\",\n    \"created\": \"2016-07-23 19:29:52\",\n    \"login_count\": 0,\n    \"login_last\": null\n}",
     "debug": null
 }
 ```

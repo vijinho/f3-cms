@@ -74,9 +74,9 @@ class ForgotPassword extends User
                 throw new \FFCMS\Exception($msg);
             }
 
-            // set user groups
-            $groups = empty($usersMapper->groups) ? [] : preg_split("/[\s,]+/", $usersMapper->groups);
-            if (!in_array('user', $groups) || in_array($usersMapper->status, ['closed', 'suspended', 'cancelled'])) {
+            // set user scopes
+            $scopes = empty($usersMapper->scopes) ? [] : preg_split("/[\s,]+/", $usersMapper->scopes);
+            if (!in_array('user', $scopes) || in_array($usersMapper->status, ['closed', 'suspended', 'cancelled'])) {
                 $msg = sprintf("User %s %s denied login because account group is not in 'user' or account status is in 'closed,suspended,cancelled'.",
                         $usersMapper->firstname, $usersMapper->lastname);
                 throw new \FFCMS\Exception($msg);

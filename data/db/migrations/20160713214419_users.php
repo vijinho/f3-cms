@@ -15,7 +15,7 @@ class Users extends AbstractMigration
               ->addColumn('email', 'string', ['comment' => 'Email', 'limit' => 255])
               ->addColumn('firstname', 'string', ['comment' => 'First Name(s)', 'limit' => 128])
               ->addColumn('lastname', 'string', ['comment' => 'Last Name(s)', 'limit' => 128])
-              ->addColumn('groups', 'string', ['comment' => 'Account Groups', 'limit' => 64, 'default' => 'user'])
+              ->addColumn('scopes', 'string', ['comment' => 'Account Scopes', 'limit' => 64, 'default' => 'user'])
               ->addColumn('status', 'string', ['comment' => 'Account Status', 'limit' => 32, 'default' => 'NEW'])
               ->addColumn('password_question', 'string', ['comment' => 'Password Hint Question', 'limit' => 255])
               ->addColumn('password_answer', 'string', ['comment' => 'Password Hint Answer', 'limit' => 255])
