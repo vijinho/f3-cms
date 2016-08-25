@@ -2,7 +2,6 @@
 
 namespace FFCMS\Models;
 
-use FFMVC\Helpers;
 use FFCMS\{Traits, Mappers};
 
 /**
