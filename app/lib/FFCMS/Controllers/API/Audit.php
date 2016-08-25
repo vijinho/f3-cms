@@ -12,7 +12,7 @@ use FFCMS\{Traits, Models, Mappers};
  * @copyright Vijay Mahrra
  * @license GPLv3 (http://www.gnu.org/licenses/gpl-3.0.html)
  */
-class Audit extends APIMapper
+class Audit extends Mapper
 {
     /**
      * Perform a create/update of the an item, used by POST, PUT, PATCH

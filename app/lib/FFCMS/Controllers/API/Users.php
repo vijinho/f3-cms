@@ -12,7 +12,7 @@ use FFCMS\{Traits, Models, Mappers};
  * @copyright Vijay Mahrra
  * @license GPLv3 (http://www.gnu.org/licenses/gpl-3.0.html)
  */
-class Users extends APIMapper
+class Users extends Mapper
 {
     protected $adminOnly = false;
 

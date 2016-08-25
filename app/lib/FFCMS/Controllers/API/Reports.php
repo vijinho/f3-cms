@@ -12,7 +12,7 @@ use FFCMS\{Traits, Models, Mappers};
  * @copyright Vijay Mahrra
  * @license GPLv3 (http://www.gnu.org/licenses/gpl-3.0.html)
  */
-class Reports extends APIMapper
+class Reports extends Mapper
 {
     protected $adminOnly = true;
 

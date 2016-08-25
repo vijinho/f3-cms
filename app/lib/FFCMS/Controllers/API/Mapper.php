@@ -13,7 +13,7 @@ use FFCMS\{Traits, Models, Mappers};
  * @copyright Vijay Mahrra
  * @license GPLv3 (http://www.gnu.org/licenses/gpl-3.0.html)
  */
-abstract class APIMapper extends API
+abstract class Mapper extends API
 {
     use Traits\Validation;
 
@@ -70,7 +70,7 @@ abstract class APIMapper extends API
         $this->table = empty($this->table) ? $f3->snakecase($class) : $this->table;
         $mapperClass = "\FFCMS\Mappers\\" . $class;
 
-        if (class_exists($mapperClass) && $this instanceof APIMapper) {
+        if (class_exists($mapperClass) && $this instanceof Mapper) {
             $this->mapperClass = $mapperClass;
             $this->mapper = new $this->mapperClass;
         }
