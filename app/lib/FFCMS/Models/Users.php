@@ -16,19 +16,6 @@ use FFCMS\{Traits, Mappers};
 class Users extends DB
 {
     /**
-     * the comma-separated list of scopes a user can belong to
-     *
-     * @const array SCOPES
-     */
-    const SCOPES = ['root', 'admin', 'api', 'user'];
-
-    /**
-     * the different type of account status
-     * @const array STATUSES
-     */
-    const STATUSES = ['registered', 'confirmed', 'suspended', 'cancelled', 'closed'];
-
-    /**
      * @var \FFCMS\Mappers\Users user mapper
      */
     public $mapper;

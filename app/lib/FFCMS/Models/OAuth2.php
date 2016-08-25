@@ -14,22 +14,6 @@ use FFCMS\{Traits, Mappers};
 class OAuth2 extends DB
 {
     /**
-     * the different type of account status
-     * @const array STATUSES
-     */
-    const STATUSES = ['registered', 'confirmed', 'suspended', 'cancelled', 'closed'];
-
-    /**
-     * OAuth2 Scopes
-     *
-     * @const array SCOPES
-     */
-    const SCOPES = [
-        'read' => 'Read any of your personal data',
-        'write' => 'Edit all of your personal data',
-    ];
-
-    /**
      * @var \FFCMS\Mappers\Oauth2Apps  mapper for apps
      */
     protected $appsMapper;
