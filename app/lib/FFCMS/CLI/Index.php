@@ -44,7 +44,7 @@ class Index extends Base
         if (1 < count($output)) {
             $msg = $pid . ': Already running! Quitting.';
             $cli->shout($msg);
-            $this->log($ps[0]);
+            $this->log($output[0]);
             $this->log($msg);
             return false;
         }

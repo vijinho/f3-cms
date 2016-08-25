@@ -35,22 +35,21 @@ class App
      * @param \Base $f3
      * @return array $cfg
      */
-    private static function loadConfigData(\Base $f3): array
+    protected static function loadConfigData(\Base $f3): array
     {
-        $cfgKeys = $f3->get('cfg.keys');
         $keysToLoad = [];
-        foreach ($cfgKeys as $k => $v) {
+        foreach ($f3->get('cfg.keys') as $k => $v) {
             if (is_array($v)) {
                 $keysToLoad = array_merge($keysToLoad, $v);
             }
         }
 
         $cache = \Cache::instance();
-        $key = 'cfg-' . md5(join('-', array_keys($cfgKeys)));
+        $key = 'cfg-' . md5(join('-', array_keys($keysToLoad)));
         if (!$cache->exists($key, $cfg)) {
             // now set the value of cfg to the keys we want to load
-            $m = Models\ConfigData::instance();
-            $cfg = $m->getValues($keysToLoad);
+            $configDataModel = Models\ConfigData::instance();
+            $cfg = $configDataModel->getValues($keysToLoad);
             $cache->set($key, $cfg, $f3->get('cfg.ttl.cfg'));
         }
 
@@ -131,7 +130,7 @@ class App
 
             // load cli config keys
             $f3->set('cfg.keys.cli', $f3->split($f3->get('cfg.keys.cli')));
-            static::loadConfigData($f3);
+            self::loadConfigData($f3);
 
             // @see http://fatfreeframework.com/routing-engine
             //load routes from ini file
@@ -283,7 +282,7 @@ class App
 
             // load api config keys
             $f3->set('cfg.keys.api', $f3->split($f3->get('cfg.keys.api')));
-            static::loadConfigData($f3);
+            self::loadConfigData($f3);
 
             $f3->config('config/routes-api.ini');
             $f3->run();
@@ -339,7 +338,7 @@ class App
         if ($cms) {
             $f3->set('cfg.keys.cms', $f3->split($f3->get('cfg.keys.cms')));
         }
-        static::loadConfigData($f3);
+        self::loadConfigData($f3);
 
         // from here we add-in routes generated from the database (cms routes)
         $f3->run();
