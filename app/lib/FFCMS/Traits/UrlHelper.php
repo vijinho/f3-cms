@@ -32,7 +32,7 @@ trait UrlHelper
     /**
      * Create an external URL
      *
-     * @param type $url
+     * @param string $url
      * @param array $params
      */
     public function xurl(string $url, array $params = [], bool $https = true): string

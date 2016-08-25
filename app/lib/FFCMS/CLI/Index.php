@@ -24,7 +24,7 @@ class Index extends Base
     /**
      * example to test if already running
      * run cli.php '/index/running' in two different terminals
-     * @return void
+     * @return bool
      */
     public function running()
     {
@@ -39,9 +39,9 @@ class Index extends Base
         $this->log($msg);
 
         // check if already running, quit if so
-        exec('ps auxww | grep -i index/running | grep -v grep', $ps);
+        exec('ps auxww | grep -i index/running | grep -v grep', $output);
 
-        if (1 < count($ps)) {
+        if (1 < count($output)) {
             $msg = $pid . ': Already running! Quitting.';
             $cli->shout($msg);
             $this->log($ps[0]);
@@ -50,5 +50,7 @@ class Index extends Base
         }
 
         sleep(10);
+
+        return true;
     }
 }

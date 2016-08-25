@@ -450,7 +450,7 @@ class User extends Base
     /**
      * Send an email confirmation to the given user
      *
-     * @param string $email the email address of the user
+     * @param null|string $email the email address of the user
      * @param boolean true/false
      */
     private function sendConfirmationEmail(string $email = null)

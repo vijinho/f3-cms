@@ -82,7 +82,7 @@ class ConfigData extends APIMapper
      *
      * @param \Base $f3
      * @param array $params
-     * @return void
+     * @return null|array|boolean
      */
     public function patch(\Base $f3, array $params)
     {
@@ -105,7 +105,7 @@ class ConfigData extends APIMapper
      *
      * @param \Base $f3
      * @param array $params
-     * @return void
+     * @return null|array|boolean
      */
     public function put(\Base $f3, array $params)
     {
@@ -127,7 +127,7 @@ class ConfigData extends APIMapper
      * Create new data
      *
      * @param \Base $f3
-     * @return void
+     * @return null|array|boolean
      */
     public function post(\Base $f3)
     {

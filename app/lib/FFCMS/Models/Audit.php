@@ -22,8 +22,8 @@ class Audit extends DB
     /**
      * initialize with array of params, 'db' and 'logger' can be injected
      *
-     * @param \Log $logger
-     * @param \DB\SQL $db
+     * @param null|\Log $logger
+     * @param null|\DB\SQL $db
      */
     public function __construct(array $params = [], \Log $logger = null, \DB\SQL $db = null)
     {
@@ -37,7 +37,7 @@ class Audit extends DB
      * Add a record to the audit table
      *
      * @param array $data
-     * @return bool|array insert id or false if not enabled
+     * @return false|array insert id or false if not enabled
      */
     public function write(array $data = [])
     {
@@ -96,6 +96,7 @@ class Audit extends DB
         $m->copyFrom($data);
         $m->validateSave();
         $data['id'] = $m->get('_id');
+        
         return $data;
     }
 }

@@ -17,7 +17,7 @@ class Users extends APIMapper
     protected $adminOnly = false;
 
     /**
-     * @var \FFMVC\Mappers\Users mapper for class
+     * @var \FFCMS\Mappers\Users mapper for class
      */
     protected $mapper;
 
@@ -27,7 +27,7 @@ class Users extends APIMapper
      *
      * @param \Base $f3
      * @param array $params
-     * @return void
+     * @return null|array|boolean
      */
     public function get(\Base $f3, array $params)
     {
@@ -106,7 +106,7 @@ class Users extends APIMapper
      *
      * @param \Base $f3
      * @param array $params
-     * @return void
+     * @return null|array|boolean
      */
     public function patch(\Base $f3, array $params)
     {
@@ -139,7 +139,7 @@ class Users extends APIMapper
      *
      * @param \Base $f3
      * @param array $params
-     * @return void
+     * @return null|array|boolean
      */
     public function put(\Base $f3, array $params)
     {
@@ -169,7 +169,7 @@ class Users extends APIMapper
      * Create a new user - admin only
      *
      * @param \Base $f3
-     * @return void
+     * @return null|array|boolean
      */
     public function post(\Base $f3)
     {
@@ -198,7 +198,7 @@ class Users extends APIMapper
      *
      * @param \Base $f3
      * @param array $params
-     * @return void
+     * @return null|array|boolean
      */
     public function delete(\Base $f3, array $params)
     {

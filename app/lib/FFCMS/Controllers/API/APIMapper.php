@@ -112,8 +112,8 @@ abstract class APIMapper extends API
      * @param \Base $f3
      * @param array $params
      * @param string $idField the field used for the unique id to load by
-     * @param string $defaultId defaule value to use if not found
-     * @return void
+     * @param string|null $defaultId defaule value to use if not found
+     * @return null|array|boolean|\FFMVC\Mappers\Mapper
      */
     public function getIdObjectIfUser(\Base $f3, array $params, string $idField = 'uuid', $defaultId = null)
     {
@@ -156,10 +156,10 @@ abstract class APIMapper extends API
      * if the user is an admin
      *
      * @param \Base $f3
-     * @param param $params
+     * @param array $params
      * @param string $idField the field used for the unique id to load by
-     * @param string $defaultId defaule value to use if not found
-     * @return type
+     * @param string|null $defaultId defaule value to use if not found
+     * @return null|array|boolean|\FFMVC\Mappers\Mapper
      */
     public function getIdObjectIfAdmin(\Base $f3, array $params, string $idField = 'uuid', $defaultId = null)
     {
@@ -204,7 +204,7 @@ abstract class APIMapper extends API
      *
      * @param \Base $f3
      * @param array $params
-     * @return void
+     * @return null|array|boolean
      */
     public function get(\Base $f3, array $params)
     {
@@ -227,7 +227,7 @@ abstract class APIMapper extends API
      *
      * @param \Base $f3
      * @param array $params
-     * @return void
+     * @return null|array|boolean
      */
     public function delete(\Base $f3, array $params)
     {
@@ -255,7 +255,7 @@ abstract class APIMapper extends API
      * list objects (list is a reserved keyword)
      *
      * @param \Base $f3
-     * @return void
+     * @return null|array|boolean
      */
     public function listingAdmin(\Base $f3)
     {
@@ -274,7 +274,7 @@ abstract class APIMapper extends API
      * search objects
      *
      * @param \Base $f3
-     * @return void
+     * @return null|array|boolean
      */
     public function searchAdmin(\Base $f3)
     {
@@ -457,7 +457,7 @@ abstract class APIMapper extends API
      *
      * @param \Base $f3
      * @param array $params
-     * @return void
+     * @return null|array|boolean
      */
     public function search(\Base $f3, array $params)
     {
@@ -582,6 +582,7 @@ abstract class APIMapper extends API
             $perPage = $rows;
         }
 
+        $pagination = [];
         $pagination['count'] = ceil($rows / $perPage);
 
         // too high page number?

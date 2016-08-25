@@ -211,7 +211,7 @@ class API
      *
      * @param string $code        the error code
      * @param string $message     the error message
-     * @param int    $http_status the http status code
+     * @param null|int    $http_status the http status code
      * @return void
      */
     public function failure(string $code, string $message, int $http_status = null)
@@ -239,7 +239,7 @@ class API
      * Set the RFC-compliant OAuth Error to return.
      *
      * @param string $code  of error code from RFC
-     * @return string the OAuth error array
+     * @return array|boolean the OAuth error array
      */
     public function setOAuthError(string $code)
     {

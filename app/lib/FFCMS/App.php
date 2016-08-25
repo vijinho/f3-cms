@@ -27,46 +27,49 @@ class App
         \Registry::set('db', $db);
     }
 
+
+    /**
+     * Helper to automatically load base config values for keys from the database
+     * and cache them
+     *
+     * @param \Base $f3
+     * @return array $cfg
+     */
+    private static function loadConfigData(\Base $f3): array
+    {
+        $cfgKeys = $f3->get('cfg.keys');
+        $keysToLoad = [];
+        foreach ($cfgKeys as $k => $v) {
+            if (is_array($v)) {
+                $keysToLoad = array_merge($keysToLoad, $v);
+            }
+        }
+
+        $cache = \Cache::instance();
+        $key = 'cfg-' . md5(join('-', array_keys($cfgKeys)));
+        if (!$cache->exists($key, $cfg)) {
+            // now set the value of cfg to the keys we want to load
+            $m = Models\ConfigData::instance();
+            $cfg = $m->getValues($keysToLoad);
+            $cache->set($key, $cfg, $f3->get('cfg.ttl.cfg'));
+        }
+
+        // cfg.keys.* are no longer required as we know which ones to load in now
+        $f3->clear('cfg.keys');
+
+        // replace cfg with values loaded in
+        $f3->set('cfg', $cfg);
+
+        return $cfg;
+    }
+
+
     /**
      * The main application to run after environment is loaded
      */
     public function Main()
     {
         $f3 = \Base::instance();
-
-        /**
-         * Helper to automatically load base config values for keys from the database
-         * and cache them
-         * @param \Base $f3
-         * @return array $cfg
-         */
-        function loadConfigData(\Base $f3): array
-        {
-            $cfgKeys = $f3->get('cfg.keys');
-            $keysToLoad = [];
-            foreach ($cfgKeys as $k => $v) {
-                if (is_array($v)) {
-                    $keysToLoad = array_merge($keysToLoad, $v);
-                }
-            }
-
-            $cache = \Cache::instance();
-            $key = 'cfg-' . md5(join('-', array_keys($cfgKeys)));
-            if (!$cache->exists($key, $cfg)) {
-                // now set the value of cfg to the keys we want to load
-                $m = Models\ConfigData::instance();
-                $cfg = $m->getValues($keysToLoad);
-                $cache->set($key, $cfg, $f3->get('cfg.ttl.cfg'));
-            }
-
-            // cfg.keys.* are no longer required as we know which ones to load in now
-            $f3->clear('cfg.keys');
-
-            // replace cfg with values loaded in
-            $f3->set('cfg', $cfg);
-
-            return $cfg;
-        }
 
         // specify keys of rows in config_data table to load in from .ini files
         $f3->set('cfg.keys.load', $f3->split($f3->get('cfg.keys.load')));
@@ -128,7 +131,7 @@ class App
 
             // load cli config keys
             $f3->set('cfg.keys.cli', $f3->split($f3->get('cfg.keys.cli')));
-            loadConfigData($f3);
+            static::loadConfigData($f3);
 
             // @see http://fatfreeframework.com/routing-engine
             //load routes from ini file
@@ -280,7 +283,7 @@ class App
 
             // load api config keys
             $f3->set('cfg.keys.api', $f3->split($f3->get('cfg.keys.api')));
-            loadConfigData($f3);
+            static::loadConfigData($f3);
 
             $f3->config('config/routes-api.ini');
             $f3->run();
@@ -336,7 +339,7 @@ class App
         if ($cms) {
             $f3->set('cfg.keys.cms', $f3->split($f3->get('cfg.keys.cms')));
         }
-        loadConfigData($f3);
+        static::loadConfigData($f3);
 
         // from here we add-in routes generated from the database (cms routes)
         $f3->run();

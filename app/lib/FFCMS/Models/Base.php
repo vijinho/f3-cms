@@ -20,7 +20,7 @@ abstract class Base extends \Prefab
      * initialize with array of params, 'db' and 'logger' can be injected
      *
      * @param array $params
-     * @param \Log $logger
+     * @param null|\Log $logger
      */
     public function __construct(array $params = [], \Log $logger = null)
     {

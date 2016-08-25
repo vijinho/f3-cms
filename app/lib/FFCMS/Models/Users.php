@@ -42,8 +42,8 @@ class Users extends DB
     /**
      * initialize with array of params, 'db' and 'logger' can be injected
      *
-     * @param \Log $logger
-     * @param \DB\SQL $db
+     * @param null|\Log $logger
+     * @param null|\DB\SQL $db
      */
     public function __construct(array $params = [], \Log $logger = null, \DB\SQL $db = null)
     {
@@ -199,7 +199,7 @@ class Users extends DB
     /**
      * Create a template object for a new user
      *
-     * @param \FFCMS\Mappers\Users $m User Mapper
+     * @param \FFCMS\Mappers\Users|null $m User Mapper
      * @link http://fatfreeframework.com/sql-mapper
      */
     public function &newUserTemplate($m = null): \FFCMS\Mappers\Users
@@ -236,7 +236,7 @@ class Users extends DB
     /**
      * Register a new user from a newly populated usersMapper object
      *
-     * @param Mappers\User $m User Mapper
+     * @param Mappers\Users|null $m User Mapper
      * @link http://fatfreeframework.com/sql-mapper
      */
     public function register($m = null)

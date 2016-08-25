@@ -11,19 +11,17 @@ namespace FFCMS\Traits;
  */
 trait Notification
 {
-
     /**
      * @var \FFMVC\Helpers\Notifications user notifications object
      */
     protected $oNotification;
 
-
     /**
      * Notify user
      *
-     * @param mixed $data multiple messages by 'type' => [messages] OR message string
-     * @param string $type type of messages (success, error, warning, info) OR null if multiple $data
-     * @return boolean success
+     * @param string|array $data multiple messages by 'type' => [messages] OR message string
+     * @param string|null $type type of messages (success, error, warning, info) OR null if multiple $data
+     * @return bool success
      */
     public function notify($data, $type = null)
     {

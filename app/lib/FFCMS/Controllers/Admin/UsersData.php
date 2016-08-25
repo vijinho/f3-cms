@@ -203,7 +203,7 @@ class UsersData extends Admin
 
             case 'json':
                 $data['value'] = $f3->get('REQUEST_UNCLEAN.value');
-                $fRules = 'valid_json_String';
+                $fRules = 'valid_json_string';
 
             case 'email':
                 $fRules = 'sanitize_email';

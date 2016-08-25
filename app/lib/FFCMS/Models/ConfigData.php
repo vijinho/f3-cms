@@ -21,8 +21,8 @@ class ConfigData extends DB
     /**
      * initialize with array of params, 'db' and 'logger' can be injected
      *
-     * @param \Log $logger
-     * @param \DB\SQL $db
+     * @param null|\Log $logger
+     * @param null|\DB\SQL $db
      */
     public function __construct(array $params = [], \Log $logger = null, \DB\SQL $db = null)
     {
