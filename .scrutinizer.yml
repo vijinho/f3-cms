@@ -1,6 +1,6 @@
 build:
     environment:
-        php: '7.0.0'
+        php: '7.0.8'
 
 #    tests:
 #        override:
@@ -181,7 +181,7 @@ tools:
                 naming:
                     enabled: false
             type_scanning:
-                raise_duplicate_warnings:  true
+                raise_duplicate_warnings:  false
             verify_php_doc_comments:
                 parameters:  true
                 return: true
@@ -194,7 +194,7 @@ tools:
             # Checks Common Precedence Mistakes
             reflection_fixes:
                 enabled:  true
-                
+
         filter:
             excluded_paths:
                 - 'docs/*'
