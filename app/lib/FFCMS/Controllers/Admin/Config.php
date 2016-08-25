@@ -210,10 +210,11 @@ class Config extends Admin
         }
 
         // type check for filtering and validation
-        $fRules = 'trim|sanitize_string';
+        $fRules = '';
         switch ($mapper->type) {
             case 'text':
             case 'textarea':
+                $fRules = 'trim|sanitize_string';
                 break;
 
             case 'html':
@@ -222,13 +223,12 @@ class Config extends Admin
             case 'yaml':
                 // trust raw input!
                 $data['value'] = $f3->get('REQUEST_UNCLEAN.value');
-                $fRules = '';
                 break;
 
             case 'json':
                 $data['value'] = $f3->get('REQUEST_UNCLEAN.value');
-                $fRules = '';
-
+                break;
+                
             case 'email':
                 $fRules = 'sanitize_email';
                 $vRules = 'valid_email';
@@ -243,8 +243,9 @@ class Config extends Admin
             case 'integer':
             case 'boolean':
             case 'float':
+                $fRules = 'trim|sanitize_string';
                 if ('float' == $mapper->type) {
-                    $fRules .= 'sanitize_floats';
+                    $fRules .= '|sanitize_floats';
                 } else {
                     $fRules = 'sanitize_numbers';
                 }

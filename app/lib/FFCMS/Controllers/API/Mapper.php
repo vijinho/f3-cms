@@ -288,10 +288,9 @@ abstract class Mapper extends API
             $users_uuid = $params['id'];
         } elseif (!$isAdmin) {
             $users_uuid = $f3->get('uuid');
+        } else {
+            $users_uuid = null;
         }
-
-        // return raw data for object?
-        $adminView = $f3->get('isAdmin') && 'admin' == $f3->get('REQUEST.view');
 
         $this->data = $this->getListingResults($f3, $this->getMapper(), $users_uuid);
     }
@@ -333,10 +332,9 @@ abstract class Mapper extends API
             $users_uuid = $params['id'];
         } elseif (!$isAdmin) {
             $users_uuid = $f3->get('uuid');
+        } else {
+            $users_uuid = null;
         }
-
-        // return raw data for object?
-        $adminView = $f3->get('isAdmin') && 'admin' == $f3->get('REQUEST.view');
 
         $this->data = $this->getSearchResults($f3, $this->getMapper(), $users_uuid);
     }

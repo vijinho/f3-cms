@@ -20,7 +20,7 @@ trait SearchController
     /**
      * Check the order by field is valid and return it corrected
      *
-     * @param string $order order field in form of: "field1 ASC/DESC,field 2 ASC/DESC.."
+     * @param null|string $order order field in form of: "field1 ASC/DESC,field 2 ASC/DESC.."
      * @param array $allFields the list of fields which are valid to order by
      * @return string $validFields
      */
@@ -59,7 +59,6 @@ trait SearchController
      *
      * @param array $checkFieldsExist [id => 'field1,field2'...]
      * @param array $fieldsList the list of fields which are valid
-     * @param string|null $users_uuid uuid of user to get results for
      * @return array $validFields
      */
     public static function checkFieldsExist(array $checkFieldsExist = [], array $fieldsList = []): array
