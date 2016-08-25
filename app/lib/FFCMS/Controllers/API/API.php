@@ -19,7 +19,7 @@ class API
         Traits\Audit,
         Traits\UrlHelper,
         Traits\Validation,
-        Traits\ControllerSecurity;
+        Traits\SecurityController;
 
     /**
      * version.

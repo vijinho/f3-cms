@@ -13,7 +13,7 @@ use FFMVC\Helpers;
  * to the supplied url (or homepage if not). The URL can be a full internal URL
  * or an f3 url alias.
  */
-trait ControllerSecurity
+trait SecurityController
 {
     /**
      * Create an internal URL

@@ -18,7 +18,7 @@ abstract class Base
         Traits\Notification,
         Traits\Logger,
         Traits\Audit,
-        Traits\ControllerSecurity,
+        Traits\SecurityController,
         Traits\Validation;
 
     /**

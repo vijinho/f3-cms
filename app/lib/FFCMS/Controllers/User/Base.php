@@ -16,7 +16,7 @@ use FFCMS\{Controllers, Models, Mappers, Traits};
  */
 abstract class Base extends Controllers\Base
 {
-    use Traits\ControllerSecurity;
+    use Traits\SecurityController;
 
     /**
      * perform a client logout

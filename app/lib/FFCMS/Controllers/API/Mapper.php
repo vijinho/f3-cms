@@ -280,7 +280,6 @@ abstract class Mapper extends API
     public function listing(\Base $f3, array $params)
     {
         $isAdmin = $f3->get('isAdmin');
-        $users_uuid = null;
         if (!$isAdmin && array_key_exists('id', $params)) {
             $this->failure('authentication_error', "User does not have permission.", 401);
             return $this->setOAuthError('access_denied');
