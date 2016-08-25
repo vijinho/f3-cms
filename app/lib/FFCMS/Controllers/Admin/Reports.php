@@ -215,7 +215,7 @@ class Reports extends Admin
             $this->audit([
                 'event' => 'Report Updated',
                 'old' => $oldMapper->cast(),
-                'new' => json_encode($mapper->cast(), JSON_PRETTY_PRINT)
+                'new' => $mapper->cast()
             ]);
             $this->notify(_('The report data was updated!'), 'success');
         } else {
@@ -357,7 +357,7 @@ class Reports extends Admin
             $this->audit([
                 'event' => 'Report Updated',
                 'old' => $oldMapper->cast(),
-                'new' => json_encode($mapper->cast(), JSON_PRETTY_PRINT)
+                'new' => $mapper->cast()
             ]);
             $this->notify(_('The report data was updated!'), 'success');
         } else {

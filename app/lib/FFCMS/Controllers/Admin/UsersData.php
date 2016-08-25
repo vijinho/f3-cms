@@ -203,7 +203,7 @@ class UsersData extends Admin
 
             case 'json':
                 $data['value'] = $f3->get('REQUEST_UNCLEAN.value');
-                $fRules = 'valid_json_string';
+                $fRules = '';
 
             case 'email':
                 $fRules = 'sanitize_email';
@@ -273,7 +273,7 @@ class UsersData extends Admin
                 'users_uuid' => $mapper->users_uuid,
                 'event' => 'Users Data Updated',
                 'old' => $oldMapper->cast(),
-                'new' => json_encode($mapper->cast(), JSON_PRETTY_PRINT)
+                'new' => $mapper->cast()
             ]);
             $this->notify(_('The account data was updated!'), 'success');
         } else {
@@ -417,7 +417,7 @@ class UsersData extends Admin
                 'users_uuid' => $mapper->users_uuid,
                 'event' => 'Users Data Updated',
                 'old' => $oldMapper->cast(),
-                'new' => json_encode($mapper->cast(), JSON_PRETTY_PRINT)
+                'new' => $mapper->cast()
             ]);
             $this->notify(_('The account data was updated!'), 'success');
         } else {

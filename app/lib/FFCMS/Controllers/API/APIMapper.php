@@ -294,7 +294,7 @@ abstract class APIMapper extends API
      *
      * @param \Base $f3
      * @param array $params
-     * @return void
+     * @return array|boolean|null
      */
     public function listing(\Base $f3, array $params)
     {

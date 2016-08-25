@@ -150,7 +150,7 @@ class Tokens extends Admin
             $this->audit([
                 'users_uuid' => $mapper->users_uuid,
                 'event' => 'Token Updated',
-                'new' => json_encode($data, JSON_PRETTY_PRINT)
+                'new' => $data
             ]);
         } else {
             $this->notify(_('App token update failed!'), 'error');

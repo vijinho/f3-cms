@@ -19,7 +19,8 @@ use FFMVC\Helpers;
 // abstract class Cursor extends \Magic implements \IteratorAggregate
 // class Mapper extends \DB\Cursor
 /**
-* @property string $key
+ * @property string $key
+ * @property string $value
  * @property string $created
  */
 abstract class Mapper extends \DB\SQL\Mapper

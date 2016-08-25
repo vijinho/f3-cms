@@ -156,7 +156,7 @@ class Apps extends Admin
                 'users_uuid' => $appsMapper->users_uuid,
                 'actor' => $appsMapper->client_id,
                 'event' => 'App Updated',
-                'new' => json_encode($data, JSON_PRETTY_PRINT)
+                'new' => $data
             ]);
         } else {
             $this->notify(_('App update failed!'), 'error');
