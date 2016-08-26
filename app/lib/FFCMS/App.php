@@ -314,7 +314,7 @@ class App
                     $files = str_replace('../', '', $f3->get('GET.files')); // close potential hacking attempts
                     echo \Web::instance()->minify($files, null, true, $path);
             },
-            $f3->get('minify.ttl')
+            $f3->get('ttl.minify')
         );
 
         // load language-based routes, default english
