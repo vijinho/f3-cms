@@ -37,8 +37,9 @@ abstract class Base
 
     /**
     * init
+    * @param \Base $f3
     */
-    public function __construct()
+    public function __construct(\Base $f3)
     {
         if (empty($f3->get('CLI'))) {
             exit("This controller can only be executed in CLI mode.");
