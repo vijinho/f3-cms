@@ -333,7 +333,8 @@ class API
         if ('http' == $f3->get('SCHEME') && !empty($f3->get('api.https'))) {
             $this->failure('api_connection_error', "Connection only allowed via HTTPS!", 400);
             $this->setOAuthError('unauthorized_client');
-            return;
+
+            return false;
         }
 
         $oAuth2Model = Models\OAuth2::instance();
@@ -349,12 +350,14 @@ class API
             if (null == $tokensMapper->uuid) {
                 $this->failure('authentication_error', "The token does not exist!", 401);
                 $this->setOAuthError('invalid_grant');
+
                 return false;
             }
             // check token is not out-of-date
             if (time() > strtotime($tokensMapper->expires)) {
                 $this->failure('authentication_error', "The token expired!", 401);
                 $this->setOAuthError('invalid_grant');
+
                 return false;
             }
             // if token found load the user for the token
@@ -364,19 +367,12 @@ class API
         // login with client_id and client_secret in request
         $clientId = $f3->get('REQUEST.client_id');
         $clientSecret = $f3->get('REQUEST.client_secret');
-
-        $appLogin = (!empty($clientId) && !empty($clientSecret)
-                && $this->authenticateClientIdSecret($clientId, $clientSecret));
-
-        // check if login via http basic auth
-        if (!empty($f3->get('REQUEST.PHP_AUTH_USER'))) {
-            // try to login as email:password
-            if ($this->basicAuthenticateLoginPassword()) {
-                $email = $f3->get('REQUEST.PHP_AUTH_USER');
-                $usersModel->getUserByEmail($email);
-            } elseif ($this->basicAuthenticateClientIdSecret()) {
-                $appLogin = true; // client_id:client_secret
-            }
+        if ($this->basicAuthenticateClientIdSecret()) {
+            $appLogin = true; // client_id:client_secret
+        } elseif ($this->basicAuthenticateLoginPassword()) {
+            // login with basic auth of email:password
+            $email = $f3->get('REQUEST.PHP_AUTH_USER');
+            $usersModel->getUserByEmail($email);
         }
 
         // login with app credentials: client_id/client_secret?
@@ -384,38 +380,21 @@ class API
         $usersMapper = $usersModel->getMapper();
         $appsMapper = $oAuth2Model->getAppsMapper();
         if (!empty($appLogin)) {
-            // set app in f3
-            $data = $appsMapper->cast();
-            $f3->set('api_app', $data);
             $usersMapper->load(['uuid = ?', $appsMapper->users_uuid]);
         }
 
         // check user has api access enabled
         // has to have 'api' in group
         $scopes = empty($usersMapper->scopes) ? [] : preg_split("/[\s,]+/", $usersMapper->scopes);
-        $f3->set('isAdmin', 0);
-        if (empty($token)) {
-            if (!in_array('api', $scopes)) {
-                // clear authorized app as user doesn't have access
-                $usersMapper->reset();
-                $f3->clear('api_app');
-            }
-            if (in_array('admin', $scopes)) {
-                $f3->set('isAdmin', 1);
-            }
+        $f3->set('isAdmin', in_array('admin', $scopes));
+        if (empty($token) && !in_array('api', $scopes)) {
+            // clear authorized app as user doesn't have access
+            $usersMapper->reset();
         }
-
-        // fetch user information if available
-        if (null !== $usersMapper->uuid) {
-            $data = $usersMapper->cast();
-            $f3->set('user', $data);
-            $f3->set('uuid', $f3->set('uuid', $usersMapper->uuid));
-        }
-
-        $app = $f3->get('api_app'); // authenticated as a client app
-        $user = $f3->get('user');   // authenticated as a user
 
         // fetch scope if available
+        $app = $appsMapper->cast();
+        $user = $usersMapper->cast();
         if (!empty($app) && !empty($user)) {
             $tokensMapper->load(['client_id = ? AND users_uuid = ?', $app['client_id'], $user['uuid']]);
         }
@@ -423,21 +402,11 @@ class API
         // get the scopes, this might have come from the token auth
         $scope = $f3->get('REQUEST.scope');
         $scopes = empty($scope) ? [] : preg_split("/[\s,]+/", $scope);
-        if (!empty($tokensMapper->users_uuid)) {
-            $f3->set('userScopes', $scopes);
-            // also check the token is valid
-            if (!$appLogin && time() > strtotime($tokensMapper->expires)) {
-                $this->failure('authentication_error', "The token expired!", 401);
-                $this->setOAuthError('invalid_grant');
-                return false;
-            }
-        }
+        if (!empty($tokensMapper->users_uuid) && !$appLogin && time() > strtotime($tokensMapper->expires)) {
+            $this->failure('authentication_error', "The token expired!", 401);
+            $this->setOAuthError('invalid_grant');
 
-        // set user scopes
-        $f3->set('isAdmin', in_array('admin', $scopes));
-        $scopes = empty($usersMapper->scopes) ? [] : preg_split("/[\s,]+/", $usersMapper->scopes);
-        if (!empty($scopes)) {
-            $f3->set('userScopes', $scopes);
+            return false;
         }
 
         $userAuthenticated = (is_array($user) || is_array($app));
@@ -447,6 +416,11 @@ class API
 
             return false;
         }
+
+        $f3->set('uuid', $f3->set('uuid', $usersMapper->uuid));
+        $f3->set('user', $usersMapper->cast());
+        $f3->set('userScopes', $scopes);
+        $f3->set('api_app', $appsMapper->cast());
 
         return true;
     }
