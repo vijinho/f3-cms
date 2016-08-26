@@ -223,6 +223,74 @@ abstract class Mapper extends API
 
 
     /**
+     * Replace data
+     *
+     * @param \Base $f3
+     * @param array $params
+     * @return null|array|boolean
+     */
+    public function put(\Base $f3, array $params)
+    {
+        $m = $this->getIdObjectIfAdmin($f3, $params, 'uuid', $params['id']);
+        if (!is_object($m) || null == $m->uuid) {
+            return;
+        }
+
+        $f3->set('REQUEST.uuid', $m->uuid);
+
+        // these fields can't be modified
+        return $this->save($f3, [
+            'id'
+        ]);
+    }
+
+
+    /**
+     * Create new data
+     *
+     * @param \Base $f3
+     * @return null|array|boolean
+     */
+    public function post(\Base $f3)
+    {
+        $isAdmin = $f3->get('isAdmin');
+        if (!$isAdmin) {
+            return;
+        }
+
+        // this fields can't be modified
+        $prohibitedFields = [
+            'id', 'uuid'
+        ];
+
+        return $this->save($f3, $prohibitedFields);
+    }
+
+
+    /**
+     * Update data
+     *
+     * @param \Base $f3
+     * @param array $params
+     * @return null|array|boolean
+     */
+    public function patch(\Base $f3, array $params)
+    {
+        $m = $this->getIdObjectIfAdmin($f3, $params, 'uuid', $params['id']);
+        if (!is_object($m) || null == $m->uuid) {
+            return;
+        }
+
+        $f3->set('REQUEST.uuid', $m->uuid);
+
+        // these fields can't be modified
+        return $this->save($f3, [
+            'id', 'uuid'
+        ]);
+    }
+
+
+    /**
      * Delete the data object indicated by @id in the request
      *
      * @param \Base $f3
