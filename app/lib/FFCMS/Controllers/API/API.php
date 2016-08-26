@@ -71,13 +71,6 @@ class API
     protected $oResponse;
 
     /**
-     * database instance
-     *
-     * @var \DB\SQL db
-     */
-    protected $db;
-
-    /**
      * Error format required by RFC6794.
      *
      * @var type
@@ -89,66 +82,77 @@ class API
             'description' => 'The request is missing a required parameter, includes an invalid parameter value, includes a parameter more than once, or is otherwise malformed.',
             'uri' => '',
             'state' => '',
+            'status' => 400
         ],
         'invalid_credentials' => [
             'code' => 'invalid_credentials',
             'description' => 'Credentials for authentication were invalid.',
             'uri' => '',
             'state' => '',
+            'status' => 403
         ],
         'invalid_client' => [
             'code' => 'invalid_client',
             'description' => 'Client authentication failed (e.g., unknown client, no client authentication included, or unsupported authentication method).',
             'uri' => '',
             'state' => '',
+            'status' => 401
         ],
         'invalid_grant' => [
             'code' => 'invalid_grant',
             'description' => 'The provided authorization grant (e.g., authorization code, resource owner credentials) or refresh token is invalid, expired, revoked, does not match the redirection URI used in the authorization request, or was issued to another client.',
             'uri' => '',
             'state' => '',
+            'status' => 401
         ],
         'unsupported_grant_type' => [
             'code' => 'unsupported_grant_type',
             'description' => 'The authorization grant type is not supported by the authorization server.',
             'uri' => '',
             'state' => '',
+            'status' => 400
         ],
         'unauthorized_client' => [
             'code' => 'unauthorized_client',
             'description' => 'The client is not authorized to request an authorization code using this method.',
             'uri' => '',
             'state' => '',
+            'status' => 401
         ],
         'access_denied' => [
             'code' => 'access_denied',
             'description' => 'The resource owner or authorization server denied the request.',
             'uri' => '',
             'state' => '',
+            'status' => 400
         ],
         'unsupported_response_type' => [
             'code' => 'unsupported_response_type',
             'description' => 'The authorization server does not support obtaining an authorization code using this method.',
             'uri' => '',
             'state' => '',
+            'status' => 400
         ],
         'invalid_scope' => [
             'code' => 'invalid_scope',
             'description' => 'The requested scope is invalid, unknown, or malformed.',
             'uri' => '',
             'state' => '',
+            'status' => 400
         ],
         'server_error' => [
             'code' => 'server_error',
             'description' => 'The authorization server encountered an unexpected condition that prevented it from fulfilling the request.',
             'uri' => '',
             'state' => '',
+            'status' => 500
         ],
         'temporarily_unavailable' => [
             'code' => 'temporarily_unavailable',
             'description' => 'The authorization server is currently unable to handle the request due to a temporary overloading or maintenance of the server.',
             'uri' => '',
             'state' => '',
+            'status' => 400
         ],
     ];
 
@@ -167,13 +171,8 @@ class API
     public function __construct(\Base $f3)
     {
         $f3 = \Base::instance();
-
-        $this->oLog = \Registry::get('logger');
-        $this->db = \Registry::get('db');
-        $this->version = $f3->get('api.version');
-        $this->oResponse = Helpers\Response::instance();
         $this->oAudit = Models\Audit::instance();
-        $this->oUrlHelper = Helpers\Url::instance();
+        $this->params['http_status'] = 200;
     }
 
     /**
@@ -203,7 +202,7 @@ class API
             ksort($this->errors);
         }
 
-        $this->oResponse->json(array_merge($data, $this->data), $this->params);
+        Helpers\Response::json(array_merge($data, $this->data), $this->params);
     }
 
     /**
@@ -246,29 +245,8 @@ class API
         $this->OAuthError = $this->getOAuthErrorType($code);
 
         // only set https status if not set anywhere else
-        if (!empty($this->params['http_status']) && $this->params['http_status'] !== 200) {
-            return $this->OAuthError;
-        }
-
-        switch ($code) {
-
-            case 'invalid_client': // as per-spec
-            case 'invalid_grant':
-            case 'unauthorized_client':
-                $this->params['http_status'] = 401;
-                break;
-
-            case 'server_error':
-                $this->params['http_status'] = 500;
-                break;
-
-            case 'invalid_credentials':
-                $this->params['http_status'] = 403;
-                break;
-
-            default:
-                $this->params['http_status'] = 400;
-                break;
+        if ($this->params['http_status'] == 200) {
+            $this->params['http_status'] = $this->OAuthError['status'];
         }
 
         return $this->OAuthError;
