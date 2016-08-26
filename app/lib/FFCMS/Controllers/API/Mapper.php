@@ -64,7 +64,7 @@ abstract class Mapper extends API
      */
     public function __construct(\Base $f3)
     {
-        parent::__construct($f3);
+        parent::__construct();
 
         // guess the table name from the class name if not specified as a class member
         $class = \UTF::instance()->substr(strrchr(get_class($this), '\\'),1);
@@ -79,18 +79,11 @@ abstract class Mapper extends API
         $this->isAuthorised = $this->validateAccess();
         if (empty($this->isAuthorised)) {
             $this->setOAuthError('invalid_grant');
-        }
-
-        $deny = false;
-        $isAdmin = $f3->get('isAdmin');
-        if (!$isAdmin && !empty($this->adminOnly)) {
-            $deny = true;
-        }
-
-        $this->isAuthorised = empty($deny);
-        if ($deny) {
+        } elseif (empty($f3->get('isAdmin')) && !empty($this->adminOnly)) {
             $this->failure('authentication_error', "User does not have permission.", 401);
             $this->setOAuthError('access_denied');
+        } else {
+            $this->isAuthorised = true;
         }
     }
 
