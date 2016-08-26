@@ -305,7 +305,7 @@ class App
             $f3->set('html', $html);
             echo \View::instance()->render('/markdown-template.phtml');
 
-        }, $f3->get('ttl.md'));
+        }, $f3->get('ttl.doc'));
 
         // @see http://fatfreeframework.com/optimization
         $f3->route('GET /minify/@type',
