@@ -22,7 +22,7 @@ class Setup
         $f3    = \Base::instance();
         $cache = \Cache::instance();
         // cli mode will not use cache on cli and will check db every time if in dev mode
-        if ($f3->get('db.create') && (!$cache->exists('tables', $tables) || PHP_SAPI == 'cli' || 'dev' == $f3->get('app.env'))) {
+        if ($f3->get('db.create') && (!$cache->exists('tables', $tables) || $f3->get('CLI') || 'dev' == $f3->get('app.env'))) {
             $db     = $dice->create('DB\\SQL');
             $tables = $db->exec('SHOW TABLES');
             if (empty($tables)) {

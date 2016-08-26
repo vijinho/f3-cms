@@ -40,7 +40,7 @@ abstract class Base
     */
     public function __construct()
     {
-        if (PHP_SAPI !== 'cli') {
+        if (empty($f3->get('CLI'))) {
             exit("This controller can only be executed in CLI mode.");
         }
 

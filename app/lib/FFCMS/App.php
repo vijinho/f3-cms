@@ -79,7 +79,7 @@ class App
         $language = $f3->get('LANG');
 
         // do not use sessions for api calls
-        if (PHP_SAPI == 'cli' ||  $api) {
+        if ($f3->get('CLI') ||  $api) {
             if (session_status() !== PHP_SESSION_NONE) {
                 session_write_close();
             }
@@ -117,7 +117,7 @@ class App
         }
 
             // load cli routes and finish
-        if (PHP_SAPI == 'cli') {
+        if ($f3->get('CLI')) {
             $f3->route('GET /docs/@page', function ($f3, array $params) {
                 $filename = '../docs/'.strtoupper($params['page']).'.md';
                 if (!file_exists($filename)) {
