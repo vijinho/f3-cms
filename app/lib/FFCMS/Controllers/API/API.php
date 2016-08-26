@@ -319,7 +319,7 @@ class API
      *
      * Or by URL query string param - ?access_token=$access_token
      *
-     * Sets hive vars: user[] (mandatory), api_app[] (optional) and user_scopes[], userScopes[]
+     * Sets hive vars: user[] (mandatory), api_app[] (optional) and userScopes[]
      *
      * @return null|boolean true/false on valid access credentials
      */
@@ -338,9 +338,10 @@ class API
 
         $oAuth2Model = Models\OAuth2::instance();
         $tokensMapper = $oAuth2Model->getTokensMapper();
+        $usersModel = Models\Users::instance();
 
         // get token from request to set the user and app
-        // override if anything in basic auth or client_id/secret after
+        // override if anything in basic auth or client_id/secret AFTER
         $token = $f3->get('REQUEST.access_token');
         if (!empty($token)) {
             $tokensMapper->load(['token = ?', $token]);
@@ -356,11 +357,7 @@ class API
                 $this->setOAuthError('invalid_grant');
                 return false;
             }
-        }
-
-        // if token found load the user for the token
-        $usersModel = Models\Users::instance();
-        if (null !== $tokensMapper->users_uuid) {
+            // if token found load the user for the token
             $usersModel->getUserByUUID($tokensMapper->users_uuid);
         }
 
@@ -427,7 +424,7 @@ class API
         $scope = $f3->get('REQUEST.scope');
         $scopes = empty($scope) ? [] : preg_split("/[\s,]+/", $scope);
         if (!empty($tokensMapper->users_uuid)) {
-            $f3->set('user_scopes', $scopes);
+            $f3->set('userScopes', $scopes);
             // also check the token is valid
             if (!$appLogin && time() > strtotime($tokensMapper->expires)) {
                 $this->failure('authentication_error', "The token expired!", 401);
