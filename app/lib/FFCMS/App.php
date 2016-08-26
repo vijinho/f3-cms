@@ -206,7 +206,7 @@ class App
                     ];
                     if ($debug > 2) {
                         // show the $e['trace'] but it's in HTML!
-                        $data['error']['trace'] = $e['trace'];
+                        $data['error']['trace'] = trim(strip_tags($e['trace']));
                     }
 
                     $params = ['http_status' => $e['code']];
