@@ -39,21 +39,21 @@ trait SecurityController
         if (empty($f3->get('security.csrf'))) {
             return false;
         }
-        // redirect user if it's not a POST request
-        if ('POST' !== $f3->get('VERB')) {
-            $f3->reroute($url);
-        }
+
+        // redirect if not POST or csrf present
         $csrf = $f3->get('csrf');
-        if ($csrf === false) {
+        if ('POST' !== $f3->get('VERB') || $csrf === false) {
             $url = $this->url($url, $params);
-            $f3->reroute($url);
-            return;
-        } else {
-            $csrf = Helpers\Str::salted(Helpers\Str::random(16), Helpers\Str::random(16), Helpers\Str::random(16));
-            $f3->set('csrf', $csrf);
-            $f3->set('SESSION.csrf', $csrf);
-            $f3->expire(0);
+            return $f3->reroute($url);
         }
+
+        $csrf = Helpers\Str::salted(Helpers\Str::random(16), Helpers\Str::random(16), Helpers\Str::random(16));
+        $f3->mset([
+            'csrf' => $csrf,
+            'SESSION.csrf' => $csrf
+        ]);
+        $f3->expire(0);
+
         return true;
     }
 
@@ -67,6 +67,7 @@ trait SecurityController
     {
         $f3 = \Base::instance();
         $cache = \Cache::instance();
+
         $ip = $f3->get('IP');
         $f3->set('DNSBL', $f3->get('security.dnsbl'));
         if (!$cache->exists($ip, $isBlacklisted)) {

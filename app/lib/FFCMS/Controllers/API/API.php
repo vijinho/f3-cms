@@ -165,12 +165,9 @@ class API
 
     /**
      * initialize
-     *
-     * @param \Base $f3
      */
-    public function __construct(\Base $f3)
+    public function __construct()
     {
-        $f3 = \Base::instance();
         $this->oAudit = Models\Audit::instance();
         $this->params['http_status'] = 200;
     }
@@ -329,6 +326,12 @@ class API
 
         $f3 = \Base::instance();
 
+        $oAuth2Model = Models\OAuth2::instance();
+        $appsMapper = $oAuth2Model->getAppsMapper();
+        $tokensMapper = $oAuth2Model->getTokensMapper();
+        $usersModel = Models\Users::instance();
+        $usersMapper = $usersModel->getMapper();
+
         // return if forcing access to https and not https
         if ('http' == $f3->get('SCHEME') && !empty($f3->get('api.https'))) {
             $this->failure('api_connection_error', "Connection only allowed via HTTPS!", 400);
@@ -336,10 +339,6 @@ class API
 
             return false;
         }
-
-        $oAuth2Model = Models\OAuth2::instance();
-        $tokensMapper = $oAuth2Model->getTokensMapper();
-        $usersModel = Models\Users::instance();
 
         // get token from request to set the user and app
         // override if anything in basic auth or client_id/secret AFTER
@@ -365,22 +364,10 @@ class API
         }
 
         // login with client_id and client_secret in request
-        $clientId = $f3->get('REQUEST.client_id');
-        $clientSecret = $f3->get('REQUEST.client_secret');
         if ($this->basicAuthenticateClientIdSecret()) {
-            $appLogin = true; // client_id:client_secret
-        } elseif ($this->basicAuthenticateLoginPassword()) {
-            // login with basic auth of email:password
-            $email = $f3->get('REQUEST.PHP_AUTH_USER');
-            $usersModel->getUserByEmail($email);
-        }
-
-        // login with app credentials: client_id/client_secret?
-        // if so fetch app and user information
-        $usersMapper = $usersModel->getMapper();
-        $appsMapper = $oAuth2Model->getAppsMapper();
-        if (!empty($appLogin)) {
             $usersMapper->load(['uuid = ?', $appsMapper->users_uuid]);
+        } elseif ($this->basicAuthenticateLoginPassword()) {
+            $usersModel->getUserByEmail($f3->get('REQUEST.PHP_AUTH_USER'));
         }
 
         // check user has api access enabled
@@ -402,7 +389,7 @@ class API
         // get the scopes, this might have come from the token auth
         $scope = $f3->get('REQUEST.scope');
         $scopes = empty($scope) ? [] : preg_split("/[\s,]+/", $scope);
-        if (!empty($tokensMapper->users_uuid) && !$appLogin && time() > strtotime($tokensMapper->expires)) {
+        if (!empty($tokensMapper->users_uuid) && time() > strtotime($tokensMapper->expires)) {
             $this->failure('authentication_error', "The token expired!", 401);
             $this->setOAuthError('invalid_grant');
 
