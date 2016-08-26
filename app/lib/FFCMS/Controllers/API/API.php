@@ -22,13 +22,6 @@ class API
         Traits\SecurityController;
 
     /**
-     * version.
-     *
-     * @var version
-     */
-    protected $version;
-
-    /**
      * response errors
      * 1xx: Informational - Transfer Protocol Information
      * 2xx: Success - Client's request successfully accepted
@@ -62,13 +55,6 @@ class API
      * @var array params
      */
     protected $params = [];
-
-    /**
-     * response helper object.
-     *
-     * @var \FFMVC\Helpers\Response response
-     */
-    protected $oResponse;
 
     /**
      * Error format required by RFC6794.
