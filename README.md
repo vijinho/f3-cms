@@ -103,7 +103,7 @@ Login and change the settings for this user ASAP!
 
 #### Migration method
 
-For database migrations using [phinx](https://phinx.org) - [read the documentation](http://docs.phinx.org/en/latest/migrations.html) 
+For database migrations using [phinx](https://phinx.org) - [read the documentation](http://docs.phinx.org/en/latest/migrations.html)
 
 ```
 cd data
@@ -150,7 +150,7 @@ Add to apache virtual host (and also see the f3-cms-ssl.local files in [app/conf
 
 ## Description of Project Layout
 
-*Note:* The files that were in `app/classes/FFCMS` have now been split-out into their own repository https://github.com/vijinho/FFCMS
+*Note:* The files that were in `app/lib/FFCMS` have now been split-out into their own repository https://github.com/vijinho/FFCMS
 They can then be included in your own project by adding the same lines in your `composer.json` as used in mine here.
 
 ## Core Files/Paths
@@ -172,20 +172,20 @@ They can then be included in your own project by adding the same lines in your `
  * `app/en/templates/error/debug.phtml` - debug error page (if DEBUG=3)
  * `app/en/templates/error/404.phtml` - 'friendly' file not found page
  * `app/en/templates/error/error.phtml` - 'friendly' error page
- * `app/classes/FFCMS/App` - Base Application Classes
- * `app/classes/FFCMS/Models` - MVC Models
- * `app/classes/FFCMS/Controllers` - MVC Controllers
- * `app/classes/FFCMS/Controllers/Api` - MVC Rest API Controllers
- * `app/classes/FFCMS/Helpers` - Auxillary helper functions and utility libraries specific to the project
- * `app/classes/FFCMS/Traits` - Shared class traits
- * `app/classes/FFCMS/CLI` - Controllers for when executing in a command-line environemnt
+ * `app/lib/FFCMS/App` - Base Application Classes
+ * `app/lib/FFCMS/Models` - MVC Models
+ * `app/lib/FFCMS/Controllers` - MVC Controllers
+ * `app/lib/FFCMS/Controllers/Api` - MVC Rest API Controllers
+ * `app/lib/FFCMS/Helpers` - Auxillary helper functions and utility libraries specific to the project
+ * `app/lib/FFCMS/Traits` - Shared class traits
+ * `app/lib/FFCMS/CLI` - Controllers for when executing in a command-line environemnt
 
 ## Supplemental Files/Paths
 
 Used for bootstrapping the application and generic enough to be separate from the main project.
 
- * `lib/FFMVC/App.php` - Base Application Class to start/shutdown app
- * `lib/FFMVC/App/Helpers` - Auxillary helper functions and utility libraries specific to the project
+ * `lib/vijinho/ffmvc` - Base Application Class to start/shutdown app and helpers [see ffmvc on github](https://github.com/vijinho/FFMVC)
+ * `lib/vijinho/enums` - Enum-handling class [see php7-enums on github](https://github.com/vijinho/php7-enums)
 
 ### External Libraries
 
