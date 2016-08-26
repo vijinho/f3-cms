@@ -24,7 +24,7 @@ class UsersData extends Mapper
      * @param array $prohibitedFields
      * @return void
      */
-    private function save(\Base $f3, array $prohibitedFields = [])
+    protected function save(\Base $f3, array $prohibitedFields = [])
     {
         // do not allow request to define these fields:
         $data = $f3->get('REQUEST');
