@@ -375,7 +375,7 @@ class API
         // get the scopes, this might have come from the token auth
         $scope = $f3->get('REQUEST.scope');
         $scopes = empty($scope) ? [] : preg_split("/[\s,]+/", $scope);
-        if (!empty($tokensMapper->users_uuid) && time() > strtotime($tokensMapper->expires)) {
+        if (null !== $tokensMapper->uuid && time() > strtotime($tokensMapper->expires)) {
             $this->failure('authentication_error', "The token expired!", 401);
             $this->setOAuthError('invalid_grant');
 
