@@ -1,5 +1,5 @@
 <?php
-declare (strict_types=1);
+declare (strict_types = 1);
 
 namespace FFCMS;
 
@@ -38,7 +38,7 @@ function boot()
         \FFMVC\Helpers\DB::createDbDsn($dbConfig),
         $dbConfig['user'],
         $dbConfig['pass'],
-        [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION]
+        [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION],
     ]]);
 
     // auto-create database if options set
