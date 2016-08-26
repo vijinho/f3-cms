@@ -129,48 +129,4 @@ class OAuth2Tokens extends Mapper
         ]);
     }
 
-
-    /**
-     * Replace data
-     *
-     * @param \Base $f3
-     * @param array $params
-     * @return null|array|boolean
-     */
-    public function put(\Base $f3, array $params)
-    {
-        $m = $this->getIdObjectIfAdmin($f3, $params, 'uuid', $params['id']);
-        if (!is_object($m) || null == $m->uuid) {
-            return;
-        }
-
-        $f3->set('REQUEST.uuid', $m->uuid);
-
-        return $this->save($f3, [
-            'id'
-        ]);
-    }
-
-
-    /**
-     * Create new data
-     *
-     * @param \Base $f3
-     * @return null|array|boolean
-     */
-    public function post(\Base $f3)
-    {
-        $isAdmin = $f3->get('isAdmin');
-        if (!$isAdmin) {
-            return;
-        }
-
-        // this fields can't be modified
-        $prohibitedFields = [
-            'id', 'uuid'
-        ];
-
-        return $this->save($f3, $prohibitedFields);
-    }
-
 }

@@ -141,26 +141,4 @@ class OAuth2Apps extends Mapper
         ]);
     }
 
-
-    /**
-     * Create new data
-     *
-     * @param \Base $f3
-     * @return null|array|boolean
-     */
-    public function post(\Base $f3)
-    {
-        $isAdmin = $f3->get('isAdmin');
-        if (!$isAdmin) {
-            return;
-        }
-
-        // this fields can't be modified
-        $prohibitedFields = [
-            'id', 'uuid'
-        ];
-
-        return $this->save($f3, $prohibitedFields);
-    }
-
 }
