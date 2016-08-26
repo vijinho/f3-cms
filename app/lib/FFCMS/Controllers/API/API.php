@@ -417,10 +417,12 @@ class API
             return false;
         }
 
-        $f3->set('uuid', $f3->set('uuid', $usersMapper->uuid));
-        $f3->set('user', $usersMapper->cast());
-        $f3->set('userScopes', $scopes);
-        $f3->set('api_app', $appsMapper->cast());
+        $f3->mset([
+            'uuid' => $f3->set('uuid', $usersMapper->uuid),
+            'user' => $usersMapper->cast(),
+            'userScopes' => $scopes,
+            'api_app' => $appsMapper->cast()
+        ]);
 
         return true;
     }
