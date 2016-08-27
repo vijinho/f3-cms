@@ -41,6 +41,10 @@ function boot()
         [\PDO::ATTR_ERRMODE => \PDO::ERRMODE_EXCEPTION],
     ]]);
 
+    // session handler in db
+    $dice->addRule('DB\\SQL\\Seession', ['shared' => true]);
+    $session = $dice->create('DB\\SQL\\Session');
+
     // auto-create database if options set
     \FFCMS\Setup::database($dice);
 

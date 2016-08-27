@@ -25,8 +25,8 @@ trait SecurityController
     abstract public function url(string $url, array $params = []): string;
 
     /**
-     * Check for CSRF token, reroute if failed, otherwise generate new csrf token
-     * Call this method from a controller method class to check and then set a new csrf token
+     * Check for CSRF token, reroute if failed on POST, or generate if GET
+     * Call this method from a controller method class to check/generate csrf token
      * then include $f3-get('csrf') as a hidden type in your form to be submitted
      *
      * @param string $url if csrf check fails
@@ -36,23 +36,29 @@ trait SecurityController
     public function csrf(string $url = '@index', array $params = []): bool
     {
         $f3 = \Base::instance();
+
+        // csrf disabled
         if (empty($f3->get('security.csrf'))) {
             return false;
         }
 
+        // security check
+        // true if page iS GET, OR page is POST and REQUEST csrf matched session
+        $verb = $f3->get('VERB');
+        $passed = ('GET' == $verb) ||
+            ('POST' == $verb && $f3->get('REQUEST.csrf') === $f3->get('SESSION.csrf'));
+
         // redirect if not POST or csrf present
-        $csrf = $f3->get('csrf');
-        if ('POST' !== $f3->get('VERB') || $csrf === false) {
+        if (!$passed) {
+            $f3->clear('SESSION.csrf');
             $url = $this->url($url, $params);
             return $f3->reroute($url);
         }
 
-        $csrf = Helpers\Str::salted(Helpers\Str::random(16), Helpers\Str::random(16), Helpers\Str::random(16));
-        $f3->mset([
-            'csrf' => $csrf,
-            'SESSION.csrf' => $csrf
-        ]);
-        $f3->expire(0);
+        // if GET/POST generate a new csrf token
+        $session = \Registry::get('session');
+        $f3->csrf = $session->csrf();
+        $f3->copy('csrf', 'SESSION.csrf');
 
         return true;
     }

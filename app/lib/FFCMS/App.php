@@ -19,12 +19,14 @@ class App
      *
      * @param \Log $logger
      * @param \DB\SQL $db
+     * @param \DB\SQL\Session $session
      */
-    public function __construct(\Log $logger, \DB\SQL $db)
+    public function __construct(\Log $logger, \DB\SQL $db, \DB\SQL\Session $session = null)
     {
         // single instances to registry
         \Registry::set('logger', $logger);
         \Registry::set('db', $db);
+        \Registry::set('session', $session); // needed for CSRF
     }
 
 
@@ -85,6 +87,7 @@ class App
             }
         } elseif (session_status() == PHP_SESSION_NONE) {
             session_start();
+
             // this is an array so not in registry
             $f3->set('notifications', $f3->get('SESSION.notifications'));
             $f3->set('uuid', $f3->get('SESSION.uuid')); // logged-in user id
@@ -279,16 +282,6 @@ class App
             $f3->config('config/routes-api.ini');
             $f3->run();
             return;
-        }
-
-        // check csrf value if present, set input csrf to boolean true/false if matched session csrf
-        if (!empty($f3->get('security.csrf'))) {
-            $csrf = $f3->get('REQUEST.csrf');
-
-            if (!$api && !empty($csrf)) {
-                $f3->set('csrf', $csrf == $f3->get('SESSION.csrf'));
-                $f3->clear('SESSION.csrf');
-            }
         }
 
         $f3->route('GET /docs/@page', function ($f3, array $params) {
