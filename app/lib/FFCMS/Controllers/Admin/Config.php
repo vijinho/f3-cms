@@ -90,6 +90,7 @@ class Config extends Admin
     public function delete(\Base $f3)
     {
         $this->redirectLoggedOutUser();
+        $this->csrf();
 
         if (false == $f3->get('isRoot')) {
             $this->notify(_('You do not have (root) permission!'), 'error');
@@ -126,6 +127,7 @@ class Config extends Admin
     public function edit(\Base $f3)
     {
         $this->redirectLoggedOutUser();
+        $this->csrf();
 
         if (false == $f3->get('isRoot')) {
             $this->notify(_('You do not have (root) permission!'), 'error');
@@ -228,7 +230,7 @@ class Config extends Admin
             case 'json':
                 $data['value'] = $f3->get('REQUEST_UNCLEAN.value');
                 break;
-                
+
             case 'email':
                 $fRules = 'sanitize_email';
                 $vRules = 'valid_email';
@@ -312,6 +314,7 @@ class Config extends Admin
     public function add(\Base $f3)
     {
         $this->redirectLoggedOutUser();
+        $this->csrf();
 
         if (false == $f3->get('isRoot')) {
             $this->notify(_('You do not have (root) permission!'), 'error');

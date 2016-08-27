@@ -81,6 +81,7 @@ class Tokens extends Admin
     public function edit(\Base $f3)
     {
         $this->redirectLoggedOutUser();
+        $this->csrf();
 
         $uuid = $f3->get('REQUEST.uuid');
         $oAuth2Model = Models\OAuth2::instance();
@@ -169,6 +170,7 @@ class Tokens extends Admin
     public function delete(\Base $f3)
     {
         $this->redirectLoggedOutUser();
+        $this->csrf();
 
         if (false == $f3->get('isRoot')) {
             $this->notify(_('You do not have (root) permission!'), 'error');

@@ -79,6 +79,7 @@ class Apps extends Admin
     public function edit(\Base $f3)
     {
         $this->redirectLoggedOutUser();
+        $this->csrf();
 
         $client_id = $f3->get('REQUEST.client_id');
         $oAuth2Model = Models\OAuth2::instance();
@@ -175,6 +176,7 @@ class Apps extends Admin
     public function delete(\Base $f3)
     {
         $this->redirectLoggedOutUser();
+        $this->csrf();
 
         if (false == $f3->get('isRoot')) {
             $this->notify(_('You do not have (root) permission!'), 'error');

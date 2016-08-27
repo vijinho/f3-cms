@@ -80,6 +80,7 @@ class Users extends Admin
     public function edit(\Base $f3)
     {
         $this->redirectLoggedOutUser();
+        $this->csrf();
 
         if (false == $f3->get('isRoot')) {
             $this->notify(_('You do not have (root) permission!'), 'error');
@@ -258,6 +259,7 @@ class Users extends Admin
     public function delete(\Base $f3)
     {
         $this->redirectLoggedOutUser();
+        $this->csrf();
 
         if (false == $f3->get('isRoot')) {
             $this->notify(_('You do not have (root) permission!'), 'error');

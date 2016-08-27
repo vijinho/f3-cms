@@ -25,6 +25,7 @@ class Apps extends Controllers\User\Base
     public function apps(\Base $f3)
     {
         $this->redirectLoggedOutUser();
+        $this->csrf();
 
         $oAuth2Model = Models\OAuth2::instance();
 

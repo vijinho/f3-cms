@@ -58,6 +58,7 @@ abstract class Base extends Controllers\Base
     {
         $this->dnsbl();
         $this->redirectLoggedInUser();
+        $this->csrf('@user');
         $f3->set('form', $f3->get('REQUEST'));
         echo \View::instance()->render('user/login.phtml');
     }

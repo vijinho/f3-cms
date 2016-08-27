@@ -23,6 +23,7 @@ class ForgotPassword extends User
     public function forgotPasswordStep1(\Base $f3)
     {
         $this->redirectLoggedInUser();
+        $this->csrf();
 
         $f3->set('form', $f3->get('REQUEST'));
         echo \View::instance()->render('forgot_password/forgot_password_step1.phtml');
@@ -37,8 +38,8 @@ class ForgotPassword extends User
      */
     public function forgotPasswordStep1Post(\Base $f3)
     {
-        $this->csrf();
         $this->redirectLoggedInUser();
+        $this->csrf();
         $view = 'forgot_password/forgot_password_step1.phtml';
 
         $usersModel = Models\Users::instance();
@@ -131,6 +132,7 @@ class ForgotPassword extends User
     public function forgotPasswordStep2(\Base $f3)
     {
         $this->redirectLoggedInUser();
+        $this->csrf();
 
         if ($f3->get('REQUEST.code')) {
             return $this->forgotPasswordStep2Post($f3);
@@ -150,8 +152,8 @@ class ForgotPassword extends User
      */
     public function forgotPasswordStep2Post(\Base $f3)
     {
-        $this->csrf();
         $this->redirectLoggedInUser();
+        $this->csrf();
 
         $db = \Registry::get('db');
         $usersModel = Models\Users::instance();
@@ -201,8 +203,8 @@ class ForgotPassword extends User
      */
     public function forgotPasswordStep3(\Base $f3)
     {
-        $this->csrf();
         $this->redirectLoggedInUser();
+        $this->csrf();
 
         $db = \Registry::get('db');
         $usersModel = Models\Users::instance();
