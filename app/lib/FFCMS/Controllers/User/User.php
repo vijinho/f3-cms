@@ -103,6 +103,7 @@ class User extends Base
     public function account(\Base $f3)
     {
         $this->redirectLoggedOutUser();
+        $this->csrf();
 
         $f3->set('breadcrumbs', [
             _('My Account') => 'user',
@@ -122,8 +123,8 @@ class User extends Base
      */
     public function accountPost(\Base $f3)
     {
-        $this->csrf('@user');
         $this->redirectLoggedOutUser();
+        $this->csrf();
 
         $view = 'user/account.phtml';
         $f3->set('breadcrumbs', [
@@ -289,6 +290,7 @@ class User extends Base
     public function register(\Base $f3)
     {
         $this->redirectLoggedInUser();
+        $this->csrf('@user');
 
         $f3->set('form', $f3->get('REQUEST'));
         echo \View::instance()->render('user/register.phtml');
