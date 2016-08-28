@@ -72,6 +72,50 @@ trait Validation
 
 
     /**
+     * Get filter rules array
+     *
+     * @return array
+     */
+    public function filterRulesGet(): array
+    {
+        return $this->filterRules;
+    }
+
+
+    /**
+     * Get default filter rules array
+     *
+     * @return array
+     */
+    public function filterRulesDefault(): array
+    {
+        return $this->filterRulesDefault;
+    }
+
+
+    /**
+     * Get validation rules array
+     *
+     * @return array
+     */
+    public function validationRulesGet(): array
+    {
+        return $this->validationRules;
+    }
+
+
+    /**
+     * Get default validation rules array
+     *
+     * @return array
+     */
+    public function validationRulesDefault(): array
+    {
+        return $this->validationRulesDefault;
+    }
+
+
+    /**
      * Set filter rules from array
      *
      * @param array $rules
