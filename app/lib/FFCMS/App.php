@@ -51,7 +51,7 @@ class App
             // now set the value of cfg to the keys we want to load
             $configDataModel = \FFCMS\Models\ConfigData::instance();
             $cfg = $configDataModel->getValues($keysToLoad);
-            $cache->set($key, $cfg, $f3->get('cfg.ttl.cfg'));
+            $cache->set($key, $cfg, $f3->get('ttl.cfg'));
         }
 
         // cfg.keys.* are no longer required as we know which ones to load in now
