@@ -3,7 +3,6 @@ namespace Step\Acceptance;
 
 class Register extends \AcceptanceTester
 {
-
     public function registerAsUser()
     {
         $I = $this;
@@ -22,9 +21,5 @@ class Register extends \AcceptanceTester
         $I->see('You successfully registered');
         $I->see('My Account');
         $I->seeInDatabase('users', ['email' => USER_EMAIL]);
-        $I->seeInDatabase('audit', [
-            'actor' => USER_EMAIL,
-            'event' => 'email-sent'
-        ]);
     }
 }

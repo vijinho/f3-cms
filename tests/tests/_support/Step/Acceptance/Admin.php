@@ -3,7 +3,6 @@ namespace Step\Acceptance;
 
 class Admin extends \AcceptanceTester
 {
-
     public function loginAsAdmin()
     {
         $I = $this;
@@ -14,9 +13,5 @@ class Admin extends \AcceptanceTester
         $I->click('#login');
         $I->see('Admin');
         $I->see('Hello');
-        $I->seeInDatabase('audit', [
-            'actor' => ADMIN_EMAIL,
-            'event' => 'user-login'
-        ]);
     }
 }
