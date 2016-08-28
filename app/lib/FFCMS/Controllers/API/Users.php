@@ -205,13 +205,8 @@ class Users extends Mapper
         }
 
         $m->status = 'closed';
-        if ($m->save()) {
-            $deleted = true;
-        } else {
-            $deleted = false;
-        }
         $this->data = [
-            'deleted' => $deleted
+            'deleted' => $m->save()
         ];
     }
 
