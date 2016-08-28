@@ -252,7 +252,7 @@ class App
         // get the access token and basic auth and set it in REQUEST.access_token
         $token = $f3->get('REQUEST.access_token');
         foreach ($f3->get('SERVER') as $k => $header) {
-            if (stristr($k, 'authorization') !== false) {
+            if ($utf->stristr($k, 'authorization') !== false) {
                 if (preg_match('/Bearer\s+(?P<access_token>.+)$/i', $header, $matches)) {
                     $token = $matches['access_token'];
                 } elseif (preg_match('/Basic\s+(?P<data>.+)$/i', $header, $matches)) {

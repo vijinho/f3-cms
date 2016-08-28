@@ -109,7 +109,7 @@ abstract class Mapper extends \DB\SQL\Mapper
         if (!$this->initValidation) {
             return;
         }
-        
+
         // work out default validation rules from schema and cache them
         $validationRules   = [];
         foreach ($this->schema() as $field => $metadata) {
@@ -312,12 +312,10 @@ abstract class Mapper extends \DB\SQL\Mapper
             }
             // convert date to unix timestamp
             if ('updated' == $k || 'created' == $k || (
-                strlen($v) == 19 && preg_match("/^[\d]{4}-[\d]{2}-[\d]{2}[\s]+[\d]{2}:[\d]{2}:[\d]{2}/", $v, $m))) {
+                    \UTF::instance()->strlen($v) == 19 &&
+                    preg_match("/^[\d]{4}-[\d]{2}-[\d]{2}[\s]+[\d]{2}:[\d]{2}:[\d]{2}/", $v, $m))) {
                 $time = strtotime($v);
-                if ($time < 0) {
-                    $time = 0;
-                }
-                $data[$k] = $time;
+                $data[$k] = ($time < 0) ? 0 : $time;
             }
             if (!empty($fields) && $k !== 'id' && $k !== 'object' && !in_array($k, $fields)) {
                 unset($data[$k]);
