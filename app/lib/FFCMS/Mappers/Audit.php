@@ -69,16 +69,7 @@ class Audit extends Mapper
      * @link https://github.com/Wixel/GUMP
      */
     public $validationRules = [
-        'uuid'        => 'max_len,36|alpha_dash',
-        'users_uuid'  => 'max_len,36|alpha_dash',
-        'created'     => 'date|min_len,0|max_len,19',
-        'actor'       => 'max_len,128',
-        'event'       => 'max_len,128',
-        'description' => 'max_len,255',
-        'ip'          => 'max_len,16',
-        'agent'       => 'max_len,255',
-        'old'         => 'max_len,32768',
-        'new'         => 'max_len,32768',
-        'debug'       => 'max_len,32768',
+        'uuid'        => 'alpha_dash',
+        'users_uuid'  => 'alpha_dash',
     ];
 }

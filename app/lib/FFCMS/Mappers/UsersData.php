@@ -72,9 +72,7 @@ class UsersData extends Mapper
      * @link https://github.com/Wixel/GUMP
      */
     public $validationRules = [
-        'uuid'       => 'max_len,36|alpha_dash',
-        'users_uuid' => 'max_len,36|alpha_dash',
-        'key'        => 'max_len,255',
-        'value'      => 'max_len,32768',
+        'uuid'       => 'alpha_dash',
+        'users_uuid' => 'alpha_dash',
     ];
 }

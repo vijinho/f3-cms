@@ -72,16 +72,10 @@ class OAuth2Apps extends Mapper
      * @link https://github.com/Wixel/GUMP
      */
     public $validationRules = [
-        'created'       => 'date|min_len,0|max_len,19',
-        'users_uuid'    => 'max_len,36|alpha_dash',
-        'client_id'     => 'max_len,36|alpha_dash',
-        'client_secret' => 'max_len,36|alpha_dash',
-        'name'          => 'max_len,255',
-        'logo_url'      => 'valid_url|max_len,1024',
-        'description'   => 'max_len,16384',
-        'scope'         => 'max_len,2048',
-        'callback_uri'  => 'valid_url|max_len,1024',
-        'redirect_uris' => 'max_len,16384',
-        'status'        => 'max_len,16',
+        'users_uuid'    => 'alpha_dash',
+        'client_id'     => 'alpha_dash',
+        'client_secret' => 'alpha_dash',
+        'logo_url'      => 'valid_url',
+        'callback_uri'  => 'valid_url',
     ];
 }
