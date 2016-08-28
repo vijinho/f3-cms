@@ -104,61 +104,55 @@ abstract class Mapper extends \DB\SQL\Mapper
         }
 
         // work out default validation rules from schema and cache them
-        $cache = \Cache::instance();
-        $key = 'validation-rules-' . $this->mapperName;
-        if (1||$cache->exists($key, $validationRules)) {
-            $validationRules   = [];
-            foreach ($this->schema() as $field => $metadata) {
-                if ('id' == $field)  {
-                    continue;
-                }
-
-                $validationRules[$field] = '';
-                $rules   = [];
-
-                if (empty($metadata['nullable']) || !empty($metadata['pkey'])) {
-                    // special case, id for internal use so we don't interfere with this
-                    $rules[] = 'required';
-                }
-
-                if (preg_match('/^(?<type>[^(]+)\(?(?<length>[^)]+)?/i', $metadata['type'], $matches)) {
-                    switch ($matches['type']) {
-                        case 'char':
-                        case 'varchar':
-                            $rules[] = 'max_len,' . $matches['length'];
-                            break;
-
-                        case 'text':
-                            $rules[] = 'max_len,65535';
-                            break;
-
-                        case 'int':
-                            $rules[] = 'integer|min_numeric,0';
-                            break;
-
-                        case 'datetime':
-                            $rules[] = 'date|min_len,0|max_len,19';
-                            break;
-
-                        default:
-                            break;
-                    }
-                    $validationRules[$field] = empty($rules) ? '' : join('|', $rules);
-                }
+        $validationRules   = [];
+        foreach ($this->schema() as $field => $metadata) {
+            if ('id' == $field)  {
+                continue;
             }
 
-            // set default validation rules
-            foreach ($this->validationRules as $field => $rule) {
-                if (!empty($rule)) {
-                    if (empty($validationRules[$field])) {
-                        $validationRules[$field] = $rule;
-                    } else {
-                        $validationRules[$field] .= '|' . $rule;
-                    }
-                }
+            $validationRules[$field] = '';
+            $rules   = [];
+
+            if (empty($metadata['nullable']) || !empty($metadata['pkey'])) {
+                // special case, id for internal use so we don't interfere with this
+                $rules[] = 'required';
             }
 
-            $cache->set($key, $validationRules, $f3->get('ttl.default'));
+            if (preg_match('/^(?<type>[^(]+)\(?(?<length>[^)]+)?/i', $metadata['type'], $matches)) {
+                switch ($matches['type']) {
+                    case 'char':
+                    case 'varchar':
+                        $rules[] = 'max_len,' . $matches['length'];
+                        break;
+
+                    case 'text':
+                        $rules[] = 'max_len,65535';
+                        break;
+
+                    case 'int':
+                        $rules[] = 'integer|min_numeric,0';
+                        break;
+
+                    case 'datetime':
+                        $rules[] = 'date|min_len,0|max_len,19';
+                        break;
+
+                    default:
+                        break;
+                }
+                $validationRules[$field] = empty($rules) ? '' : join('|', $rules);
+            }
+        }
+
+        // set default validation rules
+        foreach ($this->validationRules as $field => $rule) {
+            if (!empty($rule)) {
+                if (empty($validationRules[$field])) {
+                    $validationRules[$field] = $rule;
+                } else {
+                    $validationRules[$field] .= '|' . $rule;
+                }
+            }
         }
 
         // save default validation rules and filter rules in-case we add rules
