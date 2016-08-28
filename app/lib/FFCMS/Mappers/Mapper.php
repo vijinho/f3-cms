@@ -11,8 +11,10 @@ use FFCMS\{Traits, Models};
  * @author Vijay Mahrra <vijay@yoyo.org>
  * @copyright (c) Copyright 2016 Vijay Mahrra
  * @license GPLv3 (http://www.gnu.org/licenses/gpl-3.0.html)
- * @link https://fatfreeframework.com/sql-mapper
- * @link https://github.com/Wixel/GUMP
+ *
+ * @see https://fatfreeframework.com/cursor
+ * @see https://fatfreeframework.com/sql-mapper
+ * @see https://github.com/Wixel/GUMP
  */
 
 // abstract class Magic implements ArrayAccess
@@ -77,32 +79,37 @@ abstract class Mapper extends \DB\SQL\Mapper
     protected $auditData = [];
 
     /**
+     * @var boolean $initValidation automatically append validation settings for fields $this->validationRules/Default?
+     */
+    protected $initValidation = true;
+
+    /**
      * initialize with array of params
      *
      */
-    public function __construct(array $params = [])
+    public function __construct()
     {
         $f3 = \Base::instance();
 
-        $this->db = \Registry::get('db');
-
         // guess the table name from the class name if not specified as a class member
-        $class = strrchr(get_class($this), '\\');
-        $class = \UTF::instance()->substr($class,1);
-        if (empty($this->table)) {
-            $table = $f3->snakecase($class);
-        } else {
-            $table = $this->table;
+        $class = \UTF::instance()->substr(strrchr(get_class($this), '\\'),1);
+        $this->table = $this->mapperName = empty($this->table) ? $f3->snakecase($class) : $this->table;
+
+        parent::__construct(\Registry::get('db'), $this->table);
+
+        $this->initValidation(); // automatically create validation settings from reading tables
+        $this->setupHooks(); // setup hooks for before/after data changes in mapper
+    }
+
+    /**
+     * Initialise automatic validation settings for fields
+     */
+    public function initValidation()
+    {
+        if (!$this->initValidation) {
+            return;
         }
-        $this->table = $table; // this gets quoted
-        $this->mapperName = $table; // this doesn't
-
-        parent::__construct($this->db, $table);
-
-        foreach ($params as $k => $v) {
-            $this->$k = $v;
-        }
-
+        
         // work out default validation rules from schema and cache them
         $validationRules   = [];
         foreach ($this->schema() as $field => $metadata) {
@@ -146,20 +153,23 @@ abstract class Mapper extends \DB\SQL\Mapper
 
         // set default validation rules
         foreach ($this->validationRules as $field => $rule) {
-            if (!empty($rule)) {
-                if (empty($validationRules[$field])) {
-                    $validationRules[$field] = $rule;
-                } else {
-                    $validationRules[$field] .= '|' . $rule;
-                }
+            if (empty($rule)) {
+                continue;
             }
+            $validationRules[$field] = empty($validationRules[$field]) ? $rule :
+                                                $validationRules[$field] .  '|' . $rule;
         }
 
         // save default validation rules and filter rules in-case we add rules
-        $this->validationRulesDefault = $validationRules;
-        $this->validationRules = $validationRules;
+        $this->validationRulesDefault = $this->validationRules = $validationRules;
         $this->filterRulesDefault = $this->filterRules;
+    }
 
+    /**
+     * Initialise hooks for the mapper object actions
+     */
+    public function setupHooks()
+    {
         // set original data when object loaded
         $this->onload(function($mapper){
             $mapper->originalData = $mapper->cast();
@@ -201,17 +211,14 @@ abstract class Mapper extends \DB\SQL\Mapper
             if ('audit' == $mapper->mapperName) {
                 return;
             }
-            $data = array_merge([
+            Models\Audit::instance()->write(array_merge([
                 'event' => 'deleted-' . $mapper->mapperName,
                 'old' => $mapper->originalData,
                 'new' => $mapper->cast()
-            ], $this->auditData);
-            Models\Audit::instance()->write($data);
+            ], $this->auditData));
             $mapper->originalData = $mapper->auditData = [];
         });
-
     }
-
 
     /**
      * return string representation of class - json of data
