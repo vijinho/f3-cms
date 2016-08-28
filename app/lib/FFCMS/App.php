@@ -17,11 +17,11 @@ class App
     /**
      * Application-wide dependencies are injected
      *
-     * @param \Log $logger
+     * @param null|\Log $logger
      * @param \DB\SQL $db
-     * @param \DB\SQL\Session $session
+     * @param null|\DB\SQL\Session $session
      */
-    public function __construct(\Log $logger, \DB\SQL $db, \DB\SQL\Session $session = null)
+    public function __construct(\Log $logger = null, \DB\SQL $db, \DB\SQL\Session $session = null)
     {
         // single instances to registry
         \Registry::set('logger', $logger);
