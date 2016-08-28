@@ -452,7 +452,7 @@ class User extends Base
         $usersModel->saveKey([
             'users_uuid' => $usersMapper->uuid,
             'key' => 'confirm_email_code',
-            'value' => Helpers\Str::random(8)
+            'value' => Helpers\Str::random(6)
         ]);
 
             // set the email template variables
