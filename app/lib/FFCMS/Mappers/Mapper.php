@@ -2,8 +2,9 @@
 
 namespace FFCMS\Mappers;
 
-use FFCMS\Traits;
 use FFMVC\Helpers;
+use FFCMS\Traits;
+use FFCMS\Models;
 
 /**
  * Base Database Mapper Class extends f3's DB\SQL\Mapper
@@ -25,8 +26,7 @@ use FFMVC\Helpers;
  */
 abstract class Mapper extends \DB\SQL\Mapper
 {
-    use Traits\Logger,
-        Traits\Validation;
+    use Traits\Validation;
 
     /**
      * Fields and their visibility to clients, boolean or string of visible field name
@@ -48,9 +48,14 @@ abstract class Mapper extends \DB\SQL\Mapper
     protected $db;
 
     /**
-     * @var string $table for the mapper
+     * @var string $table for the mapper - this string gets automatically quoted
      */
     protected $table;
+
+    /**
+     * @var string $mapperName name for the mapper
+     */
+    protected $mapperName;
 
     /**
      * @var string $uuid the fieldname used for the uuid
@@ -63,6 +68,16 @@ abstract class Mapper extends \DB\SQL\Mapper
     protected $valid = null;
 
     /**
+     * @var array $originalData the original data when object created/loaded
+     */
+    protected $originalData = [];
+
+    /**
+     * @var array $auditData data to write to audit log
+     */
+    protected $auditData = [];
+
+    /**
      * initialize with array of params
      *
      */
@@ -70,7 +85,6 @@ abstract class Mapper extends \DB\SQL\Mapper
     {
         $f3 = \Base::instance();
 
-        $this->oLog = \Registry::get('logger');
         $this->db = \Registry::get('db');
 
         // guess the table name from the class name if not specified as a class member
@@ -81,7 +95,8 @@ abstract class Mapper extends \DB\SQL\Mapper
         } else {
             $table = $this->table;
         }
-        $this->table = $table;
+        $this->table = $table; // this gets quoted
+        $this->mapperName = $table; // this doesn't
 
         parent::__construct($this->db, $table);
 
@@ -92,6 +107,11 @@ abstract class Mapper extends \DB\SQL\Mapper
         // save default validation rules and filter rules in-case we add rules
         $this->validationRulesDefault = $this->validationRules;
         $this->filterRulesDefault = $this->filterRules;
+
+        // set original data when object loaded
+        $this->onload(function($mapper){
+            $mapper->originalData = $mapper->cast();
+        });
 
         // filter data, set UUID and date created before insert
         $this->beforeinsert(function($mapper){
@@ -107,6 +127,35 @@ abstract class Mapper extends \DB\SQL\Mapper
         $this->beforeupdate(function($mapper){
             $mapper->copyFrom($mapper->filter());
             return $mapper->validate();
+        });
+
+        // write audit data after save
+        $this->aftersave(function($mapper){
+            if ('audit' == $mapper->mapperName) {
+                return;
+            }
+            $data = array_merge([
+                'event' => (empty($mapper->originalData) ? 'created-'  : 'updated-') . $mapper->mapperName,
+                'old' => $mapper->originalData,
+                'new' => $mapper->cast()
+            ], $this->auditData);
+            Models\Audit::instance()->write($data);
+            $mapper->originalData = $data['new'];
+            $mapper->auditData = [];
+        });
+
+        // write audit data after erase
+        $this->aftererase(function($mapper){
+            if ('audit' == $mapper->mapperName) {
+                return;
+            }
+            $data = array_merge([
+                'event' => 'deleted-' . $mapper->mapperName,
+                'old' => $mapper->originalData,
+                'new' => $mapper->cast()
+            ], $this->auditData);
+            Models\Audit::instance()->write($data);
+            $mapper->originalData = $mapper->auditData = [];
         });
 
     }
@@ -260,4 +309,18 @@ abstract class Mapper extends \DB\SQL\Mapper
         }
         return empty($this->$field) ? null : $this->$field;
     }
+
+
+    /**
+     * Write data for audit logging
+     *
+     * @param $data array of data to audit log
+     * @return $this->auditData return the updated audit data for the mapper
+     */
+    public function audit(array $data = []): array
+    {
+        $this->auditData = array_merge($this->auditData, $data);
+        return $this->auditData;
+    }
+
 }

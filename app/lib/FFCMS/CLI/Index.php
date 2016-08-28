@@ -36,7 +36,6 @@ class Index extends Base
         $pid   = $mypid['PID'];
         $msg   = $pid . ': Starting...';
         $cli->shout($msg);
-        $this->log($msg);
 
         // check if already running, quit if so
         exec('ps auxww | grep -i index/running | grep -v grep', $output);
@@ -44,8 +43,6 @@ class Index extends Base
         if (1 < count($output)) {
             $msg = $pid . ': Already running! Quitting.';
             $cli->shout($msg);
-            $this->log($output[0]);
-            $this->log($msg);
             return false;
         }
 

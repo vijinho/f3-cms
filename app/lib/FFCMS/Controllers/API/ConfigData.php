@@ -36,7 +36,6 @@ class ConfigData extends Mapper
         $m = $this->getMapper();
 
         // copy data and validate
-        $oldMapper = clone($m);
         $m->copyfrom($data);
         $m->validationRequired([
             'key', 'value', 'type', 'rank'
@@ -63,12 +62,6 @@ class ConfigData extends Mapper
                 $this->failure('error', 'Unable to update object.');
                 return;
             }
-
-            $this->audit([
-                'event' => 'Config Updated via API',
-                'old' => $oldMapper->cast(),
-                'new' => $m->cast()
-            ]);
 
             // return raw data for object?
             $adminView = $f3->get('isAdmin') && 'admin' == $f3->get('REQUEST.view');

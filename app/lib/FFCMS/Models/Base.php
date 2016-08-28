@@ -13,8 +13,7 @@ use FFCMS\Traits as Traits;
  */
 abstract class Base extends \Prefab
 {
-    use Traits\Logger,
-        Traits\Validation;
+    use Traits\Validation;
 
     /**
      * initialize with array of params, 'db' and 'logger' can be injected
@@ -26,11 +25,6 @@ abstract class Base extends \Prefab
     {
         if (is_object($logger)) {
             \Registry::set('logger', $logger);
-        }
-        $this->oLog = \Registry::get('logger');
-
-        if (!array_key_exists('oLog', $params)) {
-            $this->oLog = \Registry::get('logger');
         }
 
         foreach ($params as $k => $v) {

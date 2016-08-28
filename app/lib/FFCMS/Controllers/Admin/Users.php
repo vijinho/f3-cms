@@ -232,12 +232,6 @@ class Users extends Admin
         $usersMapper->load(['uuid = ?', $data['uuid']]);
         $usersMapper->copyfrom($data);
         if ($usersMapper->save()) {
-            $this->audit([
-                'users_uuid' => $usersMapper->uuid,
-                'event' => 'User Updated',
-                'old' => $oldUserMapper->cast(),
-                'new' => $usersMapper->cast()
-            ]);
             $this->notify(_('The account was updated!'), 'success');
         } else {
             $this->notify(_('Unable to update your account!'), 'error');
@@ -276,14 +270,9 @@ class Users extends Admin
             return $f3->reroute('@admin_users_list');
         }
 
-        $oldMapper = clone($mapper);
         $mapper->erase();
         $this->notify('User deleted!', 'success');
-        $this->audit([
-            'users_uuid' => $oldMapper->uuid,
-            'event' => 'User Deleted',
-            'old' => $oldMapper->cast(),
-        ]);
+
         return $f3->reroute('@admin_users_list');
     }
 

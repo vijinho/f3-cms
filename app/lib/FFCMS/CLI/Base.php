@@ -12,9 +12,7 @@ use FFCMS\{Traits, Controllers, Models, Mappers};
  */
 abstract class Base
 {
-    use Traits\Logger,
-        Traits\Audit,
-        Traits\Validation;
+    use Traits\Validation;
 
     /**
      * @var \Log log class

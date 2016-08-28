@@ -152,13 +152,6 @@ class Apps extends Admin
 
         if ($appsMapper->save()) {
             $this->notify(_('The app has been updated!'), 'success');
-
-            $this->audit([
-                'users_uuid' => $appsMapper->users_uuid,
-                'actor' => $appsMapper->client_id,
-                'event' => 'App Updated',
-                'new' => $data
-            ]);
         } else {
             $this->notify(_('App update failed!'), 'error');
         }
@@ -187,15 +180,9 @@ class Apps extends Admin
 
         $mapper = new Mappers\OAuth2Apps;
         $mapper->load(['client_id = ?', $client_id]);
-
-        $oldMapper = clone($mapper);
         $mapper->erase();
         $this->notify('App deleted!', 'success');
-        $this->audit([
-            'users_uuid' => $oldMapper->users_uuid,
-            'event' => 'App Deleted',
-            'old' => $oldMapper->cast(),
-        ]);
+
         return $f3->reroute('@admin_apps_list');
     }
 

@@ -242,13 +242,6 @@ class User extends Base
         $usersMapper->load(['uuid = ?', $data['uuid']]);
         $usersMapper->copyfrom($data);
         if ($usersMapper->save()) {
-            $this->audit([
-                'users_uuid' => $usersMapper->uuid,
-                'actor' => $usersMapper->email,
-                'event' => 'User Updated',
-                'old' => $oldUserMapper->cast(),
-                'new' => $usersMapper->cast()
-            ]);
             $this->notify(_('Your account was updated!'), 'success');
         } else {
             $this->notify(_('Unable to update your account!'), 'error');
@@ -265,13 +258,6 @@ class User extends Base
                 'key'       => 'email_confirmed',
                 'value'     => 0
             ])) {
-                $this->audit([
-                   'users_uuid' => $usersMapper->uuid,
-                   'actor' => $oldUserMapper->email,
-                   'event' => 'Set Email Confirmed Fail',
-                   'old' => $oldUserMapper->cast(),
-                   'new' => $usersMapper->cast(),
-                ]);
                 $this->notify(_('Setting confirmation email failed.'), 'warning');
             }
             $this->sendConfirmationEmail();
@@ -427,14 +413,6 @@ class User extends Base
             return;
         }
 
-        $this->audit([
-            'users_uuid' => $usersMapper->uuid,
-            'actor' => $usersMapper->email,
-            'event' => 'User Updated',
-            'old' => $oldUserMapper->cast(),
-            'new' => $usersMapper->cast()
-        ]);
-
             //delete confirm_email_code and add email_confirmed
         $usersDataMapper->erase();
         $usersModel->saveKey([
@@ -490,13 +468,6 @@ class User extends Base
 
         if ($mail->send()) {
             $this->notify(_("A notification has been sent to confirm your email address."), "success");
-
-            $this->audit([
-                'users_uuid' => $usersMapper->uuid,
-                'actor' => $usersMapper->email,
-                'event' => 'Email Sent',
-            ]);
-
         } else {
             $this->notify(_("There was a problem sending you a registration email, please check your email and/or try again later."), "warning");
             $this->notify($mail->ErrorInfo, "error");

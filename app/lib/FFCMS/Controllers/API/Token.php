@@ -104,13 +104,6 @@ class Token extends API
         $tokensMapper->expires = Helpers\Time::database(time() + $f3->get('oauth2.expires_token'));
         $tokensMapper->save();
 
-        $this->audit([
-            'users_uuid' => $tokensMapper->users_uuid,
-            'actor' => $tokensMapper->client_id,
-            'event' => 'Token Updated via API',
-            'new' => $tokensMapper->cast()
-        ]);
-
         // check if there's already a refresh token for the client/user combination
         $rTokensMapper = clone $tokensMapper;
         $rTokensMapper->load(['client_id = ? AND users_uuid = ? AND '.$db->quotekey('type').' = "refresh_token"',

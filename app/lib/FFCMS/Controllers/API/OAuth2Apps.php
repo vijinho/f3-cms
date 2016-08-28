@@ -57,7 +57,6 @@ class OAuth2Apps extends Mapper
         $m = $this->getMapper();
 
         // copy data and validate
-        $oldMapper = clone($m);
         $m->copyfrom($data);
         $m->validationRequired([
             'users_uuid', 'name'
@@ -82,14 +81,6 @@ class OAuth2Apps extends Mapper
                 $this->failure('error', 'Unable to update object.');
                 return;
             }
-
-            $this->audit([
-                'users_uuid' => $m->users_uuid,
-                'actor' => $m->client_id,
-                'event' => ' App Updated via API',
-                'old' => $oldMapper->cast(),
-                'new' => $m->cast()
-            ]);
 
             // return raw data for object?
             $adminView = $f3->get('isAdmin') && 'admin' == $f3->get('REQUEST.view');

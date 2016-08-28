@@ -318,10 +318,6 @@ class OAuth2 extends Controllers\User\Base
         } else {
             $this->notify(_('Access granted to') . ' ' . $appsMapper->name, 'success');
 
-            $this->audit([
-                'event' => 'App Access Granted',
-            ]);
-
             $url = $request['redirect_uri'];
             $data = [
                 'state' => $request['state'],
@@ -395,10 +391,6 @@ class OAuth2 extends Controllers\User\Base
         ]);
 
         $f3->set('denyUrl', $url);
-
-        $this->audit([
-            'event' => 'App Access Denied',
-        ]);
 
         $f3->set('form', $f3->get('REQUEST'));
         echo \View::instance()->render('oauth2/deny.phtml');

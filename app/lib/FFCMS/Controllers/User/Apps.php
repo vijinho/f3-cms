@@ -102,13 +102,6 @@ class Apps extends Controllers\User\Base
 
         if ($appsMapper->save()) {
             $this->notify(_('Your new app has been registered!'), 'success');
-
-            $this->audit([
-                'users_uuid' => $appsMapper->users_uuid,
-                'actor' => $appsMapper->client_id,
-                'event' => 'App Registered',
-                'new' => $data
-            ]);
         } else {
             $this->notify(_('App registration failed!'), 'error');
         }
@@ -165,13 +158,6 @@ class Apps extends Controllers\User\Base
 
         if ($appsMapper->save()) {
             $this->notify(_('Your app has been updated!'), 'success');
-
-            $this->audit([
-                'users_uuid' => $appsMapper->users_uuid,
-                'actor' => $appsMapper->client_id,
-                'event' => 'App Updated',
-                'new' => $data
-            ]);
         } else {
             $this->notify(_('App update failed!'), 'error');
         }

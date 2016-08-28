@@ -90,12 +90,6 @@ class ForgotPassword extends User
                 'value' => Helpers\Str::random(8)
             ]);
 
-            $this->audit([
-                'users_uuid' => $usersMapper->uuid,
-                'actor' => $usersMapper->email,
-                'event' => 'User Forgot Password'
-            ]);
-
                 // set the email template variables
             $f3->set('templateData',
                 array_merge($usersMapper->cast(), [
@@ -258,13 +252,6 @@ class ForgotPassword extends User
         $usersMapper->password = $newPassword;
 
         if ($usersMapper->save()) {
-            $this->audit([
-                'users_uuid' => $usersMapper->uuid,
-                'actor' => $usersMapper->email,
-                'event' => 'Password Update',
-                'old' => $oldPassword,
-                'new' => $newPassword,
-            ]);
             $this->notify(_('Your password was updated!'), 'success');
         } else {
             $this->notify(_('Unable to update password!'), 'error');

@@ -16,8 +16,6 @@ abstract class Base
 {
     use Traits\UrlHelper,
         Traits\Notification,
-        Traits\Logger,
-        Traits\Audit,
         Traits\SecurityController,
         Traits\Validation;
 

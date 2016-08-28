@@ -163,8 +163,6 @@ class Reports extends Admin
             _('Edit') => '',
         ]);
 
-        $oldMapper = clone $mapper;
-
         // only allow updating of these fields
         $data = $f3->get('REQUEST');
         $fields = [
@@ -204,7 +202,7 @@ class Reports extends Admin
         }
 
         // no change, do nothing
-        if ($mapper->cast() === $oldMapper->cast()) {
+        if (!$mapper->changed()) {
             $this->notify(_('There was nothing to change!'), 'info');
             return $f3->reroute('@admin_reports_list');
         }
@@ -213,11 +211,6 @@ class Reports extends Admin
         $mapper->load(['uuid = ?', $data['uuid']]);
         $mapper->copyfrom($data);
         if ($mapper->save()) {
-            $this->audit([
-                'event' => 'Report Updated',
-                'old' => $oldMapper->cast(),
-                'new' => $mapper->cast()
-            ]);
             $this->notify(_('The report data was updated!'), 'success');
         } else {
             $this->notify(_('Unable to update report data!'), 'error');
@@ -307,9 +300,6 @@ class Reports extends Admin
             _('Add') => '',
         ]);
 
-        $oldMapper = clone $mapper;
-        $oldMapper->load(['users_uuid = ?', $uuid]);
-
         // only allow updating of these fields
         $data = $f3->get('REQUEST');
         $fields = [
@@ -347,7 +337,7 @@ class Reports extends Admin
         }
 
         // no change, do nothing
-        if ($mapper->cast() === $oldMapper->cast()) {
+        if (!$mapper->changed()) {
             $this->notify(_('There was nothing to change!'), 'info');
             return $f3->reroute('@admin_reports_list');
         }
@@ -356,11 +346,6 @@ class Reports extends Admin
         $mapper->load(['uuid = ?', $mapper->uuid]);
         $mapper->copyfrom($data);
         if ($mapper->save()) {
-            $this->audit([
-                'event' => 'Report Updated',
-                'old' => $oldMapper->cast(),
-                'new' => $mapper->cast()
-            ]);
             $this->notify(_('The report data was updated!'), 'success');
         } else {
             $this->notify(_('Unable to update report data!'), 'error');
@@ -470,13 +455,8 @@ class Reports extends Admin
             return $f3->reroute('@admin_reports_list');
         }
 
-        $oldMapper = clone($mapper);
         $mapper->erase();
         $this->notify('Report deleted!', 'success');
-        $this->audit([
-            'event' => 'Report Deleted',
-            'old' => $oldMapper->cast(),
-        ]);
         $this->notify(_('Unable to update report data!'), 'error');
         return $f3->reroute('@admin_reports_list');
     }

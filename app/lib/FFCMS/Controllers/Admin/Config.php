@@ -107,13 +107,8 @@ class Config extends Admin
             return $f3->reroute('@admin_config_list');
         }
 
-        $oldMapper = clone($mapper);
         $mapper->erase();
         $this->notify('Config item deleted!', 'success');
-        $this->audit([
-            'event' => 'Config Deleted',
-            'old' => $oldMapper->cast(),
-        ]);
         return $f3->reroute('@admin_config_list');
     }
 
@@ -189,8 +184,6 @@ class Config extends Admin
             $this->notify(_('The entry no longer exists!'), 'error');
             return $f3->reroute('@admin_config_list');
         }
-
-        $oldMapper = clone $mapper;
 
         // only allow updating of these fields
         $data = $f3->get('REQUEST');
@@ -279,7 +272,7 @@ class Config extends Admin
         $mapper->copyfrom($data);
 
         // no change, do nothing
-        if ($mapper->cast() === $oldMapper->cast()) {
+        if (!$mapper->changed()) {
             $this->notify(_('There was nothing to change!'), 'info');
             return $f3->reroute('@admin_config_list');
         }
@@ -288,11 +281,6 @@ class Config extends Admin
         $mapper->load(['uuid = ?', $data['uuid']]);
         $mapper->copyfrom($data);
         if ($mapper->save()) {
-            $this->audit([
-                'event' => 'Config Data Updated',
-                'old' => $oldMapper->cast(),
-                'new' => $mapper->cast()
-            ]);
             $this->notify(_('The config data was updated!'), 'success');
         } else {
             $this->notify(_('Unable to update config data!'), 'error');
@@ -366,9 +354,6 @@ class Config extends Admin
             _('Add') => '',
         ]);
 
-        $oldMapper = clone $mapper;
-        $oldMapper->load(['uuid = ?', $uuid]);
-
         // only allow updating of these fields
         $data = $f3->get('REQUEST');
         $fields = [
@@ -404,7 +389,7 @@ class Config extends Admin
         }
 
         // no change, do nothing
-        if ($mapper->cast() === $oldMapper->cast()) {
+        if (!$mapper->changed()) {
             $this->notify(_('There was nothing to change!'), 'info');
             return $f3->reroute('@admin_config_list');
         }
@@ -413,11 +398,6 @@ class Config extends Admin
         $mapper->load(['uuid = ?', $mapper->uuid]);
         $mapper->copyfrom($data);
         if ($mapper->save()) {
-            $this->audit([
-                'event' => 'Config Data Updated',
-                'old' => $oldMapper->cast(),
-                'new' => $mapper->cast()
-            ]);
             $this->notify(_('The config data was updated!'), 'success');
         } else {
             $this->notify(_('Unable to update config data!'), 'error');

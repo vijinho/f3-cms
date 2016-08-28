@@ -69,7 +69,6 @@ class Users extends Mapper
 
         // set validation check
         $m = $this->getMapper();
-        $oldMapper = clone($m);
         $m->copyfrom($data);
         $m->validationRequired();
         $errors = $m->validate(false);
@@ -85,14 +84,6 @@ class Users extends Mapper
                 $this->failure('error', 'Unable to update object.');
                 return;
             }
-
-            $this->audit([
-                'users_uuid' => $m->uuid,
-                'actor' => $f3->get('uuid'),
-                'event' => 'User Updated via API',
-                'old' => $oldMapper->cast(),
-                'new' => $m->cast()
-            ]);
 
             // return raw data for object?
             $adminView = $f3->get('isAdmin') && 'admin' == $f3->get('REQUEST.view');

@@ -48,7 +48,6 @@ abstract class DB extends Base
         if (is_object($logger)) {
             \Registry::set('logger', $logger);
         }
-        $this->oLog = \Registry::get('logger');
 
         if (is_object($db)) {
             \Registry::set('db', $db);

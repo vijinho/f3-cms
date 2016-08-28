@@ -15,9 +15,7 @@ use FFCMS\{Traits, Models, Mappers};
  */
 class API
 {
-    use Traits\Logger,
-        Traits\Audit,
-        Traits\UrlHelper,
+    use Traits\UrlHelper,
         Traits\Validation,
         Traits\SecurityController;
 

@@ -147,12 +147,6 @@ class Tokens extends Admin
 
         if ($mapper->save()) {
             $this->notify(_('The app token has been updated!'), 'success');
-
-            $this->audit([
-                'users_uuid' => $mapper->users_uuid,
-                'event' => 'Token Updated',
-                'new' => $data
-            ]);
         } else {
             $this->notify(_('App token update failed!'), 'error');
         }
@@ -187,14 +181,9 @@ class Tokens extends Admin
             return $f3->reroute('@admin_tokens_list');
         }
 
-        $oldMapper = clone($mapper);
         $mapper->erase();
         $this->notify('Token deleted!', 'success');
-        $this->audit([
-            'users_uuid' => $oldMapper->users_uuid,
-            'event' => 'Token Deleted',
-            'old' => $oldMapper->cast(),
-        ]);
+
         return $f3->reroute('@admin_tokens_list');
     }
 

@@ -165,8 +165,6 @@ class UsersData extends Admin
             _('Edit') => '',
         ]);
 
-        $oldMapper = clone $mapper;
-
         // only allow updating of these fields
         $data = $f3->get('REQUEST');
         $fields = [
@@ -264,7 +262,7 @@ class UsersData extends Admin
         }
 
         // no change, do nothing
-        if ($mapper->cast() === $oldMapper->cast()) {
+        if ($mapper->changed()) {
             $this->notify(_('There was nothing to change!'), 'info');
             return $f3->reroute('@admin_usersdata_list');
         }
@@ -273,12 +271,6 @@ class UsersData extends Admin
         $mapper->load(['uuid = ?', $data['uuid']]);
         $mapper->copyfrom($data);
         if ($mapper->save()) {
-            $this->audit([
-                'users_uuid' => $mapper->users_uuid,
-                'event' => 'Users Data Updated',
-                'old' => $oldMapper->cast(),
-                'new' => $mapper->cast()
-            ]);
             $this->notify(_('The account data was updated!'), 'success');
         } else {
             $this->notify(_('Unable to update account data!'), 'error');
@@ -373,9 +365,6 @@ class UsersData extends Admin
             _('Add') => '',
         ]);
 
-        $oldMapper = clone $mapper;
-        $oldMapper->load(['users_uuid = ?', $users_uuid]);
-
         // only allow updating of these fields
         $data = $f3->get('REQUEST');
         $fields = [
@@ -409,7 +398,7 @@ class UsersData extends Admin
         }
 
         // no change, do nothing
-        if ($mapper->cast() === $oldMapper->cast()) {
+        if (!$mapper->changed()) {
             $this->notify(_('There was nothing to change!'), 'info');
             return $f3->reroute('@admin_usersdata_list');
         }
@@ -418,12 +407,6 @@ class UsersData extends Admin
         $mapper->load(['uuid = ?', $mapper->uuid]);
         $mapper->copyfrom($data);
         if ($mapper->save()) {
-            $this->audit([
-                'users_uuid' => $mapper->users_uuid,
-                'event' => 'Users Data Updated',
-                'old' => $oldMapper->cast(),
-                'new' => $mapper->cast()
-            ]);
             $this->notify(_('The account data was updated!'), 'success');
         } else {
             $this->notify(_('Unable to update account data!'), 'error');
@@ -462,14 +445,8 @@ class UsersData extends Admin
             return $f3->reroute('@admin_usersdata_list');
         }
 
-        $oldMapper = clone($mapper);
         $mapper->erase();
         $this->notify('User data deleted!', 'success');
-        $this->audit([
-            'users_uuid' => $oldMapper->users_uuid,
-            'event' => 'Users Data Deleted',
-            'old' => $oldMapper->cast(),
-        ]);
         return $f3->reroute('@admin_usersdata_list');
     }
 
