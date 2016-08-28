@@ -2,7 +2,7 @@
 
 namespace FFCMS\Models;
 
-use FFCMS\{Traits, Mappers};
+use FFCMS\{Traits, Mappers, Exceptions};
 
 /**
  * Audit Model Class.
@@ -95,7 +95,7 @@ class Audit extends DB
 
         $mapper->copyFrom($data);
         if (!$mapper->save()) {
-            throw new \InvalidArgumentException("Bad arguments to Audit.");
+            throw new Exceptions\InvalidArgumentException("Bad arguments to Audit.");
         }
 
         return $mapper->cast();

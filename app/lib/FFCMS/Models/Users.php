@@ -3,7 +3,7 @@
 namespace FFCMS\Models;
 
 use FFMVC\Helpers;
-use FFCMS\{Traits, Mappers};
+use FFCMS\{Traits, Mappers, Exceptions};
 
 
 /**
@@ -139,7 +139,7 @@ class Users extends DB
         $usersMapper = empty($uuid) ? $this->getMapper() : $this->getUserByUUID($uuid);
         if (null == $usersMapper->uuid) {
             $msg = "User account not found for $uuid";
-            throw new \FFCMS\Exception($msg);
+            throw new Exceptions\Exception($msg);
         }
 
         // set user scopes
@@ -147,7 +147,7 @@ class Users extends DB
         if (!in_array('user', $scopes) || in_array($usersMapper->status, ['closed', 'suspended', 'cancelled'])) {
             $msg = sprintf(_("User %s %s denied login because account group is not in 'user' or account status is in 'closed,suspended,cancelled'."),
                     $usersMapper->firstname, $usersMapper->lastname);
-            throw new \FFCMS\Exception($msg);
+            throw new Exceptions\Exception($msg);
         }
 
         $usersMapper->login_count++;

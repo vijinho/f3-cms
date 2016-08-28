@@ -3,7 +3,7 @@
 namespace FFCMS\Controllers\User;
 
 use FFMVC\Helpers;
-use FFCMS\{Controllers, Models, Mappers, Traits};
+use FFCMS\{Controllers, Models, Mappers, Traits, Exceptions};
 
 /**
  * Base User Controller Class.

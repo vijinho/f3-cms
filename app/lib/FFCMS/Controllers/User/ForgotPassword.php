@@ -3,7 +3,7 @@
 namespace FFCMS\Controllers\User;
 
 use FFMVC\Helpers;
-use FFCMS\{Controllers, Models, Mappers, Traits};
+use FFCMS\{Controllers, Models, Mappers, Traits, Exceptions};
 
 /**
  * Forgot Password Website Controller Class.
@@ -72,7 +72,7 @@ class ForgotPassword extends User
             $uuid = $usersMapper->uuid;
             if (null == $usersMapper->uuid) {
                 $msg = "User account not found for $uuid";
-                throw new \FFCMS\Exception($msg);
+                throw new Exceptions\Exception($msg);
             }
 
             // set user scopes
@@ -80,7 +80,7 @@ class ForgotPassword extends User
             if (!in_array('user', $scopes) || in_array($usersMapper->status, ['closed', 'suspended', 'cancelled'])) {
                 $msg = sprintf("User %s %s denied login because account group is not in 'user' or account status is in 'closed,suspended,cancelled'.",
                         $usersMapper->firstname, $usersMapper->lastname);
-                throw new \FFCMS\Exception($msg);
+                throw new Exceptions\Exception($msg);
             }
 
                 // generate a random code to email to the user for password reset
