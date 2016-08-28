@@ -346,6 +346,12 @@ class User extends Base
             'password_answer',
         ]);
 
+        // set defaults
+        $usersMapper->setUUID();
+        $usersMapper->scopes = 'user';
+        $usersMapper->status = 'registered';
+        $usersMapper->created = Helpers\Time::database();
+
         $errors = $usersMapper->validate(false);
 
         if (is_array($errors)) {

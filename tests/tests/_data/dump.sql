@@ -152,7 +152,7 @@ CREATE TABLE `reports` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` char(36) NOT NULL COMMENT 'UUID',
   `users_uuid` char(36) NOT NULL COMMENT 'User UUID',
-  `scopes` varchar(64) NOT NULL DEFAULT 'user' COMMENT 'Account Scopes',
+  `scopes` varchar(64) NULL DEFAULT 'user' COMMENT 'Account Scopes',
   `key` varchar(255) NOT NULL COMMENT 'Key',
   `name` varchar(255) NOT NULL COMMENT 'Name',
   `description` text COMMENT 'Description',

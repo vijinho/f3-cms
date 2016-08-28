@@ -84,6 +84,17 @@ class Apps extends Controllers\User\Base
             'callback_uri',
         ]);
 
+        // admin group auto-approved
+        $scopes = $f3->get('userScopes');
+
+        // set defaults
+        $appsMapper->client_id = $appsMapper->setUUID('client_id');
+        $appsMapper->client_secret = $appsMapper->setUUID('client_secret');
+        $appsMapper->users_uuid = $f3->get('uuid');
+        $appsMapper->scope = join(',', $scopes);
+        $appsMapper->status = in_array('admin', $scopes) ? 'approved' : 'registered';
+        $appsMapper->created = Helpers\Time::database();
+
         // at this point the app can be validated
         if (true !== $appsMapper->validate()) {
             $this->notify(['info' => $appsMapper->validationErrors($appsMapper->validate(false))]);
@@ -91,14 +102,6 @@ class Apps extends Controllers\User\Base
             echo \View::instance()->render($view);
             return;
         }
-
-        $appsMapper->client_id = $appsMapper->setUUID('client_id');
-        $appsMapper->client_secret = $appsMapper->setUUID('client_secret');
-        $appsMapper->users_uuid = $f3->get('uuid');
-
-        // admin group auto-approved
-        $scopes = $f3->get('userScopes');
-        $appsMapper->status = in_array('admin', $scopes) ? 'approved' : 'registered';
 
         if ($appsMapper->save()) {
             $this->notify(_('Your new app has been registered!'), 'success');
@@ -155,7 +158,7 @@ class Apps extends Controllers\User\Base
             $this->notify(['info' => $appsMapper->validationErrors($appsMapper->validate(false))]);
             $f3->reroute('@api_apps');
         }
-        
+
         if ($appsMapper->save()) {
             $this->notify(_('Your app has been updated!'), 'success');
         } else {

@@ -175,7 +175,7 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL COMMENT 'Email',
   `firstname` varchar(128) NOT NULL COMMENT 'First Name(s)',
   `lastname` varchar(128) NOT NULL COMMENT 'Last Name(s)',
-  `scopes` varchar(64) NOT NULL DEFAULT 'user' COMMENT 'Account Scopes',
+  `scopes` varchar(64) NULL DEFAULT 'user' COMMENT 'Account Scopes',
   `status` varchar(32) NOT NULL DEFAULT 'NEW' COMMENT 'Account Status',
   `password_question` varchar(255) NOT NULL COMMENT 'Password Hint Question',
   `password_answer` varchar(255) NOT NULL COMMENT 'Password Hint Answer',
