@@ -39,11 +39,11 @@ class OAuth2Apps extends Mapper
         }
 
         if (!array_key_exists('client_id', $data)) {
-            $data['client_id'] = Helpers\Str::uuid(8);
+            $data['client_id'] = Helpers\Str::uuid(16);
         }
 
         if (!array_key_exists('client_secret', $data)) {
-            $data['client_secret'] = Helpers\Str::uuid(8);
+            $data['client_secret'] = Helpers\Str::uuid(16);
         }
 
         // do not allow request to define these fields:
