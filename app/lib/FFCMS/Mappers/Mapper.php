@@ -112,7 +112,7 @@ abstract class Mapper extends \DB\SQL\Mapper
                 $validationRules[$field] = '';
                 $rules   = [];
                 if (!empty($metadata['nullable']) || !empty($metadata['pkey'])) {
-//                    $rules[] = 'required';
+                    $rules[] = 'required';
                 }
                 if (preg_match('/^(?<type>[^(]+)\(?(?<length>[^)]+)?/i', $metadata['type'], $matches)) {
                     switch ($matches['type']) {
