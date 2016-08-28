@@ -103,7 +103,7 @@ class OAuth2 extends Controllers\User\Base
      */
     public function Authenticate(\Base $f3, array $params)
     {
-        $this->csrf('@user_api');
+        $this->csrf('@api_apps');
 
         $view = 'oauth2/authenticate.phtml';
 
@@ -249,7 +249,7 @@ class OAuth2 extends Controllers\User\Base
      */
     public function ConfirmPost(\Base $f3, array $params)
     {
-        $this->csrf('@user_api');
+        $this->csrf('@api_apps');
         $request = $f3->get('REQUEST');
 
         $oAuth2Model = Models\OAuth2::instance();
@@ -352,7 +352,7 @@ class OAuth2 extends Controllers\User\Base
      */
     public function Deny(\Base $f3, array $params)
     {
-        $this->csrf('@user_api');
+        $this->csrf('@api_apps');
         $request = $f3->get('REQUEST');
         $oAuth2Model = Models\OAuth2::instance();
         $appsMapper = $oAuth2Model->getAppsMapper();

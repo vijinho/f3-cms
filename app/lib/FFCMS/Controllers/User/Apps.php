@@ -118,7 +118,7 @@ class Apps extends Controllers\User\Base
      */
     public function updateAppPost(\Base $f3)
     {
-        $this->csrf('@user_api');
+        $this->csrf('@api_apps');
         $this->redirectLoggedOutUser();
 
         $oAuth2Model = Models\OAuth2::instance();
@@ -155,7 +155,7 @@ class Apps extends Controllers\User\Base
             $this->notify(['info' => $appsMapper->validationErrors($appsMapper->validate(false))]);
             $f3->reroute('@api_apps');
         }
-
+        
         if ($appsMapper->save()) {
             $this->notify(_('Your app has been updated!'), 'success');
         } else {
