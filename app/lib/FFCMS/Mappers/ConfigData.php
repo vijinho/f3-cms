@@ -58,7 +58,7 @@ class ConfigData extends Mapper
      * @link https://github.com/Wixel/GUMP
      */
     public $validationRules = [
-        'uuid'    => 'exact_len,36|alpha_dash',
+        'uuid'    => 'max_len,36|alpha_dash',
         'key'     => 'max_len,255',
         'value'   => 'max_len,32768',
         'type'    => 'max_len,32',

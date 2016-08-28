@@ -86,7 +86,7 @@ class Users extends Mapper
      * @link https://github.com/Wixel/GUMP
      */
     public $validationRules = [
-        'uuid'              => 'exact_len,36|alpha_dash',
+        'uuid'              => 'max_len,36|alpha_dash',
         'password'          => 'max_len,16',
         'email'             => 'valid_email|max_len,255',
         'firstname'         => 'valid_name|max_len,128',
@@ -97,6 +97,6 @@ class Users extends Mapper
         'password_answer'   => 'max_len,255',
         'created'           => 'date|min_len,0|max_len,19',
         'login_count'       => 'integer|min_numeric,0',
-        'login_last'        => 'min_len,0|max_len,19',
+        'login_last'        => 'date|min_len,0|max_len,19',
     ];
 }

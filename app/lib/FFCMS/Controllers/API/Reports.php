@@ -58,7 +58,7 @@ class Reports extends UsersData
             }
         } else {
             // load in original data and then replace for save
-            if (!$m->validateSave()) {
+            if (!$m->save()) {
                 $this->setOAuthError('invalid_request');
                 $this->failure('error', 'Unable to update object.');
                 return;

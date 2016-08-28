@@ -73,8 +73,8 @@ class Reports extends Mapper
      * @link https://github.com/Wixel/GUMP
      */
     public $validationRules = [
-        'uuid'        => 'exact_len,36|alpha_dash',
-        'users_uuid'  => 'exact_len,36|alpha_dash',
+        'uuid'        => 'max_len,36|alpha_dash',
+        'users_uuid'  => 'max_len,36|alpha_dash',
         'scopes'      => 'max_len,64',
         'key'         => 'max_len,255',
         'name'        => 'max_len,255',

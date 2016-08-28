@@ -81,11 +81,11 @@ class OAuth2Tokens extends Mapper
      * @link https://github.com/Wixel/GUMP
      */
     public $validationRules = [
-        'uuid'        => 'exact_len,36|alpha_dash',
+        'uuid'        => 'max_len,36|alpha_dash',
         'created'     => 'date|min_len,0|max_len,19',
         'expires'     => 'date|min_len,10|max_len,19',
-        'users_uuid'  => 'exact_len,36|alpha_dash',
-        'client_id'   => 'exact_len,36|alpha_dash',
+        'users_uuid'  => 'max_len,36|alpha_dash',
+        'client_id'   => 'max_len,36|alpha_dash',
         'token'       => 'max_len,36',
         'type'        => 'min_len,4|max_len,13',
         'description' => 'max_len,16384',

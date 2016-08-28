@@ -102,7 +102,7 @@ class Token extends API
         $tokensMapper->setUUID('token');
         $tokensMapper->type = 'access_token';
         $tokensMapper->expires = Helpers\Time::database(time() + $f3->get('oauth2.expires_token'));
-        $tokensMapper->validateSave();
+        $tokensMapper->save();
 
         $this->audit([
             'users_uuid' => $tokensMapper->users_uuid,
@@ -127,7 +127,7 @@ class Token extends API
             $rTokensMapper->setUUID('token');
             $rTokensMapper->type = 'refresh_token';
             $rTokensMapper->expires = null;
-            $rTokensMapper->validateSave();
+            $rTokensMapper->save();
         }
 
         // all good - return the token!
@@ -183,14 +183,14 @@ class Token extends API
             $tokensMapper->scope = 'read write';
             $tokensMapper->setUUID('token');
             $tokensMapper->expires = Helpers\Time::database(time() + $f3->get('oauth2.expires_token'));
-            $tokensMapper->validateSave();
+            $tokensMapper->save();
         }
 
         // token expired!
         if (time() > strtotime($tokensMapper->expires)) {
             // as it's a client credentials login we can extend it though
             $tokensMapper->expires = Helpers\Time::database(time() + $f3->get('oauth2.expires_token'));
-            $tokensMapper->validateSave();
+            $tokensMapper->save();
         }
 
         // check if there's already a refresh token for the client/user combination
@@ -207,7 +207,7 @@ class Token extends API
             $rTokensMapper->setUUID('token');
             $rTokensMapper->type = 'refresh_token';
             $rTokensMapper->expires = Helpers\Time::database(time() + 3600);
-            $rTokensMapper->validateSave();
+            $rTokensMapper->save();
         }
 
         // all good - return the access token only
@@ -298,13 +298,13 @@ class Token extends API
             $tokensMapper->scope = 'read write';
             $tokensMapper->setUUID('token');
             $tokensMapper->expires = Helpers\Time::database(time() + $f3->get('oauth2.expires_token'));
-            $tokensMapper->validateSave();
+            $tokensMapper->save();
         }
         // token expired!
         if (time() > strtotime($tokensMapper->expires)) {
             // as it's a password login we can extend it though
             $tokensMapper->expires = Helpers\Time::database(time() + $f3->get('oauth2.expires_token'));
-            $tokensMapper->validateSave();
+            $tokensMapper->save();
         }
 
         // check if there's already a refresh token for the client/user combination
@@ -322,7 +322,7 @@ class Token extends API
             $rTokensMapper->setUUID('token');
             $rTokensMapper->type = 'refresh_token';
             $rTokensMapper->expires = null;
-            $rTokensMapper->validateSave();
+            $rTokensMapper->save();
         }
 
         // all good - return the access token only because client_secret absent
@@ -473,7 +473,7 @@ class Token extends API
         // create a new token value
         $tokensMapper->setUUID('token');
         $tokensMapper->expires = Helpers\Time::database(time() + $f3->get('oauth2.expires_token'));
-        $tokensMapper->validateSave();
+        $tokensMapper->save();
 
         $this->params['headers']['Service'] = 'OAuth2 Refresh Access Token';
         $this->data += [

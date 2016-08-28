@@ -150,7 +150,7 @@ class Apps extends Admin
             $f3->reroute('@api_apps');
         }
 
-        if ($appsMapper->validateSave()) {
+        if ($appsMapper->save()) {
             $this->notify(_('The app has been updated!'), 'success');
 
             $this->audit([

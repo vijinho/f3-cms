@@ -53,7 +53,17 @@ abstract class Mapper extends \DB\SQL\Mapper
     protected $table;
 
     /**
-     * initialize with array of params, 'db' and 'logger' can be injected
+     * @var string $uuid the fieldname used for the uuid
+     */
+    protected $uuidField = 'uuid';
+
+    /**
+     * @var boolean $valid the data after validation is valid?
+     */
+    protected $valid = null;
+
+    /**
+     * initialize with array of params
      *
      */
     public function __construct(array $params = [])
@@ -82,6 +92,23 @@ abstract class Mapper extends \DB\SQL\Mapper
         // save default validation rules and filter rules in-case we add rules
         $this->validationRulesDefault = $this->validationRules;
         $this->filterRulesDefault = $this->filterRules;
+
+        // filter data, set UUID and date created before insert
+        $this->beforeinsert(function($mapper){
+            $mapper->setUUID($mapper->uuidField);
+            $mapper->copyFrom($mapper->filter());
+            if (in_array('created', $mapper->fields()) && empty($mapper->created)) {
+                $mapper->created = Helpers\Time::database();
+            }
+            return $mapper->validate();
+        });
+
+        // filter data, set updated field if present before update
+        $this->beforeupdate(function($mapper){
+            $mapper->copyFrom($mapper->filter());
+            return $mapper->validate();
+        });
+
     }
 
 
@@ -233,88 +260,4 @@ abstract class Mapper extends \DB\SQL\Mapper
         }
         return empty($this->$field) ? null : $this->$field;
     }
-
-
-    /**
-     * Enhanced mapper save only saves if validation passes and also generates a uuid if needed
-     *
-     * @param string $id uuid key field
-     * @return boolean|array true/false or list of errors
-     */
-    public function validateSave(string $id = 'uuid')
-    {
-        // set UUID vield value if not set
-        $this->setUUID($id);
-
-        // set date created field if not set
-        if (in_array('created', $this->fields()) && empty($this->created)) {
-            $this->created = Helpers\Time::database();
-        }
-
-        return $this->validate() ? $this->save() : $this->validate(false);
-    }
-
-
-    /**
-     * Apply filter rules to data
-     *
-     * @param array $data
-     * @return array $data
-     */
-    public function filter(array $data = [])
-    {
-        if (!is_array($data) || empty($data)) {
-            $data = $this->cast();
-        }
-
-        $validator = Helpers\Validator::instance();
-        $validator->filter_rules($this->filterRules);
-        $data = $validator->filter($data);
-        $this->copyfrom($data); // update filtered/validated data
-        return $data;
-
-    }
-
-
-    /**
-     * Filter and validate
-     *
-     * @param bool $run GUMP - call 'run' (return true/false) otherwise call 'validate' (return array)
-     * @param array $data optional data array if different values to check outside of this mapper object fields
-     * @return bool|array of validated data if 'run' otherwise array of errors or boolean if passed 'validate'
-     * @link https://github.com/Wixel/GUMP
-     */
-    public function validate(bool $run = true, array $data = [])
-    {
-        if (!is_array($data) || empty($data)) {
-            $data = $this->cast();
-        }
-
-        $validator = Helpers\Validator::instance();
-        $validator->validation_rules($this->validationRules);
-        $validator->filter_rules($this->filterRules);
-        $data = $validator->filter($data);
-
-        if (empty($run)) {
-
-            $this->validationErrors = $validator->validate($data);
-            $this->valid = !is_array($this->validationErrors);
-
-            return $this->valid ? true : $this->validationErrors;
-
-        } else {
-
-            $this->valid = false;
-            $data = $validator->run($data);
-
-            if (is_array($data)) {
-                $this->valid = true;
-                $this->copyfrom($data); // update filtered/validated data
-            }
-
-            return $this->valid;
-        }
-    }
-
-
 }

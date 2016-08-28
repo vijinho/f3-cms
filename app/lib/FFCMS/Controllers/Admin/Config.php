@@ -287,7 +287,7 @@ class Config extends Admin
         // reset usermapper and copy in valid data
         $mapper->load(['uuid = ?', $data['uuid']]);
         $mapper->copyfrom($data);
-        if ($mapper->validateSave()) {
+        if ($mapper->save()) {
             $this->audit([
                 'event' => 'Config Data Updated',
                 'old' => $oldMapper->cast(),
@@ -412,7 +412,7 @@ class Config extends Admin
         // reset usermapper and copy in valid data
         $mapper->load(['uuid = ?', $mapper->uuid]);
         $mapper->copyfrom($data);
-        if ($mapper->validateSave()) {
+        if ($mapper->save()) {
             $this->audit([
                 'event' => 'Config Data Updated',
                 'old' => $oldMapper->cast(),

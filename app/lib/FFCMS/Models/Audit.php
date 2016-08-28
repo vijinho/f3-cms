@@ -91,14 +91,13 @@ class Audit extends DB
         // set ip to audit
         $data['ip'] = $f3->get('IP');
         $data['agent'] = $f3->get('AGENT');
-        $m = $this->getMapper();
-        $m->copyFrom($data);
-        $save = $m->validateSave();
-        if (is_array($save)) {
+        $mapper = $this->getMapper();
+
+        $mapper->copyFrom($data);
+        if (!$mapper->save()) {
             throw new \InvalidArgumentException("Bad arguments to Audit.");
         }
-        $data['id'] = $m->get('_id');
 
-        return $data;
+        return $mapper->cast();
     }
 }

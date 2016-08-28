@@ -145,7 +145,7 @@ class Tokens extends Admin
             $f3->reroute('@api_tokens');
         }
 
-        if ($mapper->validateSave()) {
+        if ($mapper->save()) {
             $this->notify(_('The app token has been updated!'), 'success');
 
             $this->audit([

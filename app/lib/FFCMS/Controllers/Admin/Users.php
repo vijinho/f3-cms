@@ -231,7 +231,7 @@ class Users extends Admin
         // reset usermapper and copy in valid data
         $usersMapper->load(['uuid = ?', $data['uuid']]);
         $usersMapper->copyfrom($data);
-        if ($usersMapper->validateSave()) {
+        if ($usersMapper->save()) {
             $this->audit([
                 'users_uuid' => $usersMapper->uuid,
                 'event' => 'User Updated',

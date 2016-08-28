@@ -100,7 +100,7 @@ class Apps extends Controllers\User\Base
         $scopes = $f3->get('userScopes');
         $appsMapper->status = in_array('admin', $scopes) ? 'approved' : 'registered';
 
-        if ($appsMapper->validateSave()) {
+        if ($appsMapper->save()) {
             $this->notify(_('Your new app has been registered!'), 'success');
 
             $this->audit([
@@ -163,7 +163,7 @@ class Apps extends Controllers\User\Base
             $f3->reroute('@api_apps');
         }
 
-        if ($appsMapper->validateSave()) {
+        if ($appsMapper->save()) {
             $this->notify(_('Your app has been updated!'), 'success');
 
             $this->audit([

@@ -313,7 +313,7 @@ class OAuth2 extends Controllers\User\Base
 
         }
 
-        if (!$tokensMapper->validateSave()) {
+        if (!$tokensMapper->save()) {
             $this->notify(_('Could not create app access.'), 'error');
         } else {
             $this->notify(_('Access granted to') . ' ' . $appsMapper->name, 'success');

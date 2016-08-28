@@ -257,7 +257,7 @@ class ForgotPassword extends User
         $newPassword = Helpers\Str::password($password);
         $usersMapper->password = $newPassword;
 
-        if ($usersMapper->validateSave()) {
+        if ($usersMapper->save()) {
             $this->audit([
                 'users_uuid' => $usersMapper->uuid,
                 'actor' => $usersMapper->email,

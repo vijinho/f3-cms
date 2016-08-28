@@ -186,7 +186,7 @@ trait Validation
 
 
     /**
-     * Apply filter rules to data
+     * Apply filter rules only
      *
      * @param array $data
      * @param array $rules
@@ -194,6 +194,10 @@ trait Validation
      */
     public function filter(array $data = [], array $rules = []): array
     {
+        if (empty($data) && method_exists($this, 'cast')) {
+            $data = $this->cast();
+        }
+
         $validator = Helpers\Validator::instance();
         $validator->filter_rules(empty($rules) ? $this->filterRules : $rules);
         return $validator->filter($data);
@@ -201,34 +205,32 @@ trait Validation
 
 
     /**
-     * Filter and validate
+     * Filter, then validate
      *
-     * @param bool $run GUMP - call 'run' (return true/false) otherwise call 'validate' (return array)
+     * @param boolean $run GUMP - call 'run' (return true/false) otherwise call 'validate' (return array of errors)
      * @param array $data optional data array if different values to check outside of this mapper object fields
-     * @return mixed array of validated data if 'run' otherwise array of errors or boolean if passed 'validate'
+     * @return boolean|array of validated data if 'run' otherwise array of errors or boolean if passed 'validate'
      * @link https://github.com/Wixel/GUMP
      */
     public function validate($run = true, array $data = [])
     {
+        if (empty($data) && method_exists($this, 'cast')) {
+            $data = $this->cast();
+        }
+
         $validator = Helpers\Validator::instance();
         $validator->validation_rules($this->validationRules);
         $validator->filter_rules($this->filterRules);
-        $data = $validator->filter($data);
 
-        if (empty($run)) {
-            $this->validationErrors = $validator->validate($data);
-            $this->valid = !is_array($this->validationErrors);
-
-            return $this->valid ? true : $this->validationErrors;
-        } else {
-            $this->valid = false;
-            $data = $validator->run($data);
-
-            if (is_array($data)) {
-                $this->valid = true;
-            }
-
+        if (!empty($run)) {
+            // return boolean success/failure after validation
+            $this->valid = is_array($validator->run($validator->filter($data)));
             return $this->valid;
+        } else {
+            // return array of errors if fail rathern than false
+            $this->validationErrors = $validator->validate($validator->filter($data));
+            $this->valid = !is_array($this->validationErrors);
+            return $this->valid ? true : $this->validationErrors;
         }
     }
 

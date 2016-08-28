@@ -73,9 +73,9 @@ class OAuth2Apps extends Mapper
      */
     public $validationRules = [
         'created'       => 'date|min_len,0|max_len,19',
-        'users_uuid'    => 'exact_len,36|alpha_dash',
-        'client_id'     => 'exact_len,36|alpha_dash',
-        'client_secret' => 'exact_len,36|alpha_dash',
+        'users_uuid'    => 'max_len,36|alpha_dash',
+        'client_id'     => 'max_len,36|alpha_dash',
+        'client_secret' => 'max_len,36|alpha_dash',
         'name'          => 'max_len,255',
         'logo_url'      => 'valid_url|max_len,1024',
         'description'   => 'max_len,16384',

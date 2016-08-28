@@ -152,7 +152,7 @@ class Users extends DB
 
         $usersMapper->login_count++;
         $usersMapper->login_last = Helpers\Time::database();
-        $usersMapper->validateSave();
+        $usersMapper->save();
 
         Audit::instance()->write([
             'users_uuid' => $usersMapper->uuid,
@@ -235,7 +235,7 @@ class Users extends DB
 
         // try to save the data
         $m = $this->newUserTemplate($m);
-        $result = $m->validateSave();
+        $result = $m->save();
         if (true !== $result) {
             return $result;
         }
@@ -288,7 +288,7 @@ class Users extends DB
         }
 
         $m->copyfrom($data);
-        $m->validateSave();
+        $m->save();
 
         $audit = Audit::instance();
 

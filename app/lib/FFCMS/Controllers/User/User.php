@@ -241,7 +241,7 @@ class User extends Base
         // reset usermapper and copy in valid data
         $usersMapper->load(['uuid = ?', $data['uuid']]);
         $usersMapper->copyfrom($data);
-        if ($usersMapper->validateSave()) {
+        if ($usersMapper->save()) {
             $this->audit([
                 'users_uuid' => $usersMapper->uuid,
                 'actor' => $usersMapper->email,
@@ -421,7 +421,7 @@ class User extends Base
         // update account status to 'confirmed'
         $oldUserMapper = clone($usersMapper);
         $usersMapper->status = 'confirmed';
-        if (!$usersMapper->validateSave()) {
+        if (!$usersMapper->save()) {
             $this->notify(_('Unable to update account status!'), 'error');
             $f3->reroute('@index');
             return;
