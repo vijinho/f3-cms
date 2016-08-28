@@ -68,12 +68,12 @@ LOCK TABLES `config_data` WRITE;
 
 INSERT INTO `config_data` (`id`, `uuid`, `description`, `key`, `value`, `type`, `options`, `rank`)
 VALUES
-	(1,'35db8273-cb16-395f-9576-531d022e968c','Contact form email','contact-email','vijay@yoyo.org','email','',0),
-	(2,'8fdf6122-e768-3a1a-9c1b-913fce60753d','Github URL','github-url','https://github.com/vijinho','url','',0),
-	(3,'73aeed16-05cc-3638-8c46-e5dfb1abdb24','Twitter URL','twitter-url','http://twitter.com/vijinh0','url','',0),
-	(4,'25cb0566-f669-3569-aabf-de32b1c1b7bb','EyeEm URL','eyem-url','http://eyeem.com/u/vijinho','url','',0),
-	(5,'df06116c-596c-33c6-b299-90bf49a918e3','Instagram URL','instagram-url','http://instagram.com/vijinho','url','',0),
-	(6,'c9bbfd21-2db7-37df-97e5-d5e99f9765f2','Website Author URL','author-url','http://about.me/vijay.mahrra','url','',0);
+	(1,'35db8273','Contact form email','contact-email','vijay@yoyo.org','email','',0),
+	(2,'8fdf6122','Github URL','github-url','https://github.com/vijinho','url','',0),
+	(3,'73aeed16','Twitter URL','twitter-url','http://twitter.com/vijinh0','url','',0),
+	(4,'25cb0566','EyeEm URL','eyem-url','http://eyeem.com/u/vijinho','url','',0),
+	(5,'df06116c','Instagram URL','instagram-url','http://instagram.com/vijinho','url','',0),
+	(6,'c9bbfd21','Website Author URL','author-url','http://about.me/vijay.mahrra','url','',0);
 
 /*!40000 ALTER TABLE `config_data` ENABLE KEYS */;
 UNLOCK TABLES;

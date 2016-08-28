@@ -35,11 +35,11 @@ class OAuth2Tokens extends Mapper
         }
 
         if (!array_key_exists('client_id', $data)) {
-            $data['client_id'] = Helpers\Str::uuid();
+            $data['client_id'] = Helpers\Str::uuid(8);
         }
 
         if (!array_key_exists('token', $data)) {
-            $data['token'] = Helpers\Str::uuid();
+            $data['token'] = Helpers\Str::uuid(8);
         }
 
         if (!array_key_exists('type', $data)) {

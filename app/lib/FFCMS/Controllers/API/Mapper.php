@@ -173,7 +173,7 @@ abstract class Mapper extends API
             $id = $defaultId;
         }
 
-        if (!empty($id) && ('uuid' == $idField && 36 !== strlen($id))) {
+        if (!empty($id) && ('uuid' == $idField && 8 !== strlen($id))) {
             $this->failure('authentication_error', "Invalid @id parameter.", 400);
             return $this->setOAuthError('invalid_request');
         }

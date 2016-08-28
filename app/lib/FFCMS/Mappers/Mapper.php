@@ -345,18 +345,19 @@ abstract class Mapper extends \DB\SQL\Mapper
      * Set a field (default named uuid) to a UUID value if one is not present.
      *
      * @param string $field the name of the field to check and set
+     * @param int $len length of uuid to return
      * @return null|string $uuid the new uuid generated
      */
-    public function setUUID(string $field = 'uuid')
+    public function setUUID(string $field = 'uuid', $len = 8)
     {
         $db = \Registry::get('db');
-        // a proper uuid is 36 characters
+        // a proper uuid is actually 36 characters but we don't need so many
         if (in_array($field, $this->fields()) &&
             (empty($this->$field) || strlen($this->$field) < 36)) {
             $tmp = clone $this;
 
             do {
-                $uuid = Helpers\Str::uuid();
+                $uuid = Helpers\Str::uuid($len);
             }
             while ($tmp->load([$db->quotekey($field) . ' = ?', $uuid]));
 
