@@ -3,7 +3,6 @@
 namespace FFCMS;
 
 use FFMVC\Helpers;
-use FFCMS\Models;
 
 /**
  * fat-free framework application
@@ -50,7 +49,7 @@ class App
         $key = 'cfg-' . md5(join('-', array_keys($keysToLoad)));
         if (!$cache->exists($key, $cfg)) {
             // now set the value of cfg to the keys we want to load
-            $configDataModel = Models\ConfigData::instance();
+            $configDataModel = \FFCMS\Models\ConfigData::instance();
             $cfg = $configDataModel->getValues($keysToLoad);
             $cache->set($key, $cfg, $f3->get('cfg.ttl.cfg'));
         }

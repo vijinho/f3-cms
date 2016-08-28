@@ -2,8 +2,7 @@
 
 namespace FFCMS\Controllers\API;
 
-use FFMVC\Helpers;
-use FFCMS\{Traits, Models, Mappers};
+use FFCMS\{Traits, Mappers};
 
 /**
  * Api Audit REST Controller Class.

@@ -152,7 +152,6 @@ class API
      */
     public function __construct()
     {
-        $this->oAudit = Models\Audit::instance();
         $this->params['http_status'] = 200;
     }
 

@@ -247,7 +247,6 @@ class ForgotPassword extends User
         }
 
             // set new hashed password
-        $oldPassword = $usersMapper->password;
         $newPassword = Helpers\Str::password($password);
         $usersMapper->password = $newPassword;
 

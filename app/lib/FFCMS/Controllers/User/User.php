@@ -141,7 +141,6 @@ class User extends Base
             echo \View::instance()->render('user/account.phtml');
             return;
         }
-        $oldUserMapper = clone $usersMapper;
 
         // check password is correct
         $str = Helpers\Str::instance();
@@ -231,7 +230,7 @@ class User extends Base
         }
 
         // no change, do nothing
-        if ($usersMapper->cast() === $oldUserMapper->cast()) {
+        if (!$usersMapper->changed()) {
             $this->notify(_('There was nothing to change!'), 'info');
             $f3->set('form', $f3->get('REQUEST'));
             echo \View::instance()->render($view);
@@ -251,7 +250,7 @@ class User extends Base
         }
 
         // send verification email if email change - non-fatal
-        if ($usersMapper->email !== $oldUserMapper->email) {
+        if ($usersMapper->changed()) {
             // if email address changed, send confirmation enail
             if (!$usersModel->saveKey([
                 'users_uuid' => $usersMapper->uuid,
@@ -405,7 +404,6 @@ class User extends Base
         }
 
         // update account status to 'confirmed'
-        $oldUserMapper = clone($usersMapper);
         $usersMapper->status = 'confirmed';
         if (!$usersMapper->save()) {
             $this->notify(_('Unable to update account status!'), 'error');

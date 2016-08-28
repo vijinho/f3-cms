@@ -3,8 +3,7 @@
 namespace FFCMS\Mappers;
 
 use FFMVC\Helpers;
-use FFCMS\Traits;
-use FFCMS\Models;
+use FFCMS\{Traits, Models};
 
 /**
  * Base Database Mapper Class extends f3's DB\SQL\Mapper
@@ -315,7 +314,7 @@ abstract class Mapper extends \DB\SQL\Mapper
      * Write data for audit logging
      *
      * @param $data array of data to audit log
-     * @return $this->auditData return the updated audit data for the mapper
+     * @return array $this->auditData return the updated audit data for the mapper
      */
     public function audit(array $data = []): array
     {

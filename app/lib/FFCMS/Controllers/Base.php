@@ -26,8 +26,6 @@ abstract class Base
     {
         $this->oUrlHelper = Helpers\Url::instance();
         $this->oNotification = Helpers\Notifications::instance();
-        $this->oLog = \Registry::get('logger');
-        $this->oAudit = Models\Audit::instance();
     }
 
     /**
