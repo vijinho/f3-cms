@@ -13,6 +13,7 @@ class Assets extends AbstractMigration
         $assets->addColumn('uuid', 'string', ['comment' => 'UUID', 'limit' => 36, 'null' => false])
                ->addColumn('users_uuid', 'string', ['comment' => 'User UUID', 'limit' => 36])
                ->addColumn('key', 'string', ['comment' => 'Key', 'limit' => 255, 'null' => true])
+               ->addColumn('groups', 'string', ['comment' => 'Groups', 'limit' => 255, 'null' => true])
                ->addColumn('name', 'string', ['comment' => 'Name', 'limit' => 255, 'null' => true])
                ->addColumn('description', 'text', ['comment' => 'Description', 'null' => true])
                ->addColumn('filename', 'text', ['comment' => 'Filename'])

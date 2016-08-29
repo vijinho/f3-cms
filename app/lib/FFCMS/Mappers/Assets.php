@@ -13,8 +13,15 @@ namespace FFCMS\Mappers;
  * @property string $uuid
  * @property string $users_uuid
  * @property string $key
+ * @property string $groups
  * @property string $name
  * @property string $description
+ * @property string $filename
+ * @property string $url
+ * @property string $type
+ * @property string $size
+ * @property string $tags
+ * @property string $metadata
  * @property string $created
  */
 class Assets extends Mapper
@@ -26,18 +33,20 @@ class Assets extends Mapper
      * @link https://github.com/Wixel/GUMP
      */
     public $fieldsVisible = [
-        'uuid'        => 'id',
-        'users_uuid'  => 'user_id',
-        'key'         => true,
-        'name'        => true,
-        'description' => true,
-        'filename'    => false,
-        'url'         => true,
-        'type'        => true,
-        'size'        => true,
-        'tags'        => true,
-        'metadata'    => true,
-        'created'     => true,
+        'uuid'         => 'id',
+        'users_uuid'   => 'user_id',
+        'key'          => true,
+        'groups'       => true,
+        'name'         => true,
+        'description'  => true,
+        'filename'     => false,
+        'url'          => true,
+        'type'         => true,
+        'size'         => true,
+        'categories'   => true,
+        'tags'         => true,
+        'metadata'     => true,
+        'created'      => true,
     ];
 
     /**
@@ -47,6 +56,7 @@ class Assets extends Mapper
      */
     protected $fieldsEditable = [
         'key',
+        'groups',
         'name',
         'description',
         'categories',
@@ -62,20 +72,21 @@ class Assets extends Mapper
      * @link https://github.com/Wixel/GUMP
      */
     public $filterRules = [
-        'uuid'          => 'trim|sanitize_string|lower',
-        'users_uuid'    => 'trim|sanitize_string|lower',
-        'key'           => 'trim|sanitize_string|lower|slug',
-        'name'          => 'trim|sanitize_string',
-        'description'   => 'trim|sanitize_string',
-        'filename'      => 'trim|sanitize_string|lower',
-        'url'           => 'trim',
-        'type'          => 'trim|sanitize_string|lower',
-        'size'          => 'whole_number',
-        'categories'    => 'trim|sanitize_string',
-        'tags'          => 'trim|sanitize_string|lower',
-        'metadata'      => 'trim',
-        'created'       => 'trim|sanitize_string',
-        'updated'       => 'trim|sanitize_string',
+        'uuid'             => 'trim|sanitize_string|lower',
+        'users_uuid'       => 'trim|sanitize_string|lower',
+        'key'              => 'trim|sanitize_string|lower|slug',
+        'groups'           => 'trim|sanitize_string|lower|slug',
+        'name'             => 'trim|sanitize_string',
+        'description'      => 'trim|sanitize_string',
+        'filename'         => 'trim|sanitize_string|lower',
+        'url'              => 'trim',
+        'type'             => 'trim|sanitize_string|lower',
+        'size'             => 'whole_number',
+        'categories'       => 'trim|sanitize_string',
+        'tags'             => 'trim|sanitize_string|lower',
+        'metadata'         => 'trim',
+        'created'          => 'trim|sanitize_string',
+        'updated'          => 'trim|sanitize_string',
     ];
 
     /**
