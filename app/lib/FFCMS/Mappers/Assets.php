@@ -32,9 +32,11 @@ class Assets extends Mapper
         'name'        => true,
         'description' => true,
         'filename'    => false,
+        'url'         => true,
         'type'        => true,
         'size'        => true,
         'tags'        => true,
+        'metadata'    => true,
         'created'     => true,
     ];
 
@@ -49,6 +51,8 @@ class Assets extends Mapper
         'description',
         'categories',
         'tags',
+        'url',
+        'metadata',
     ];
 
     /**
@@ -64,10 +68,12 @@ class Assets extends Mapper
         'name'          => 'trim|sanitize_string',
         'description'   => 'trim|sanitize_string',
         'filename'      => 'trim|sanitize_string|lower',
+        'url'           => 'trim',
         'type'          => 'trim|sanitize_string|lower',
         'size'          => 'whole_number',
         'categories'    => 'trim|sanitize_string',
         'tags'          => 'trim|sanitize_string|lower',
+        'metadata'      => 'trim',
         'created'       => 'trim|sanitize_string',
         'updated'       => 'trim|sanitize_string',
     ];

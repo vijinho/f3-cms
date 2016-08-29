@@ -22,6 +22,8 @@ class Assets extends AbstractMigration
                ->addColumn('tags', 'text', ['comment' => 'Tags', 'null' => true])
                ->addColumn('created', 'datetime', ['comment' => 'Created'])
                ->addColumn('updated', 'datetime', ['comment' => 'Updated'])
+               ->addColumn('url', 'text', ['comment' => 'URL'])
+               ->addColumn('metadata', 'text', ['comment' => 'Additional Metadata'])
                ->addIndex(['key'], ['unique' => true])
                ->addIndex(['type'], ['unique' => false])
                ->addIndex(['uuid'], ['unique' => true])

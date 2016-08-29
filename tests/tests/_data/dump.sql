@@ -238,6 +238,8 @@ CREATE TABLE `assets` (
   `type` varchar(255) DEFAULT NULL COMMENT 'Mime Type',
   `categories` text COMMENT 'Categories',
   `tags` text COMMENT 'Tags',
+  `metadata` text COMMENT 'File Metadata',
+  `url` text COMMENT 'URL',
   `created` datetime NOT NULL COMMENT 'Created',
   `updated` datetime NOT NULL COMMENT 'Updated',
   PRIMARY KEY (`id`),
