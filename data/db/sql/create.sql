@@ -213,6 +213,32 @@ CREATE TABLE `users_data` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
+# Dump of table assets
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `assets`;
+
+CREATE TABLE `assets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(36) NOT NULL COMMENT 'UUID',
+  `users_uuid` varchar(36) NOT NULL COMMENT 'User UUID',
+  `key` varchar(255) DEFAULT NULL COMMENT 'Key',
+  `name` varchar(255) DEFAULT NULL COMMENT 'Name',
+  `description` text COMMENT 'Description',
+  `filename` text NOT NULL COMMENT 'Filename',
+  `size` int(11) NOT NULL COMMENT 'File Size',
+  `type` varchar(255) DEFAULT NULL COMMENT 'Mime Type',
+  `categories` text COMMENT 'Categories',
+  `tags` text COMMENT 'Tags',
+  `created` datetime NOT NULL COMMENT 'Created',
+  `updated` datetime NOT NULL COMMENT 'Updated',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uuid` (`uuid`),
+  UNIQUE KEY `key` (`key`),
+  KEY `type` (`type`),
+  KEY `users_uuid` (`users_uuid`),
+  CONSTRAINT `assets_ibfk_1` FOREIGN KEY (`users_uuid`) REFERENCES `users` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
