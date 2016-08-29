@@ -230,3 +230,32 @@ CREATE TABLE `reports` (
   CONSTRAINT `reports_ibfk_1` FOREIGN KEY (`users_uuid`) REFERENCES `users` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
+
+### assets
+
+Media file and upload storage.  Each file should have some minimal metadata, and where it can be obtained from (filesystem and URL) as well as tags and categories which can be used to determine additional actions when used.
+
+```
+CREATE TABLE `assets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(36) NOT NULL COMMENT 'UUID',
+  `users_uuid` varchar(36) NOT NULL COMMENT 'User UUID',
+  `key` varchar(255) DEFAULT NULL COMMENT 'Key',
+  `name` varchar(255) DEFAULT NULL COMMENT 'Name',
+  `description` text COMMENT 'Description',
+  `filename` text NOT NULL COMMENT 'Filename',
+  `size` int(11) NOT NULL COMMENT 'File Size',
+  `type` varchar(255) DEFAULT NULL COMMENT 'Mime Type',
+  `categories` text COMMENT 'Categories',
+  `tags` text COMMENT 'Tags',
+  `metadata` text COMMENT 'File Metadata',
+  `url` text COMMENT 'URL',
+  `created` datetime NOT NULL COMMENT 'Created',
+  `updated` datetime NOT NULL COMMENT 'Updated',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uuid` (`uuid`),
+  UNIQUE KEY `key` (`key`),
+  KEY `type` (`type`),
+  KEY `users_uuid` (`users_uuid`),
+  CONSTRAINT `assets_ibfk_1` FOREIGN KEY (`users_uuid`) REFERENCES `users` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
