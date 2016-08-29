@@ -30,12 +30,7 @@ class Reports extends Mapper
     public $fieldsVisible = [
         'uuid'        => 'id',
         'users_uuid'  => 'user_id',
-        'scopes'      => true,
-        'key'         => true,
-        'name'        => true,
-        'description' => true,
         'query'       => false,
-        'created'     => true,
     ];
 
     /**

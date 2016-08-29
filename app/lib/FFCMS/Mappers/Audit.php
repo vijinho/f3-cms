@@ -29,17 +29,8 @@ class Audit extends Mapper
      * @var array $fieldsVisible
      */
     public $fieldsVisible = [
-        'uuid'        => true,
-        'users_uuid'  => true,
-        'created'     => true,
-        'actor'       => true,
-        'event'       => true,
-        'description' => true,
-        'ip'          => true,
-        'agent'       => true,
-        'old'         => true,
-        'new'         => true,
-        'debug'       => true,
+        'uuid'        => 'id',
+        'users_uuid'  => 'user_id',
     ];
 
     /**

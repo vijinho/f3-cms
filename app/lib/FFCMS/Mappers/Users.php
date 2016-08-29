@@ -33,16 +33,8 @@ class Users extends Mapper
     public $fieldsVisible = [
         'uuid'              => 'id',
         'password'          => false,
-        'email'             => true,
-        'firstname'         => true,
-        'lastname'          => true,
         'scopes'            => false,
-        'status'            => true,
-        'password_question' => true,
-        'password_answer'   => true,
-        'created'           => true,
         'login_count'       => false,
-        'login_last'        => true,
     ];
 
     /**

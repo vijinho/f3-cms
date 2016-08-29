@@ -32,17 +32,8 @@ class OAuth2Apps extends Mapper
      * @var array $fieldsVisible
      */
     public $fieldsVisible = [
-        'created'       => true,
         'users_uuid'    => 'user_id',
         'client_id'     => 'id',
-        'client_secret' => true,
-        'name'          => true,
-        'logo_url'      => true,
-        'description'   => true,
-        'scope'         => true,
-        'callback_uri'  => true,
-        'redirect_uris' => true,
-        'status'        => true,
     ];
 
     /**

@@ -35,18 +35,7 @@ class Assets extends Mapper
     public $fieldsVisible = [
         'uuid'         => 'id',
         'users_uuid'   => 'user_id',
-        'key'          => true,
-        'groups'       => true,
-        'name'         => true,
-        'description'  => true,
         'filename'     => false,
-        'url'          => true,
-        'type'         => true,
-        'size'         => true,
-        'categories'   => true,
-        'tags'         => true,
-        'metadata'     => true,
-        'created'      => true,
     ];
 
     /**

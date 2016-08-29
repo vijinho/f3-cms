@@ -27,9 +27,6 @@ class UsersData extends Mapper
     public $fieldsVisible = [
         'uuid'       => 'id',
         'users_uuid' => 'user_id',
-        'key'        => true,
-        'value'      => true,
-        'type'       => true,
     ];
 
     /**

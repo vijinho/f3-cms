@@ -46,14 +46,7 @@ class OAuth2Tokens extends Mapper
      */
     public $fieldsVisible = [
         'uuid'        => 'id',
-        'created'     => true,
-        'expires'     => true,
         'users_uuid'  => 'user_id',
-        'client_id'   => true,
-        'token'       => true,
-        'type'        => true,
-        'description' => true,
-        'scope'       => true,
     ];
 
     /**

@@ -31,6 +31,7 @@ abstract class Mapper extends \DB\SQL\Mapper
 
     /**
      * Fields and their visibility to clients, boolean or string of visible field name
+     * all fields are visible except where 'false'
      *
      * @var array $fieldsVisible
      */
@@ -302,14 +303,16 @@ abstract class Mapper extends \DB\SQL\Mapper
         }
 
         foreach ($data as $k => $v) {
-            if (empty($this->fieldsVisible[$k])) {
+            if (array_key_exists($k, $this->fieldsVisible)) {
                 unset($data[$k]);
-                continue;
-            } elseif (true !== $this->fieldsVisible[$k]) {
-                unset($data[$k]);
+                if (empty($this->fieldsVisible[$k])) {
+                    continue;
+                }
+                // use the alias of the field
                 $k = $this->fieldsVisible[$k];
                 $data[$k] = $v;
             }
+
             // convert date to unix timestamp
             if ('updated' == $k || 'created' == $k || (
                     \UTF::instance()->strlen($v) == 19 &&

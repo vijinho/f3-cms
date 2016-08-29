@@ -26,13 +26,7 @@ class ConfigData extends Mapper
      * @var array $fieldsVisible
      */
     public $fieldsVisible = [
-        'uuid'        => true,
-        'description' => true,
-        'key'         => true,
-        'value'       => true,
-        'type'        => true,
-        'options'     => true,
-        'rank'        => true,
+        'uuid'        => 'id',
     ];
 
     /**
