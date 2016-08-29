@@ -44,7 +44,7 @@ Where tables have fields named 'key' and 'value':
 * Used by phinx to store migration data.
 * Independent from main application functioning.
 
-```
+```sql
 CREATE TABLE `phinxlog` (
   `version` bigint(20) NOT NULL,
   `migration_name` varchar(100) DEFAULT NULL,
@@ -60,7 +60,7 @@ CREATE TABLE `phinxlog` (
 * Used to track and keep a history of changes within the database.
 * Shouldn't be used within the application other than to store changes.
 
-```
+```sql
 CREATE TABLE `audit` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` varchar(36) NOT NULL COMMENT 'UUID',
@@ -81,7 +81,7 @@ CREATE TABLE `audit` (
 
 ### config_data
 
-```
+```sql
 CREATE TABLE `config_data` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` varchar(36) NOT NULL COMMENT 'UUID',
@@ -107,7 +107,7 @@ CREATE TABLE `config_data` (
 * 'scopes' is a comma-separated list of scopes the user belongs to, e.g. user (default), api (for api-access), admin (for admin access) etc
 * The users table should only contain the absolute minimum data required for a user to sign-up to the application - any other supplemental data should be stored elsewhere, e.g. in the  users_data table
 
-```
+```sql
 CREATE TABLE `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` varchar(36) NOT NULL COMMENT 'UUID',
@@ -138,7 +138,7 @@ Please refer to the [User Model](app/classes/FFCMS/Models/Users.php) code for la
 
 * Used to store general key/value data on a per-user basis
 
-```
+```sql
 CREATE TABLE `users_data` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` varchar(36) NOT NULL COMMENT 'UUID',
@@ -158,7 +158,7 @@ A registered user if in the group 'api' can register an application stored in th
 This application can then be used to access the api and issue OAuth2 tokens on behalf of users.
 The status must be 'approved' to use the api.
 
-```
+```sql
 CREATE TABLE `oauth2_apps` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL COMMENT 'Created',
@@ -186,7 +186,7 @@ CREATE TABLE `oauth2_apps` (
 
 Tokens created for API access on behalf of users.
 
-```
+```sql
 CREATE TABLE `oauth2_tokens` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` varchar(36) NOT NULL COMMENT 'UUID',
@@ -212,7 +212,7 @@ CREATE TABLE `oauth2_tokens` (
 
 Raw SQL that can be run to generate reports, export to CSV.
 
-```
+```sql
 CREATE TABLE `reports` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` varchar(36) NOT NULL COMMENT 'UUID',
@@ -235,12 +235,26 @@ CREATE TABLE `reports` (
 
 Media file and upload storage.  Each file should have some minimal metadata, and where it can be obtained from (filesystem and URL) as well as tags and categories which can be used to determine additional actions when used.
 
-```
+* `user_uuid` - optional owner/originator of file
+* `key` - unique identifier to item
+* `groups` - list of groups the item belongs to, e.g. SKUs
+* `name` - name to display
+* `description` - descriptive text
+* `filename` - server filename path
+* `size` - filesize
+* `type` - file type
+* `categories` - list of categories the file belongs to (can be used to determine image resizing sizes for example)
+* `tags` - arbitrary list of tags to describe file
+* `url` - URL to the original asset file
+* `metadata` - any additional metadata, e.g copyright info
+
+```sql
 CREATE TABLE `assets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` varchar(36) NOT NULL COMMENT 'UUID',
   `users_uuid` varchar(36) NOT NULL COMMENT 'User UUID',
   `key` varchar(255) DEFAULT NULL COMMENT 'Key',
+  `groups` text DEFAULT NULL COMMENT 'Group(s)',
   `name` varchar(255) DEFAULT NULL COMMENT 'Name',
   `description` text COMMENT 'Description',
   `filename` text NOT NULL COMMENT 'Filename',
@@ -258,3 +272,4 @@ CREATE TABLE `assets` (
   KEY `type` (`type`),
   KEY `users_uuid` (`users_uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+```
