@@ -5,8 +5,8 @@ use Phinx\Migration\AbstractMigration;
 class Reports extends AbstractMigration
 {
     /**
-    * Create OAuth2 application tokens table
-      */
+     * Create OAuth2 application tokens table
+     */
     public function change()
     {
         $oauthTokens = $this->table('reports');
@@ -19,8 +19,9 @@ class Reports extends AbstractMigration
               ->addColumn('query', 'text', ['comment' => 'Query', 'null' => true])
               ->addColumn('options', 'text', ['comment' => 'Extra Options', 'null' => true])
               ->addColumn('created', 'datetime', ['comment' => 'Created'])
+              ->addIndex(['key'], ['unique' => true])
               ->addIndex(['uuid'], ['unique' => true])
-              ->addForeignKey('users_uuid', 'users', 'uuid', ['delete'=> 'CASCADE', 'update'=> 'CASCADE'])
+              ->addForeignKey('users_uuid', 'users', 'uuid', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
               ->save();
     }
 }

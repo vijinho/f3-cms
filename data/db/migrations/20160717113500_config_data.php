@@ -17,6 +17,8 @@ class ConfigData extends AbstractMigration
               ->addColumn('options', 'text', ['comment' => 'Options', 'null' => true])
               ->addColumn('description', 'text', ['comment' => 'Description', 'null' => true])
               ->addColumn('rank', 'integer', ['comment' => 'Rank', 'default' => 9999, 'null' => true])
+              ->addIndex(['rank'], ['unique' => false])
+              ->addIndex(['type'], ['unique' => false])
               ->addIndex(['uuid'], ['unique' => true])
               ->addIndex(['key'], ['unique' => true])
               ->save();

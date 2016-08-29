@@ -21,6 +21,9 @@ class Audit extends AbstractMigration
               ->addColumn('old', 'text', ['comment' => 'Old Value', 'null' => true])
               ->addColumn('new', 'text', ['comment' => 'New Value', 'null' => true])
               ->addColumn('debug', 'text', ['comment' => 'Debug Information', 'null' => true])
+              ->addIndex(['ip'], ['unique' => false])
+              ->addIndex(['event'], ['unique' => false])
+              ->addIndex(['users_uuid'], ['unique' => false])
               ->addIndex(['uuid'], ['unique' => true])
               ->save();
     }
