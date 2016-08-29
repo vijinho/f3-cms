@@ -27,7 +27,6 @@ class Assets extends AbstractMigration
                ->addIndex(['key'], ['unique' => true])
                ->addIndex(['type'], ['unique' => false])
                ->addIndex(['uuid'], ['unique' => true])
-               ->addForeignKey('users_uuid', 'users', 'uuid', ['delete' => 'CASCADE', 'update' => 'CASCADE'])
                ->save();
     }
 }

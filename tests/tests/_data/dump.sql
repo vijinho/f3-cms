@@ -246,8 +246,7 @@ CREATE TABLE `assets` (
   UNIQUE KEY `uuid` (`uuid`),
   UNIQUE KEY `key` (`key`),
   KEY `type` (`type`),
-  KEY `users_uuid` (`users_uuid`),
-  CONSTRAINT `assets_ibfk_1` FOREIGN KEY (`users_uuid`) REFERENCES `users` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `users_uuid` (`users_uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
