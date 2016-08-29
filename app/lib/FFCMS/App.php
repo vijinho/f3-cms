@@ -79,6 +79,9 @@ class App
         $f3->set('api', $api);
         $language = $f3->get('LANG');
 
+        // set the assets dir
+        $f3->set('assets.dir', realpath($f3->get('assets.dir')));
+
         // do not use sessions for api calls
         if ($f3->get('CLI') ||  $api) {
             if (session_status() !== PHP_SESSION_NONE) {
