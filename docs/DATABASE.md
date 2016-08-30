@@ -235,8 +235,9 @@ CREATE TABLE `reports` (
 
 Media file and upload storage.  Each file should have some minimal metadata, and where it can be obtained from (filesystem and URL) as well as tags and categories which can be used to determine additional actions when used.
 
+* `uuid` - the only unique id column in the table other than internal id
 * `user_uuid` - optional owner/originator of file
-* `key` - unique identifier to item
+* `key` - an id linked to user_uuid, can occur more than once
 * `groups` - list of groups the item belongs to, e.g. SKUs
 * `name` - name to display
 * `description` - descriptive text
@@ -254,7 +255,7 @@ CREATE TABLE `assets` (
   `uuid` varchar(36) NOT NULL COMMENT 'UUID',
   `users_uuid` varchar(36) NOT NULL COMMENT 'User UUID',
   `key` varchar(255) DEFAULT NULL COMMENT 'Key',
-  `groups` text DEFAULT NULL COMMENT 'Group(s)',
+  `groups` varchar(255) DEFAULT NULL COMMENT 'Groups',
   `name` varchar(255) DEFAULT NULL COMMENT 'Name',
   `description` text COMMENT 'Description',
   `filename` text NOT NULL COMMENT 'Filename',
@@ -262,14 +263,13 @@ CREATE TABLE `assets` (
   `type` varchar(255) DEFAULT NULL COMMENT 'Mime Type',
   `categories` text COMMENT 'Categories',
   `tags` text COMMENT 'Tags',
-  `metadata` text COMMENT 'File Metadata',
-  `url` text COMMENT 'URL',
   `created` datetime NOT NULL COMMENT 'Created',
   `updated` datetime NOT NULL COMMENT 'Updated',
+  `url` text NOT NULL COMMENT 'URL',
+  `metadata` text NOT NULL COMMENT 'Additional Metadata',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uuid` (`uuid`),
-  UNIQUE KEY `key` (`key`),
-  KEY `type` (`type`),
-  KEY `users_uuid` (`users_uuid`)
+  KEY `users_uuid` (`users_uuid`,`key`),
+  KEY `type` (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```

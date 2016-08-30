@@ -23,9 +23,7 @@
 # Dump of table audit
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `audit`;
-
-CREATE TABLE `audit` (
+CREATE TABLE IF NOT EXISTS `audit` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` char(36) NOT NULL COMMENT 'UUID',
   `users_uuid` char(36) DEFAULT NULL COMMENT 'User UUID',
@@ -43,13 +41,10 @@ CREATE TABLE `audit` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-
 # Dump of table config_data
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `config_data`;
-
-CREATE TABLE `config_data` (
+CREATE TABLE IF NOT EXISTS `config_data` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` char(36) NOT NULL COMMENT 'UUID',
   `description` text COMMENT 'Description',
@@ -82,9 +77,7 @@ UNLOCK TABLES;
 # Dump of table oauth2_apps
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `oauth2_apps`;
-
-CREATE TABLE `oauth2_apps` (
+CREATE TABLE IF NOT EXISTS `oauth2_apps` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `created` datetime NOT NULL COMMENT 'Created',
   `users_uuid` char(36) NOT NULL COMMENT 'User UUID',
@@ -106,19 +99,10 @@ CREATE TABLE `oauth2_apps` (
   CONSTRAINT `oauth2_apps_fk_uuid` FOREIGN KEY (`users_uuid`) REFERENCES `users` (`uuid`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-LOCK TABLES `oauth2_apps` WRITE;
-/*!40000 ALTER TABLE `oauth2_apps` DISABLE KEYS */;
-
-/*!40000 ALTER TABLE `oauth2_apps` ENABLE KEYS */;
-UNLOCK TABLES;
-
-
 # Dump of table oauth2_tokens
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `oauth2_tokens`;
-
-CREATE TABLE `oauth2_tokens` (
+CREATE TABLE IF NOT EXISTS `oauth2_tokens` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` char(36) NOT NULL COMMENT 'UUID',
   `created` datetime NOT NULL COMMENT 'Created',
@@ -138,13 +122,10 @@ CREATE TABLE `oauth2_tokens` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-
 # Dump of table reports
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `reports`;
-
-CREATE TABLE `reports` (
+CREATE TABLE IF NOT EXISTS `reports` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` char(36) NOT NULL COMMENT 'UUID',
   `users_uuid` char(36) NOT NULL COMMENT 'User UUID',
@@ -166,9 +147,7 @@ CREATE TABLE `reports` (
 # Dump of table users
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `users`;
-
-CREATE TABLE `users` (
+CREATE TABLE IF NOT EXISTS `users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` char(36) NOT NULL COMMENT 'UUID',
   `password` char(16) NOT NULL COMMENT 'Password',
@@ -187,19 +166,11 @@ CREATE TABLE `users` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
-UNLOCK TABLES;
-
 
 # Dump of table users_data
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `users_data`;
-
-CREATE TABLE `users_data` (
+CREATE TABLE IF NOT EXISTS `users_data` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` char(36) NOT NULL COMMENT 'UUID',
   `users_uuid` char(36) NOT NULL COMMENT 'User UUID',
@@ -216,14 +187,12 @@ CREATE TABLE `users_data` (
 # Dump of table assets
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `assets`;
-
-CREATE TABLE `assets` (
+CREATE TABLE IF NOT EXISTS `assets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` varchar(36) NOT NULL COMMENT 'UUID',
   `users_uuid` varchar(36) NOT NULL COMMENT 'User UUID',
   `key` varchar(255) DEFAULT NULL COMMENT 'Key',
-  `groups` text DEFAULT NULL COMMENT 'Group(s)',
+  `groups` varchar(255) DEFAULT NULL COMMENT 'Groups',
   `name` varchar(255) DEFAULT NULL COMMENT 'Name',
   `description` text COMMENT 'Description',
   `filename` text NOT NULL COMMENT 'Filename',
@@ -231,15 +200,14 @@ CREATE TABLE `assets` (
   `type` varchar(255) DEFAULT NULL COMMENT 'Mime Type',
   `categories` text COMMENT 'Categories',
   `tags` text COMMENT 'Tags',
-  `metadata` text COMMENT 'File Metadata',
-  `url` text COMMENT 'URL',
   `created` datetime NOT NULL COMMENT 'Created',
   `updated` datetime NOT NULL COMMENT 'Updated',
+  `url` text NOT NULL COMMENT 'URL',
+  `metadata` text NOT NULL COMMENT 'Additional Metadata',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uuid` (`uuid`),
-  UNIQUE KEY `key` (`key`),
-  KEY `type` (`type`),
-  KEY `users_uuid` (`users_uuid`)
+  KEY `users_uuid` (`users_uuid`,`key`),
+  KEY `type` (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 

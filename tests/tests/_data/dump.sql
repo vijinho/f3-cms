@@ -231,7 +231,7 @@ CREATE TABLE `assets` (
   `uuid` varchar(36) NOT NULL COMMENT 'UUID',
   `users_uuid` varchar(36) NOT NULL COMMENT 'User UUID',
   `key` varchar(255) DEFAULT NULL COMMENT 'Key',
-  `groups` text DEFAULT NULL COMMENT 'Group(s)',
+  `groups` varchar(255) DEFAULT NULL COMMENT 'Groups',
   `name` varchar(255) DEFAULT NULL COMMENT 'Name',
   `description` text COMMENT 'Description',
   `filename` text NOT NULL COMMENT 'Filename',
@@ -239,17 +239,15 @@ CREATE TABLE `assets` (
   `type` varchar(255) DEFAULT NULL COMMENT 'Mime Type',
   `categories` text COMMENT 'Categories',
   `tags` text COMMENT 'Tags',
-  `metadata` text COMMENT 'File Metadata',
-  `url` text COMMENT 'URL',
   `created` datetime NOT NULL COMMENT 'Created',
   `updated` datetime NOT NULL COMMENT 'Updated',
+  `url` text NOT NULL COMMENT 'URL',
+  `metadata` text NOT NULL COMMENT 'Additional Metadata',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uuid` (`uuid`),
-  UNIQUE KEY `key` (`key`),
-  KEY `type` (`type`),
-  KEY `users_uuid` (`users_uuid`)
+  KEY `users_uuid` (`users_uuid`,`key`),
+  KEY `type` (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 
 
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
