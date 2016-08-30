@@ -22,14 +22,14 @@ $f3->set('title', $title);
 
             <div class="input-field col s12">
                 <input required  class="validate" type="text" name="nickname" id="nickname" value="<?=$f3->get('form.nickname') ?>">
-                <label for="nickname">Nickname</label>
+                <label for="nickname">Name (as you want to appear on the website)</label>
             </div>
 
             <div class="row">
 
                 <div class="input-field col s6">
                     <textarea required name="bio" class="materialize-textarea" id="bio"><?=$f3->get('form.bio') ?></textarea>
-                    <label for="bio">Bio</label>
+                    <label for="bio">Bio (optionally in <a href="https://en.wikipedia.org/wiki/Markdown" target="markdown">Markdown Text Format</a>)</label>
                 </div>
 
                 <div class="input-field col s6" id="bio-preview">
