@@ -27,10 +27,9 @@ abstract class Base
     {
         $this->oUrlHelper = Helpers\Url::instance();
         $this->oNotification = Helpers\Notifications::instance();
-        $this->addScripts();
     }
 
-    
+
     /**
      * Add default scripts for displaying templates - override in controller to add more
      *
@@ -111,6 +110,9 @@ abstract class Base
         ]);
 
         $f3->set('user', array_merge($user, $usersData));
+
+        // add default css and js
+        $this->addScripts();
     }
 
 }
