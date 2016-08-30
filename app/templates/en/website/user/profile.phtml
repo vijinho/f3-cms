@@ -25,9 +25,16 @@ $f3->set('title', $title);
                 <label for="nickname">Nickname</label>
             </div>
 
-            <div class="input-field col s12">
-                <textarea required name="bio" class="materialize-textarea" id="bio"><?=$f3->get('form.bio') ?></textarea>
-                <label for="bio">Short Bio</label>
+            <div class="row">
+
+                <div class="input-field col s6">
+                    <textarea required name="bio" class="materialize-textarea" id="bio"><?=$f3->get('form.bio') ?></textarea>
+                    <label for="bio">Bio</label>
+                </div>
+
+                <div class="input-field col s6" id="bio-preview">
+                </div>
+
             </div>
 
         </fieldset>
@@ -43,3 +50,20 @@ $f3->set('title', $title);
 
 <?=\View::instance()->render('cms/footer-menu.phtml'); ?>
 <?=\View::instance()->render('cms/footer.phtml'); ?>
+
+<script type="text/javascript">
+
+function updateBio(jQuery){
+    updateBio.refreshes--;
+    $('#bio-preview').html(updateBio.converter.makeHtml($('#bio').val()));
+    if (updateBio.refreshes > 0) {
+        setTimeout(updateBio, 250);
+    }
+    console.log(updateBio.refreshes);
+}
+updateBio.converter =  new showdown.Converter();
+updateBio.refreshes = 5000;
+
+updateBio();
+
+</script>
