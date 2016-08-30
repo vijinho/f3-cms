@@ -53,7 +53,7 @@ $f3->set('title', $title);
 
 <script type="text/javascript">
 
-function updateBio(jQuery){
+function updateBio(){
     updateBio.refreshes--;
     $('#bio-preview').html(updateBio.converter.makeHtml($('#bio').val()));
     if (updateBio.refreshes > 0) {
