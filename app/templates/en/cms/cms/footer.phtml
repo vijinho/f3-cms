@@ -1,6 +1,6 @@
 <?php
-$f3 = \Base::instance();
-$analytics = $f3->get('analytics');
+$f3                   = \Base::instance();
+$analytics            = $f3->get('analytics');
 $analytics['enabled'] = $analytics['enabled'] && 'production' == $f3->get('app.env');
 ?>
 <?php if (!empty($analytics['enabled']) && !empty($analytics['code']) && !empty($analytics['domain'])): ?>
@@ -15,14 +15,9 @@ $analytics['enabled'] = $analytics['enabled'] && 'production' == $f3->get('app.e
 </script>
 <?php endif ?>
 
-
-<?php if ('production' == $f3->get('app.env')): ?>
-    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
-<?php else: ?>
-    <script type="text/javascript" src="/js/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/materialize.min.js"></script>
-<?php endif; ?>
+<?php $js = $f3->get('js.load'); if (is_array($js)): foreach ($js as $script): ?>
+    <script src="<?=$script ?>"></script>
+<?php endforeach; endif ?>
 
 <script>window.jQuery || document.write('<script src="/js/jquery.min.js"><\/script>')</script>
 

@@ -13,13 +13,11 @@
     <meta name="HandheldFriendly" content="True"/>
     <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<?php if ($f3->get('app.env') == 'production'): ?>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
-    <?php else: ?>
-        <link type="text/css" rel="stylesheet" href="/css/materialize.min.css"  media="screen,projection"/>
-<?php endif ?>
-    <link rel="stylesheet" href="/css/font-awesome.min.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <?php $css = $f3->get('css.load'); if (is_array($css)): foreach ($css as $k => $script): ?>
+        <link rel="stylesheet" href="<?=$script ?>"<?php if ('materialize' == $k) {
+    echo ' media="screen,projection"';
+}?>>
+    <?php endforeach; endif ?>
     <link rel="icon" type="image/png" href="/img/favicon.png">
 </head>
 <body>

@@ -21,11 +21,50 @@ abstract class Base
 
     /**
      * init
+     * @param \Base $f3
      */
     public function __construct()
     {
         $this->oUrlHelper = Helpers\Url::instance();
         $this->oNotification = Helpers\Notifications::instance();
+        $this->addScripts();
+    }
+
+    
+    /**
+     * Add default scripts for displaying templates - override in controller to add more
+     *
+     * @return void
+     * @see app/config/default.ini
+     */
+    protected function addScripts()
+    {
+        // no scripts to add, override me and set css and js
+        $this->setScripts();
+    }
+
+
+    /**
+     * Set the scripts to load in the templates
+     *
+     * @param array $css list of css to load as defined in config.ini [css]
+     * @param array $js list of js to load as defined in config.ini [js]
+     * @return void
+     * @see app/config/default.ini
+     */
+    protected function setScripts(array $css = [], array $js = [])
+    {
+        $f3 = \Base::instance();
+        $env = ('production' == $f3->get('app.env')) ? 'production' : 'dev';
+        $scripts = [];
+        $scripts['css']['autoload'] = $css;
+        $scripts['js']['autoload'] = $js;
+        foreach (['js', 'css'] as $type) {
+            $scripts[$type]['autoload'] = array_merge($scripts[$type]['autoload'], $f3->get($type . '.autoload'));
+            $scripts[$type]['scripts'] = $f3->get($type . '.' . $env);
+            $scripts[$type]['load'] = array_intersect_key($scripts[$type]['scripts'], array_flip($scripts[$type]['autoload']));
+            $f3->set($type . '.load', $scripts[$type]['load']);
+        }
     }
 
     /**

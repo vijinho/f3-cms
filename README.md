@@ -196,5 +196,9 @@ Used for bootstrapping the application and generic enough to be separate from th
  * [PHPMailer](https://github.com/PHPMailer/PHPMailer) for outgoing emails
  * [Whoops](https://github.com/filp/whoops) for nicer error handling if level of DEBUG=4
 
+### Javascript Libraries
+
+ * [Showdown](https://github.com/showdownjs/showdown) - Markdown converter
+
 --
 http://about.me/vijay.mahrra

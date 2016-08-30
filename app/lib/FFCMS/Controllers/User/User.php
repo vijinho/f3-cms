@@ -16,6 +16,19 @@ class User extends Base
 {
 
     /**
+     * Add default scripts for displaying templates
+     *
+     * @return void
+     * @see app/config/default.ini
+     */
+    protected function addScripts()
+    {
+        // no scripts to add, override me and set css and js
+        $this->setScripts([], ['showdown']);
+    }
+    
+
+    /**
      * user homepage
      *
      * @param \Base $f3
