@@ -3,7 +3,7 @@
 namespace FFCMS\Models;
 
 use FFMVC\Helpers;
-use FFCMS\{Traits, Mappers, Exceptions};
+use FFCMS\{Traits, Mappers, Exceptions, Enums};
 
 
 /**
@@ -94,14 +94,18 @@ class Users extends DB
      * Fetch the users data, optionally only by specified keys
      *
      * @param string $uuid
-     * @param string[] $keys
+     * @param array $keys
      * @return array $data
      */
     public function getUserDetails(string $uuid, array $keys = []): array
     {
         $db = \Registry::get('db');
 
+            // initialise return value
         $data = [];
+        foreach ($keys as $k) {
+            $data[$k] = null;
+        }
 
         if (!empty($keys)) {
 
@@ -124,6 +128,59 @@ class Users extends DB
 
         }
         return $data;
+    }
+
+
+    /**
+     * Fetch the users profile, optionally only by specified keys
+     *
+     * @param string $uuid
+     * @param array $keys
+     * @return array $data
+     */
+    public function getProfile(string $uuid, array $keys = []): array
+    {
+        if (empty($keys)) {
+            $keys = Enums\ProfileKeys::values();
+        }
+        return $this->getUserDetails($uuid, $keys);
+    }
+
+
+    /**
+     * Save user's data
+     *
+     * @param string $uuid
+     * @param array $keys
+     */
+    public function saveData(string $uuid, array $keys = []): array
+    {
+        if (empty($keys)) {
+            return false;
+        }
+        $db = \Registry::get('db');
+        $dataMapper = $this->getDataMapper();
+        foreach ($keys as $k => $v) {
+            $dataMapper->load(['users_uuid = ? AND ' . $db->quoteKey('key') . ' = ?', $uuid, $k]);
+            if (empty($dataMapper->type)) {
+                switch ($k) {
+                    case 'bio':
+                        $dataMapper->type = 'markdown';
+                        break;
+                    case 'nickname':
+                        $dataMapper->type = 'text';
+                        break;
+                    default:
+                        $dataMapper->type = null;
+                    break;
+                }
+            }
+            $dataMapper->users_uuid = $uuid;
+            $dataMapper->key = $k;
+            $dataMapper->value = $v;
+            $dataMapper->save();
+        }
+        return $dataMapper->cast();
     }
 
 

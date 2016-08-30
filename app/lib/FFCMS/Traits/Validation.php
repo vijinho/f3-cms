@@ -253,18 +253,20 @@ trait Validation
      *
      * @param boolean $run GUMP - call 'run' (return true/false) otherwise call 'validate' (return array of errors)
      * @param array $data optional data array if different values to check outside of this mapper object fields
+     * @param array $validationRules
+     * @param array $filterRules
      * @return boolean|array of validated data if 'run' otherwise array of errors or boolean if passed 'validate'
      * @link https://github.com/Wixel/GUMP
      */
-    public function validate($run = true, array $data = [])
+    public function validate($run = true, array $data = [], array $validationRules = [], array $filterRules = [])
     {
         if (empty($data) && method_exists($this, 'cast')) {
             $data = $this->cast();
         }
 
         $validator = Helpers\Validator::instance();
-        $validator->validation_rules($this->validationRules);
-        $validator->filter_rules($this->filterRules);
+        $validator->validation_rules(empty($validationRules) ? $this->validationRules : $validationRules);
+        $validator->filter_rules(empty($filterRules) ? $this->filterRules : $filterRules);
 
         if (!empty($run)) {
             // return boolean success/failure after validation
@@ -328,6 +330,11 @@ trait Validation
 
                     case 'validate_required':
                         $msg = sprintf(_('%s must be entered.'), $fieldname);
+                        break;
+
+                    case 'validate_valid_name':
+                        $msg = sprintf(_('%s must be a valid name.'),
+                            $fieldname);
                         break;
 
                     default:

@@ -1,0 +1,45 @@
+<?php
+$f3    = \Base::instance();
+$title = 'My Profile';
+$f3->set('title', $title);
+?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
+
+<div class="container">
+
+    <h1><?=$title ?></h1>
+
+    <p>This is your <em>public</em> profile data.</p>
+
+    <form method="post" action="<?=$f3->alias('profile') ?>">
+        <input type="hidden" id="csrf" name="csrf" value="<?=$f3->get('csrf') ?>">
+
+        <fieldset>
+
+            <legend><i class="material-icons prefix large">perm_identity</i></legend>
+
+            <div class="input-field col s12">
+                <input required  class="validate" type="text" name="nickname" id="nickname" value="<?=$f3->get('form.nickname') ?>">
+                <label for="nickname">Nickname</label>
+            </div>
+
+            <div class="input-field col s12">
+                <textarea required name="bio" class="materialize-textarea" id="bio"><?=$f3->get('form.bio') ?></textarea>
+                <label for="bio">Short Bio</label>
+            </div>
+
+        </fieldset>
+
+        <div class="center">
+            <button type="submit" class="waves-effect waves-light btn btn-large green darken-1" id="update_profile">Update Profile</button>
+        </div>
+
+    </form>
+
+</div>
+
+
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>

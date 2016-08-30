@@ -1,6 +1,6 @@
 <?php
-$f3 = \Base::instance();
-$user = $f3->get('user');
+$f3    = \Base::instance();
+$user  = $f3->get('user');
 $title = 'Hello ' . $user['firstname'] . '!';
 ?>
 <?=\View::instance()->render('cms/header.phtml'); ?>
@@ -14,6 +14,7 @@ $title = 'Hello ' . $user['firstname'] . '!';
     <ul>
         <li><a href="<?=$f3->alias('account')?>">My Account</a></li>
         <li><a href="<?=$f3->alias('api_apps')?>">My Apps</a></li>
+        <li><a href="<?=$f3->alias('profile')?>">My Profile</a></li>
     </ul>
 
 </div>

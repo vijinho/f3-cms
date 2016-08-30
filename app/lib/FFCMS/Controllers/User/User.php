@@ -3,7 +3,7 @@
 namespace FFCMS\Controllers\User;
 
 use FFMVC\Helpers;
-use FFCMS\{Controllers, Models, Mappers, Traits};
+use FFCMS\{Controllers, Models, Mappers, Traits, Enums};
 
 /**
  * User Website Controller Class.
@@ -476,5 +476,84 @@ class User extends Base
             $this->notify(_("There was a problem sending you a registration email, please check your email and/or try again later."), "warning");
             $this->notify($mail->ErrorInfo, "error");
         }
+    }
+
+
+    /**
+     * my profile
+     *
+     * @param \Base $f3
+     * @return void
+     */
+    public function profile(\Base $f3)
+    {
+        $this->redirectLoggedOutUser();
+        $this->csrf();
+
+        $f3->set('breadcrumbs', [
+            _('My Account') => 'user',
+            _('My Profile') => 'profile',
+        ]);
+
+        // fetch profile
+        $usersModel = Models\Users::instance();
+        $profileData = $usersModel->getProfile($f3->get('uuid'));
+        $f3->set('form', $profileData);
+
+        echo \View::instance()->render('user/profile.phtml');
+    }
+
+
+    /**
+     * my profile posted
+     *
+     * @param \Base $f3
+     * @return void
+     */
+    public function profilePost(\Base $f3)
+    {
+        $this->redirectLoggedOutUser();
+        $this->csrf();
+
+        $view = 'user/profile.phtml';
+        $f3->set('breadcrumbs', [
+            _('My Account') => 'user',
+            _('My Profile') => 'profile',
+        ]);
+
+        // get existing profile and merge with input
+        $usersModel = Models\Users::instance();
+        $profileEnum = new Enums\ProfileKeys;
+
+        // merge profile keys and filter input
+        $profileData = $this->filter(
+            array_intersect_key(
+                array_merge(
+                    $usersModel->getProfile($f3->get('uuid')),
+                    $f3->get('REQUEST')
+                ),
+                $profileEnum->values()
+            ), [
+            'nickname' => 'trim|sanitize_string',
+            'bio' => 'trim|sanitize_string'
+        ]);
+
+        $errors = $this->validate(false, $profileData, [
+            'nickname' => 'valid_name',
+        ]);
+        if (is_array($errors)) {
+            $this->notify(['warning' => $this->validationErrors($errors)]);
+            $f3->set('form', $f3->get('REQUEST'));
+            echo \View::instance()->render($view);
+            return;
+        }
+
+        // save profile
+        $usersModel->saveData($f3->get('uuid'), $profileData);
+
+        // set form data
+        $f3->set('form', $profileData);
+
+        echo \View::instance()->render('user/profile.phtml');
     }
 }
