@@ -2,7 +2,6 @@
 
 namespace FFCMS\Traits;
 
-
 /**
  * The constructor should initialise a member $oUrlHelper which has two methods:
  *     - internal to generate an internal link (optionally with @value to reference a URL alias)
@@ -10,13 +9,6 @@ namespace FFCMS\Traits;
  */
 trait UrlHelper
 {
-
-    /**
-     * @var \FFMVC\Helpers\Url url helper objects
-     */
-    protected $oUrlHelper;
-
-
     /**
      * Create an internal URL
      *
@@ -25,7 +17,7 @@ trait UrlHelper
      */
     public function url(string $url, array $params = []): string
     {
-        return $this->oUrlHelper->internal($url, $params);
+        return \FFMVC\Helpers\Url::instance()->internal($url, $params);
     }
 
 
@@ -37,6 +29,6 @@ trait UrlHelper
      */
     public function xurl(string $url, array $params = [], bool $https = true): string
     {
-        return $this->oUrlHelper->external($url, $params, $https);
+        return \FFMVC\Helpers\Url::instance()->external($url, $params, $https);
     }
 }

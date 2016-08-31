@@ -20,16 +20,6 @@ abstract class Base
         Traits\Validation;
 
     /**
-     * init
-     */
-    public function __construct()
-    {
-        $this->oUrlHelper = Helpers\Url::instance();
-        $this->oNotification = Helpers\Notifications::instance();
-    }
-
-
-    /**
      * Add default scripts for displaying templates - override in controller to add more
      *
      * @return void

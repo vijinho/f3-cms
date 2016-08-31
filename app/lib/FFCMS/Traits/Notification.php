@@ -4,18 +4,9 @@ namespace FFCMS\Traits;
 
 /**
  * Add user notifications messages, typically for user feedback from web pages.
- * The class constructor must set a member $oNotification which contains
- * two methods:
- *     - add which adds notification of $type (e.g warning or into)
- *     - addMultiple which adds multiple messages in $type => $messages[] format
  */
 trait Notification
 {
-    /**
-     * @var \FFMVC\Helpers\Notifications user notifications object
-     */
-    protected $oNotification;
-
     /**
      * Notify user
      *
@@ -26,9 +17,9 @@ trait Notification
     public function notify($data, $type = null)
     {
         if (is_array($data)) {
-            return $this->oNotification->addMultiple($data);
+            return \FFMVC\Helpers\Notifications::instance()->addMultiple($data);
         } else {
-            return $this->oNotification->add($data, $type);
+            return \FFMVC\Helpers\Notifications::instance()->add($data, $type);
         }
     }
 }
