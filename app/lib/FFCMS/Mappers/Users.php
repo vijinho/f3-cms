@@ -148,12 +148,8 @@ class Users extends Mapper
         $metadata = $exif->getData();
         unset($exif);
 
-        // convert image to png
-        $img = new \Image($file);
-        $resize = $f3->get('assets.images.profile');
-        $img->resize($resize['width'], $resize['height']);
-
         // convert to .png, create new profile image file
+        $img = new \Image($file);
         $profileImagePath = $this->profileImageFilePath();
         if (!$f3->write($profileImagePath, $img->dump('png', 9))) {
             return false;
