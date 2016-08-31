@@ -562,6 +562,7 @@ class User extends Base
                     $this->notify(_("The file uploaded was not valid!"), 'error');
                 } else {
                     $user = $f3->get('usersMapper');
+                    $user->load(); // refresh data
                     if ($user->profileImageCreate($file)) {
                         $this->notify(_("Your profile picture was updated!"), 'success');
                         unlink($file);

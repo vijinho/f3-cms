@@ -103,7 +103,7 @@ abstract class Mapper extends \DB\SQL\Mapper
     }
 
     /**
-     * Load by internal integer ID or by UUID if no array passed
+     * Load by internal integer ID or by UUID if no array passed or reload if null
      *
   	 * @param $filter string|array
  	 * @param $options array
@@ -112,6 +112,9 @@ abstract class Mapper extends \DB\SQL\Mapper
      * @return array|FALSE
      */
     public function load($filter = NULL, array $options = null, $ttl = 0) {
+        if (NULL === $filter && !empty($this->id)) {
+            return $this->load($this->id);
+        }
         if (!is_array($filter)) {
             if (is_int($filter)) {
                 return parent::load(['id = ?', $filter], $options, $ttl);
