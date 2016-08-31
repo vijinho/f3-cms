@@ -21,7 +21,6 @@ abstract class Base
 
     /**
      * init
-     * @param \Base $f3
      */
     public function __construct()
     {
