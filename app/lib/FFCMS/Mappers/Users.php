@@ -142,17 +142,18 @@ class Users extends Mapper
         }
         $f3 = \Base::instance();
 
-        // resize
+        // read exif metadata
+        $reader = \PHPExif\Reader\Reader::factory(\PHPExif\Reader\Reader::TYPE_NATIVE);
+        $exif = $reader->read($file);
+        $metadata = $exif->getData();
+        unset($exif);
+
+        // convert image to png
         $img = new \Image($file);
         $img->resize(512, 512);
 
-        // remove pre-existing file
-        $profileImagePath = $this->profileImageFilePath();
-        if (file_exists($profileImagePath)) {
-            unlink($profileImagePath);
-        }
-
         // convert to .png, create new profile image file
+        $profileImagePath = $this->profileImageFilePath();
         if (!$f3->write($profileImagePath, $img->dump('png', 9))) {
             return false;
         }
@@ -175,7 +176,7 @@ class Users extends Mapper
         $asset->groups = 'users';
         $asset->categories = 'profile';
         $asset->tags = 'users,profile';
-        $asset->metadata = null;
+        $asset->metadata = json_encode($metadata, JSON_PRETTY_PRINT);
 
         return $asset->save();
     }

@@ -53,7 +53,7 @@ class Audit extends DB
             if (array_key_exists($field, $data) && is_object($data[$field])) {
                 $o = $data[$field];
                 $rc = new \ReflectionClass(get_class($o));
-                if ($rc->hasMethod('cast') || $rc->hasMethod('__toArray')) {
+                if ($rc->hasMethod('cast')) {
                     $o = $o->cast();
                 } elseif ($rc->hasMethod('__toString')) {
                     $o = $o->__toString();

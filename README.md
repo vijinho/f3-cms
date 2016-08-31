@@ -195,7 +195,8 @@ Used for bootstrapping the application and generic enough to be separate from th
  * [Retry](https://github.com/ScriptFUSION/Retry) for retrying failed operations
  * [PHPMailer](https://github.com/PHPMailer/PHPMailer) for outgoing emails
  * [Whoops](https://github.com/filp/whoops) for nicer error handling if level of DEBUG=4
-
+ * [php-exif](https://github.com/Miljar/php-exif) for parsing EXIF data in images
+ 
 ### Javascript Libraries
 
  * [Showdown](https://github.com/showdownjs/showdown) - Markdown converter

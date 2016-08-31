@@ -33,6 +33,7 @@
         "scriptfusion/retry": "dev-master",
         "robmorgan/phinx": "dev-master",
         "fzaninotto/faker": "dev-master",
+        "miljar/php-exif": "dev-master",
         "vijinho/ffmvc": "dev-dev-master",
         "vijinho/enums": "dev-dev-master"
     },
