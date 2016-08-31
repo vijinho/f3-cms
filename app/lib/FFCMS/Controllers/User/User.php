@@ -547,16 +547,18 @@ class User extends Base
         }, true, true);
 
         // create new profile image
-        foreach ($files as $file => $valid) {
-            if (false === $valid) {
-                $this->notify(_("The file uploaded was not valid!"), 'error');
-            } else {
-                $user = $f3->get('usersMapper');
-                if ($user->profileImageCreate($file)) {
-                    $this->notify(_("Your profile picture was updated!"), 'success');
+        if (!empty($files)) {
+            foreach ($files as $file => $valid) {
+                if (false === $valid) {
+                    $this->notify(_("The file uploaded was not valid!"), 'error');
+                } else {
+                    $user = $f3->get('usersMapper');
+                    if ($user->profileImageCreate($file)) {
+                        $this->notify(_("Your profile picture was updated!"), 'success');
+                    }
                 }
+                unlink($file);
             }
-            unlink($file);
         }
 
         // get existing profile and merge with input
