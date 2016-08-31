@@ -150,7 +150,8 @@ class Users extends Mapper
 
         // convert image to png
         $img = new \Image($file);
-        $img->resize(512, 512);
+        $resize = $f3->get('assets.images.profile');
+        $img->resize($resize['width'], $resize['height']);
 
         // convert to .png, create new profile image file
         $profileImagePath = $this->profileImageFilePath();
