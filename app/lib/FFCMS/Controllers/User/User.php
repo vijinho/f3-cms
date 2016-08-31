@@ -540,7 +540,7 @@ class User extends Base
         // size > 4 MB upload limit
         $files = \Web::instance()->receive(function($metadata, $fieldname){
             return !(
-                'profile_image' !== $fieldname ||
+                'profile' !== $fieldname ||
                 'image/' !== substr($metadata['type'], 0, 6) ||
                 $metadata['size'] > Enums\Bytes::MEGABYTE() * 4
             );

@@ -162,7 +162,7 @@ class Users extends Mapper
         $asset = new Assets;
 
         // load pre existing asset
-        $asset->load(['users_uuid = ? AND ' . $this->db->quoteKey('key') . ' = ?', $this->uuid, 'profile-image']);
+        $asset->load(['users_uuid = ? AND ' . $this->db->quoteKey('key') . ' = ?', $this->uuid, 'profile']);
 
         // set values
         $asset->users_uuid = $this->uuid;
