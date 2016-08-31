@@ -109,7 +109,7 @@ class Users extends Mapper
      */
     public function profileImageExists()
     {
-        return file_exists($this->profileImageFilePath($this->uuid));
+        return file_exists($this->profileImageFilePath());
     }
 
     /**
@@ -120,7 +120,11 @@ class Users extends Mapper
      */
     public function profileImageUrlPath()
     {
-        return $this->profileImageExists($this->uuid) ? '/img/users/' . $this->uuid . '/profile.png' : false;
+        $url = $this->profileImageExists() ? '/assets/img/users/' . $this->uuid . '/profile.png' : false;
+        if (empty($url)) {
+            return false;
+        }
+        return $url . '?' . filesize($this->profileImageFilePath());
     }
 
     /**

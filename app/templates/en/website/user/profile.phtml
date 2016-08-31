@@ -2,6 +2,7 @@
 $f3    = \Base::instance();
 $title = 'My Profile';
 $f3->set('title', $title);
+$usersMapper = $f3->get('usersMapper');
 ?>
 <?=\View::instance()->render('cms/header.phtml'); ?>
 <?=\View::instance()->render('cms/header-menu.phtml'); ?>
@@ -13,16 +14,30 @@ $f3->set('title', $title);
 
     <p>This is your <em>public</em> profile data.</p>
 
-    <form method="post" action="<?=$f3->alias('profile') ?>">
+    <form method="post" action="<?=$f3->alias('profile') ?>" enctype='multipart/form-data'>
         <input type="hidden" id="csrf" name="csrf" value="<?=$f3->get('csrf') ?>">
 
         <fieldset>
 
             <legend><i class="material-icons prefix large">perm_identity</i></legend>
 
-            <div class="input-field col s12">
-                <input required  class="validate" type="text" name="nickname" id="nickname" value="<?=$f3->get('form.nickname') ?>">
-                <label for="nickname">Name (as you want to appear on the website)</label>
+            <div class="row">
+
+                <div class="input-field col s12">
+                    <?php if ($url = $usersMapper->profileImageUrlPath()): ?>
+                        <img class="center-align valign-wrapper circle responsive-img" src="<?=$url?>">
+                    <?php endif ?>
+                    <input type="file" name="profile_image" id="profile_image">
+                    <label for="profile_image">Profile Image</label>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="input-field col s12">
+                    <input required class="validate" type="text" name="nickname" id="nickname" value="<?=$f3->get('form.nickname') ?>">
+                    <label for="nickname">Name (as you want to appear on the website)</label>
+                </div>
             </div>
 
             <div class="row">

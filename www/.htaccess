@@ -279,14 +279,14 @@ FileETag None
 <IfModule mod_expires.c>
 
     ExpiresActive on
-    ExpiresDefault                                      "access plus 1 month"
-    ExpiresByType text/css                              "access plus 1 year"
+    ExpiresDefault                                      "access plus 10 seconds"
+    ExpiresByType text/css                              "access plus 1 minute"
     ExpiresByType application/json                      "access plus 0 seconds"
     ExpiresByType application/xml                       "access plus 0 seconds"
     ExpiresByType text/xml                              "access plus 0 seconds"
     ExpiresByType image/x-icon                          "access plus 1 week"
-    ExpiresByType text/html                             "access plus 1 hour"
-    ExpiresByType application/javascript                "access plus 1 year"
+    ExpiresByType text/html                             "access plus 3 minutes"
+    ExpiresByType application/javascript                "access plus 30 minutes"
 
 </IfModule>
 

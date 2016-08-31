@@ -109,6 +109,7 @@ abstract class Base
         ]);
 
         $f3->set('user', array_merge($user, $usersData));
+        $f3->set('usersMapper', $usersMapper);
 
         // add default css and js
         $this->addScripts();
