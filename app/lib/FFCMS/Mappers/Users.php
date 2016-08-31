@@ -173,7 +173,7 @@ class Users extends Mapper
         $asset->size = filesize($profileImagePath);
         $asset->url = $this->url($this->profileImageUrlPath());
         $asset->type = 'image/png';
-        $asset->key = 'profile_image';
+        $asset->key = 'profile';
         $asset->groups = 'users';
         $asset->categories = 'profile';
         $asset->tags = 'users,profile';
