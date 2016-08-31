@@ -535,40 +535,28 @@ class User extends Base
         ]);
 
         // handle file upload
+        // wrong upload form field name or
+        // upload mime type is not image/* or
+        // size > 4 MB upload limit
         $files = \Web::instance()->receive(function($metadata, $fieldname){
-            // wrong upload form field name!
-            if ('profile_image' !== $fieldname) {
-                return false;
-            }
-            // upload mime type should be image/*
-            if ('image/' !== substr($metadata['type'], 0, 6)) {
-                return false;
-            }
-            // 4 MB upload limit
-            if ($metadata['size'] > Enums\Bytes::MEGABYTE() * 4) {
-                return false;
-            }
-            return true;
-            },
-            true,
-            true
-        );
+            return !(
+                'profile_image' !== $fieldname ||
+                'image/' !== substr($metadata['type'], 0, 6) ||
+                $metadata['size'] > Enums\Bytes::MEGABYTE() * 4
+            );
+        }, true, true);
 
         // create new profile image
-        if (is_array($files)) {
-            foreach ($files as $file => $valid) {
-                if (false === $valid) {
-                    $f3->delete($file);
-                    $this->notify(_("The file uploaded was not valid!"), 'error');
-                } else {
-                    $user = $f3->get('usersMapper');
-                    $user->load(); // refresh data
-                    if ($user->profileImageCreate($file)) {
-                        $this->notify(_("Your profile picture was updated!"), 'success');
-                        unlink($file);
-                    }
+        foreach ($files as $file => $valid) {
+            if (false === $valid) {
+                $this->notify(_("The file uploaded was not valid!"), 'error');
+            } else {
+                $user = $f3->get('usersMapper');
+                if ($user->profileImageCreate($file)) {
+                    $this->notify(_("Your profile picture was updated!"), 'success');
                 }
             }
+            unlink($file);
         }
 
         // get existing profile and merge with input
