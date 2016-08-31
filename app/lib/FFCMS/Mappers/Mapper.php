@@ -21,6 +21,7 @@ use FFCMS\{Traits, Models};
 // abstract class Cursor extends \Magic implements \IteratorAggregate
 // class Mapper extends \DB\Cursor
 /**
+ * @property int $id
  * @property string $key
  * @property string $value
  * @property string $created
