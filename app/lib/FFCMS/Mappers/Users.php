@@ -2,7 +2,7 @@
 
 namespace FFCMS\Mappers;
 
-use FFCMS\Exceptions;
+use FFCMS\{Traits, Models};
 
 /**
  * Users Mapper Class.
@@ -27,6 +27,8 @@ use FFCMS\Exceptions;
  */
 class Users extends Mapper
 {
+    use Traits\UrlHelper;
+
     /**
      * Fields and their visibility to clients, boolean or string of visible field name
      *
@@ -131,7 +133,7 @@ class Users extends Mapper
      * Create profile image from given file
      *
      * @param string $file path to file
-     * @return int|false if the file was written
+     * @return boolean if the file was written and and asset record created
      */
     public function profileImageCreate($file)
     {
@@ -151,6 +153,30 @@ class Users extends Mapper
         }
 
         // convert to .png, create new profile image file
-        return $f3->write($profileImagePath, $img->dump('png', 9));
+        if (!$f3->write($profileImagePath, $img->dump('png', 9))) {
+            return false;
+        }
+
+        // create asset table entry
+        $asset = new Assets;
+
+        // load pre existing asset
+        $asset->load(['users_uuid = ? AND ' . $this->db->quoteKey('key') . ' = ?', $this->uuid, 'profile-image']);
+
+        // set values
+        $asset->users_uuid = $this->uuid;
+        $asset->filename = $profileImagePath;
+        $asset->name = $this->firstname . ' ' . $this->lastname;
+        $asset->description = $this->firstname . ' ' . $this->lastname . ' Profile Image';
+        $asset->size = filesize($profileImagePath);
+        $asset->url = $this->url($this->profileImageUrlPath());
+        $asset->type = 'image/png';
+        $asset->key = 'profile_image';
+        $asset->groups = 'users';
+        $asset->categories = 'profile';
+        $asset->tags = 'users,profile';
+        $asset->metadata = null;
+
+        return $asset->save();
     }
 }

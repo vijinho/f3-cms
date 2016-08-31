@@ -554,6 +554,7 @@ class User extends Base
             true
         );
 
+        // create new profile image
         if (is_array($files)) {
             foreach ($files as $file => $valid) {
                 if (false === $valid) {

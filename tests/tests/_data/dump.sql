@@ -229,24 +229,25 @@ DROP TABLE IF EXISTS `assets`;
 CREATE TABLE `assets` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `uuid` varchar(36) NOT NULL COMMENT 'UUID',
-  `users_uuid` varchar(36) NOT NULL COMMENT 'User UUID',
+  `users_uuid` varchar(36) DEFAULT NULL COMMENT 'User UUID',
   `key` varchar(255) DEFAULT NULL COMMENT 'Key',
   `groups` varchar(255) DEFAULT NULL COMMENT 'Groups',
   `name` varchar(255) DEFAULT NULL COMMENT 'Name',
   `description` text COMMENT 'Description',
   `filename` text NOT NULL COMMENT 'Filename',
-  `size` int(11) NOT NULL COMMENT 'File Size',
+  `size` int(11) NOT NULL DEFAULT '0' COMMENT 'File Size',
   `type` varchar(255) DEFAULT NULL COMMENT 'Mime Type',
   `categories` text COMMENT 'Categories',
   `tags` text COMMENT 'Tags',
   `created` datetime NOT NULL COMMENT 'Created',
-  `updated` datetime NOT NULL COMMENT 'Updated',
-  `url` text NOT NULL COMMENT 'URL',
-  `metadata` text NOT NULL COMMENT 'Additional Metadata',
+  `updated` datetime DEFAULT NULL COMMENT 'Updated',
+  `url` text COMMENT 'URL',
+  `metadata` text COMMENT 'Additional Metadata',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uuid` (`uuid`),
   KEY `users_uuid` (`users_uuid`,`key`),
-  KEY `type` (`type`)
+  KEY `type` (`type`),
+  KEY `users_uuid_2` (`users_uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
