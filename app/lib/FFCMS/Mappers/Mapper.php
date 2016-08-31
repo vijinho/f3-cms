@@ -209,6 +209,9 @@ abstract class Mapper extends \DB\SQL\Mapper
         // filter data, set updated field if present before update
         $this->beforeupdate(function($mapper){
             $mapper->copyFrom($mapper->filter());
+            if (in_array('updated', $mapper->fields())) {
+                $mapper->updated = Helpers\Time::database();
+            }
             return $mapper->validate();
         });
 
