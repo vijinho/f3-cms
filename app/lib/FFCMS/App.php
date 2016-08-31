@@ -72,7 +72,7 @@ class App
         $f3 = \Base::instance();
 
         // specify keys of rows in config_data table to load in from .ini files
-        $f3->set('cfg.keys.load', $f3->split($f3->get('cfg.keys.load')));
+        $f3->set('cfg.keys.load', $f3->get('cfg.keys.load'));
 
         // is the url under /api ?
         $api = '/api' == substr($f3->get('PATH'), 0, 4);
@@ -134,7 +134,7 @@ class App
             });
 
             // load cli config keys
-            $f3->set('cfg.keys.cli', $f3->split($f3->get('cfg.keys.cli')));
+            $f3->set('cfg.keys.cli', $f3->get('cfg.keys.cli'));
             self::loadConfigData($f3);
 
             // @see http://fatfreeframework.com/routing-engine
@@ -278,7 +278,7 @@ class App
         if (!empty($api)) {
 
             // load api config keys
-            $f3->set('cfg.keys.api', $f3->split($f3->get('cfg.keys.api')));
+            $f3->set('cfg.keys.api', $f3->get('cfg.keys.api'));
             self::loadConfigData($f3);
 
             $f3->config('config/routes-api.ini');
@@ -320,10 +320,10 @@ class App
         }
 
         // auto-load config keys for www and cms (if needed)
-        $f3->set('cfg.keys.www', $f3->split($f3->get('cfg.keys.www')));
+        $f3->set('cfg.keys.www', $f3->get('cfg.keys.www'));
         $cms = '/cms' == substr($f3->get('PATH'), 3, 5);
         if ($cms) {
-            $f3->set('cfg.keys.cms', $f3->split($f3->get('cfg.keys.cms')));
+            $f3->set('cfg.keys.cms',$f3->get('cfg.keys.cms'));
         }
         self::loadConfigData($f3);
 
