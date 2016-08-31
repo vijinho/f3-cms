@@ -103,6 +103,26 @@ abstract class Mapper extends \DB\SQL\Mapper
     }
 
     /**
+     * Load by internal integer ID or by UUID if no array passed
+     *
+  	 * @param $filter string|array
+ 	 * @param $options array
+ 	 * @param $ttl int
+     * @see DB\Cursor::load($filter = NULL, array $options = NULL, $ttl = 0)
+     * @return array|FALSE
+     */
+    public function load($filter = NULL, array $options = null, $ttl = 0) {
+        if (!is_array($filter)) {
+            if (is_int($filter)) {
+                return parent::load(['id = ?', $filter], $options, $ttl);
+            } else if (is_string($filter)) {
+                return parent::load(['uuid = ?', $filter], $options, $ttl);
+            }
+        }
+        return parent::load($filter, $options, $ttl);
+    }
+
+    /**
      * Initialise automatic validation settings for fields
      */
     public function initValidation()
@@ -383,5 +403,4 @@ abstract class Mapper extends \DB\SQL\Mapper
         $this->auditData = array_merge($this->auditData, $data);
         return $this->auditData;
     }
-
 }
