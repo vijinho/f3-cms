@@ -3,7 +3,7 @@
 namespace FFCMS\Controllers;
 
 use FFMVC\Helpers;
-use FFCMS\{Traits, Models};
+use FFCMS\{Traits, Models, Mappers};
 
 /**
  * Base Controller Class.
@@ -66,7 +66,8 @@ abstract class Base
     {
         // get logged in user info
         $usersModel = Models\Users::instance();
-        $usersMapper = $usersModel->getMapper();
+        // $usersMapper = $usersModel->getMapper();
+        $usersMapper = new Mappers\Users; // this instance exists independently throughout the session
 
         // get the logged in user
         $uuid = $f3->get('uuid');
