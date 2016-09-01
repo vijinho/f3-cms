@@ -2,7 +2,7 @@
 $f3    = \Base::instance();
 $title = 'My Profile';
 $f3->set('title', $title);
-$usersMapper = $f3->get('usersMapper');
+$user = $f3->get('usersMapper');
 ?>
 <?=\View::instance()->render('cms/header.phtml'); ?>
 <?=\View::instance()->render('cms/header-menu.phtml'); ?>
@@ -24,8 +24,10 @@ $usersMapper = $f3->get('usersMapper');
             <div class="row">
 
                 <div class="input-field col s12">
-                    <?php if ($url = $usersMapper->profileImageUrlDynamic(['height' => 150])): ?>
-                        <img class="center-align valign-wrapper circle responsive-img" src="<?=$url?>">
+                    <?php if ($user->profileImageExists()): ?>
+                        <?php if ($url = $user->profileImageUrlDynamic(['height' => 150])): ?>
+                            <img class="center-align valign-wrapper circle responsive-img" src="<?=$url?>">
+                        <?php endif ?>
                     <?php endif ?>
                     <input type="file" name="profile" id="profile">
                     <p>Profile Image (max size 4MB)</p>
