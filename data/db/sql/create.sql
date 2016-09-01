@@ -211,6 +211,42 @@ CREATE TABLE `assets` (
   KEY `users_uuid_2` (`users_uuid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+
+# Dump of table pages
+# ------------------------------------------------------------
+
+CREATE TABLE `pages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `uuid` varchar(36) NOT NULL COMMENT 'UUID',
+  `users_uuid` varchar(36) DEFAULT NULL COMMENT 'User UUID',
+  `key` varchar(255) DEFAULT NULL COMMENT 'Key',
+  `author` varchar(255) DEFAULT NULL COMMENT 'Author',
+  `language` varchar(5) DEFAULT 'en' COMMENT 'Language',
+  `status` varchar(255) DEFAULT NULL COMMENT 'Publish Status',
+  `slug` varchar(255) DEFAULT NULL COMMENT 'Slug',
+  `path` text COMMENT 'URL Path',
+  `keywords` text COMMENT 'Keywords',
+  `description` text COMMENT 'Description',
+  `robots` tinyint(1) DEFAULT '1' COMMENT 'Allow Robots?',
+  `title` varchar(255) DEFAULT NULL COMMENT 'Title',
+  `summary` text COMMENT 'Summary',
+  `body` text COMMENT 'Body Content',
+  `scopes` varchar(255) DEFAULT NULL COMMENT 'Scopes',
+  `categories` text COMMENT 'Categories',
+  `tags` text COMMENT 'Tags',
+  `created` datetime NOT NULL COMMENT 'Date Created',
+  `published` datetime DEFAULT NULL COMMENT 'Date Published',
+  `updated` datetime DEFAULT NULL COMMENT 'Date Updated',
+  `metadata` text COMMENT 'Additional Metadata',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uuid` (`uuid`),
+  UNIQUE KEY `key` (`key`),
+  UNIQUE KEY `slug` (`slug`),
+  KEY `language` (`language`),
+  KEY `status` (`status`),
+  KEY `users_uuid` (`users_uuid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
