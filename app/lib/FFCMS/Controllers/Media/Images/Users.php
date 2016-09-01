@@ -18,7 +18,7 @@ class Users
      *
      * @param \Base $f3
      * @param array $params
-     * @return void
+     * @return string|null
      */
     public function profile(\Base $f3, array $params = [])
     {
@@ -63,7 +63,7 @@ class Users
 
         // return the url if exists
         $url      = $usersMapper->profileImageUrl($filename);
-        if (false !== $url) {
+        if (!empty($url)) {
             return $f3->reroute($url);
         }
 
@@ -75,7 +75,7 @@ class Users
         // create new resized file
         $img      = new \Image($asset->filename);
         $img->resize($width, $height, $crop);
-        if (!$f3->write($usersMapper->profileImageFilePath($filename), $img->dump('jpeg', $f3->get('assets.image.default.quality.jpg')))) {
+        if (empty($f3->write($usersMapper->profileImageFilePath($filename), $img->dump('jpeg', $f3->get('assets.image.default.quality.jpg'))))) {
             return $f3->status(404);
         }
 

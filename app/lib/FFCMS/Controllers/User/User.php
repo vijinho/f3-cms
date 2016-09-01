@@ -546,7 +546,7 @@ class User extends Base
         }, true, true);
 
         // create new profile image
-        if (!empty($files)) {
+        if (is_array($files)) {
             foreach ($files as $file => $valid) {
                 if (false === $valid) {
                     $this->notify(_("The file uploaded was not valid!"), 'error');

@@ -89,7 +89,7 @@ class Assets extends DB
      * @return boolean $path to the asset
      * @return boolean true if the asset exists
      */
-    public function assetExists($dirPath, $filename)
+    public function assetExists($dirPath, $filename): boolean
     {
         return file_exists($this->assetFilePath($dirPath, $filename));
     }

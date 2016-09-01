@@ -107,9 +107,9 @@ class Users extends Mapper
      * Return the on-the-fly dynamic image generation URL path
      *
      * @param array $params params to url
-     * @return string return the url path or false if not exists
+     * @return false|array return the url path or false if not exists
      */
-    public function profileImageUrlDynamic(array $params = []): string
+    public function profileImageUrlDynamic(array $params = [])
     {
         $f3 = \Base::instance();
         return Helpers\Url::internal($f3->alias('profile_image', 'key=profile,uuid=' . $this->uuid), $params);
@@ -118,7 +118,6 @@ class Users extends Mapper
     /**
      * Return the URL path to the image if exists or false
      *
-     * @param null|string $uuid the user uuid
      * @return string return the url path or false if not exists
      */
     public function profileImageUrlPath($filename = null): string
@@ -158,7 +157,6 @@ class Users extends Mapper
     /**
      * Return the URL path to the image if exists or false
      *
-     * @param string $uuid the user uuid
      * @return null|string $path to the profile image
      * @return bool true if the profile image exists
      */
@@ -170,7 +168,6 @@ class Users extends Mapper
     /**
      * Return the URL path to the image if exists or false
      *
-     * @param null|string $uuid the user uuid
      * @return false|string return the url path or false if not exists
      */
     public function profileImageUrl($filename = null)

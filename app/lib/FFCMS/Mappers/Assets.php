@@ -21,6 +21,7 @@ namespace FFCMS\Mappers;
  * @property string $type
  * @property string $size
  * @property string $tags
+ * @property string $categories
  * @property string $metadata
  * @property string $created
  */

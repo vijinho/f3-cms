@@ -254,6 +254,7 @@ abstract class Mapper extends \DB\SQL\Mapper
      *
      * @param string $key String to quote as a database key
      * @param string $key
+     * @param return string
      */
     public function quotekey(string $key): string
     {
@@ -269,6 +270,7 @@ abstract class Mapper extends \DB\SQL\Mapper
      *
      * @param mixed $value Value to quote
      * @param mixed $value
+     * @param null|return string
      */
     public function quote($value)
     {
