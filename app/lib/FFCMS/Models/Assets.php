@@ -57,6 +57,7 @@ class Assets extends DB
     /**
      * Create if needed, and return the dir to the asset path
      *
+     * @param string $assetPath
      * @return string string $assetPath the path in assets
      */
     public function assetDirPath($assetPath): string
@@ -85,8 +86,8 @@ class Assets extends DB
      * Return the URL path to the asset if exists or false
      *
      * @param string $dirPath dir for the $filename
-     * @return string $path to the asset
-     * @return bool true if the asset exists
+     * @return boolean $path to the asset
+     * @return boolean true if the asset exists
      */
     public function assetExists($dirPath, $filename)
     {
@@ -97,7 +98,6 @@ class Assets extends DB
      * Return the URL path to the asset if exists or false
      *
      * @param string $dirPath dir for the $filename
-     * @param string $uuid the user uuid
      * @return false|string return the url path or false if not exists
      */
     public function assetUrl($dirPath, $filename)
