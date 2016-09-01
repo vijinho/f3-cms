@@ -112,7 +112,7 @@ class Users extends Mapper
     public function profileImageUrlDynamic(array $params = [])
     {
         $f3 = \Base::instance();
-        return Helpers\Url::internal($f3->alias('profile_image', 'key=profile,uuid=' . $this->uuid), $params);
+        return Helpers\Url::internal($f3->alias('user_image', 'key=profile,uuid=' . $this->uuid), $params);
     }
 
     /**
