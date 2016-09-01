@@ -91,27 +91,29 @@ class Users extends Mapper
      * Create if needed, and return the path to the user profile image
      *
      * @param string $uuid the user uuid
+     * @param string $filename filename for image
      * @return string $path to the profile image
      */
-    public function profileImageFilePath()
+    public function profileImageFilePath($filename = 'profile.png')
     {
         $f3  = \Base::instance();
         $dir = $f3->get('assets.dir') . '/img/users/' . $this->uuid;
         if (!file_exists($dir)) {
             mkdir($dir, 0777, true);
         }
-        return $dir . '/' . 'profile.png';
+        return $dir . '/' . $filename;
     }
 
     /**
      * Return the URL path to the image if exists or false
      *
      * @param string $uuid the user uuid
+     * @return string $path to the profile image
      * @return bool true if the profile image exists
      */
-    public function profileImageExists()
+    public function profileImageExists($filename = 'profile.png')
     {
-        return file_exists($this->profileImageFilePath());
+        return file_exists($this->profileImageFilePath($filename));
     }
 
     /**
@@ -120,9 +122,9 @@ class Users extends Mapper
      * @param string $uuid the user uuid
      * @return false|string return the url path or false if not exists
      */
-    public function profileImageUrlPath()
+    public function profileImageUrlPath($filename = 'profile.png')
     {
-        $url = $this->profileImageExists() ? '/assets/img/users/' . $this->uuid . '/profile.png' : false;
+        $url = $this->profileImageExists($filename) ? '/assets/img/users/' . $this->uuid . '/' . $filename : false;
         if (empty($url)) {
             return false;
         }
@@ -163,7 +165,7 @@ class Users extends Mapper
 
         // convert to .png, create new profile image file, overwrites existing
         $profileImagePath = $this->profileImageFilePath();
-        if (!$f3->write($profileImagePath, $img->dump('png', 9))) {
+        if (!$f3->write($profileImagePath, $img->dump('png', $f3->get('assets.image.default.quality.png')))) {
             return false;
         }
 
