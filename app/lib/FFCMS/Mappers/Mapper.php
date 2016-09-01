@@ -138,17 +138,12 @@ abstract class Mapper extends \DB\SQL\Mapper
         // work out default validation rules from schema and cache them
         $validationRules   = [];
         foreach ($this->schema() as $field => $metadata) {
-            if ('id' == $field)  {
+            if (in_array($field, ['id', 'uuid', 'created', 'updated']))  {
                 continue;
             }
 
             $validationRules[$field] = '';
             $rules   = [];
-
-            if (empty($metadata['nullable']) || !empty($metadata['pkey'])) {
-                // special case, id for internal use so we don't interfere with this
-                $rules[] = 'required';
-            }
 
             if (preg_match('/^(?<type>[^(]+)\(?(?<length>[^)]+)?/i', $metadata['type'], $matches)) {
                 switch ($matches['type']) {
@@ -172,6 +167,14 @@ abstract class Mapper extends \DB\SQL\Mapper
                     default:
                         break;
                 }
+
+                if (empty($metadata['default']) || 'datetime' !== $matches['type']) {
+                    if (empty($metadata['nullable']) || !empty($metadata['pkey'])) {
+                        // special case, id for internal use so we don't interfere with this
+                        $rules[] = 'required';
+                    }
+                }
+
                 $validationRules[$field] = empty($rules) ? '' : join('|', $rules);
             }
         }
