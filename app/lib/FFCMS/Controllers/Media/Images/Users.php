@@ -60,7 +60,7 @@ class Users
         $filename = 'profile_' . $width . 'x' . $height . '.jpg';
 
         // return the url if exists
-        $url      = $usersMapper->profileImageUrlPath($filename);
+        $url      = $usersMapper->profileImageUrl($filename);
         if (false !== $url) {
             return $f3->reroute($url);
         }

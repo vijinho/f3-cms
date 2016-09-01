@@ -87,31 +87,60 @@ class Users extends Mapper
         'firstname'         => 'valid_name',
     ];
 
+    protected $profileImageFileName = 'profile.png';
+
     /**
-     * Create if needed, and return the path to the user profile image
+     * Return the URL path to the image if exists or false
      *
-     * @param string $uuid the user uuid
-     * @param string $filename filename for image
-     * @return string $path to the profile image
+     * @param null|string $uuid the user uuid
+     * @return string return the url path or false if not exists
      */
-    public function profileImageFilePath($filename = 'profile.png')
+    public function profileImageUrlPath($filename = null): string
+    {
+        if (empty($filename)) {
+            $filename = $this->profileImageFileName;
+        }
+        $f3 = \Base::instance();
+        return $f3->get('assets.url') . '/img/users/' . $this->uuid . '/' . $filename;
+    }
+
+    /**
+     * Create if needed, and return the dir to the user profile image
+     *
+     * @return string $dir to the profile image
+     */
+    public function profileImageDirPath(): string
     {
         $f3  = \Base::instance();
         $dir = $f3->get('assets.dir') . '/img/users/' . $this->uuid;
         if (!file_exists($dir)) {
             mkdir($dir, 0777, true);
         }
-        return $dir . '/' . $filename;
+        return $dir . '/';
+    }
+
+    /**
+     * Create if needed, and return the path to the user profile image
+     *
+     * @param null|string $filename filename for image
+     * @return string $path to the profile image
+     */
+    public function profileImageFilePath($filename = null): string
+    {
+        if (empty($filename)) {
+            $filename = $this->profileImageFileName;
+        }
+        return $this->profileImageDirPath() . $filename;
     }
 
     /**
      * Return the URL path to the image if exists or false
      *
      * @param string $uuid the user uuid
-     * @return string $path to the profile image
+     * @return null|string $path to the profile image
      * @return bool true if the profile image exists
      */
-    public function profileImageExists($filename = 'profile.png')
+    public function profileImageExists($filename = null)
     {
         return file_exists($this->profileImageFilePath($filename));
     }
@@ -119,17 +148,18 @@ class Users extends Mapper
     /**
      * Return the URL path to the image if exists or false
      *
-     * @param string $uuid the user uuid
+     * @param null|string $uuid the user uuid
      * @return false|string return the url path or false if not exists
      */
-    public function profileImageUrlPath($filename = 'profile.png')
+    public function profileImageUrl($filename = null)
     {
-        $url = $this->profileImageExists($filename) ? '/assets/img/users/' . $this->uuid . '/' . $filename : false;
+        $url = $this->profileImageExists($filename) ? $this->profileImageUrlPath($filename) : false;
         if (empty($url)) {
             return false;
         }
-        return $url . '?' . filesize($this->profileImageFilePath());
+        return $url . '?' . filesize($this->profileImageFilePath($filename));
     }
+
 
     /**
      * Create profile image from given file
@@ -163,6 +193,12 @@ class Users extends Mapper
             $img->resize($width, $height);
         }
 
+        // remove pre-existing cached-images
+        $dirPath = $this->profileImageDirPath();
+        foreach (glob($dirPath . '/*.jpg') as $file) {
+            unlink($file);
+        }
+
         // convert to .png, create new profile image file, overwrites existing
         $profileImagePath = $this->profileImageFilePath();
         if (!$f3->write($profileImagePath, $img->dump('png', $f3->get('assets.image.default.quality.png')))) {
@@ -181,7 +217,7 @@ class Users extends Mapper
         $asset->name = $this->firstname . ' ' . $this->lastname;
         $asset->description = $this->firstname . ' ' . $this->lastname . ' Profile Image';
         $asset->size = filesize($profileImagePath);
-        $asset->url = $this->url($this->profileImageUrlPath());
+        $asset->url = $this->url($this->profileImageUrl());
         $asset->type = 'image/png';
         $asset->key = 'profile';
         $asset->groups = 'users';
