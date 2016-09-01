@@ -1,0 +1,202 @@
+<?php
+use \FFCMS\Enums\Languages;
+use \FFCMS\Enums\Scopes;
+
+$f3    = \Base::instance();
+$title = 'Edit Page';
+$f3->set('title', $title);
+?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
+
+<div class="container">
+
+    <h1><?=$title ?></h1>
+
+    <form method="post" action="<?=$f3->alias('admin_pages_edit') ?>">
+        <input type="hidden" id="csrf" name="csrf" value="<?=$f3->get('csrf') ?>">
+        <input type="hidden" id="uuid" name="uuid" value="<?=$f3->get('form.uuid') ?>">
+
+        <fieldset>
+
+            <legend>Edit Page Content</legend>
+
+            <div class="input-field col s12">
+                <input required class="validate" type="text" name="author" id="author" value="<?=$f3->get('form.author') ?>">
+                <label for="author">Author (Free-text, default is you!)</label>
+            </div>
+
+            <div class="input-field col s12">
+                <input required class="validate" type="text" name="title" id="title" value="<?=$f3->get('form.title') ?>">
+                <label for="title">Page Title</label>
+            </div>
+
+            <div class="row">
+
+                <div class="input-field col s6">
+                    <textarea required name="summary" class="materialize-textarea" id="summary"><?=$f3->get('form.summary') ?></textarea>
+                    <label for="summary">Content Summary (optionally in <a href="https://en.wikipedia.org/wiki/Markdown" target="markdown">Markdown Text Format</a>)</label>
+                </div>
+
+                <div class="col s6">
+                    <div id="summary-preview"></div>
+                </div>
+
+            </div>
+
+            <div class="row">
+
+                <div class="input-field col s6">
+                    <textarea required name="body" class="materialize-textarea" id="body"><?=$f3->get('form.body') ?></textarea>
+                    <label for="bio">Body Content (optionally in <a href="https://en.wikipedia.org/wiki/Markdown" target="markdown">Markdown Text Format</a>)</label>
+                </div>
+
+                <div class="col s6">
+                    <div id="body-preview"></div>
+                </div>
+
+            </div>
+<!--
+            <div class="input-field col s12">
+                <input required  class="validate" type="text" name="category" id="category" value="<?=$f3->get('form.category') ?>">
+                <label for="category">Category</label>
+            </div>
+
+            <div class="input-field col s12">
+                <input required  class="validate" type="text" name="tags" id="tags" value="<?=$f3->get('form.tags') ?>">
+                <label for="tags">Tags</label>
+            </div>
+-->
+            <div class="input-field col s12">
+                <input required  class="validate" type="text" name="published" id="published" value="<?=$f3->get('form.published') ?>">
+                <label for="published">Publish date/time (YYYY-MM-DD HH:MM:SS) - leave empty or in the future to publish later</label>
+            </div>
+
+            <div class="input-field col s12">
+              <select required class="validate" type="text" name="scopes" id="scopes">
+                <option value="" disabled selected>Choose Audience</option>
+                <?php
+                    $types = Scopes::values();
+                    foreach ($types as $type => $name): ?>
+                        <option value="<?=$name ?>"<?php if ($name == $f3->get('form.scopes')) {
+    echo ' selected';
+} ?>><?=ucwords($name) ?></option>
+                    <?php endforeach; ?>
+              </select>
+              <label for="scopes">Audience</label>
+            </div>
+
+        </fieldset>
+
+        <fieldset>
+
+            <legend>Meta Information</legend>
+
+            <div class="input-field col s12">
+                <input required class="validate" type="text" name="key" id="key" value="<?=$f3->get('form.key') ?>">
+                <label for="key">Page ID Key (leave empty to generate from page title)</label>
+            </div>
+
+            <div class="input-field col s12">
+                <input required class="validate" type="text" name="path" id="path" value="<?=$f3->get('form.path') ?>">
+                <label for="path">Path (leave empty for top-level, or user /path/to/page)</label>
+            </div>
+
+            <div class="input-field col s12">
+                <input required class="validate" type="text" name="slug" id="slug" value="<?=$f3->get('form.slug') ?>">
+                <label for="slug">Slug (leave empty to generate automatically from title)</label>
+            </div>
+
+            <div class="input-field col s12">
+              <select required class="validate" type="text" name="language" id="language">
+                <option value="" disabled selected>Language</option>
+                <?php
+                    $types = Languages::values();
+                    foreach ($types as $type => $name): ?>
+                        <option value="<?=$type ?>"<?php if ($type == $f3->get('form.language')) {
+    echo ' selected';
+} ?>><?=$name ?></option>
+                    <?php endforeach; ?>
+              </select>
+              <label for="language">Language</label>
+            </div>
+
+
+            <div class="input-field col s12">
+                <input required class="validate" type="text" name="keywords" id="keywords" value="<?=$f3->get('form.keywords') ?>">
+                <label for="keywords">Keywords</label>
+            </div>
+
+            <div class="input-field col s12">
+                <textarea required name="description" id="description" class="materialize-textarea"><?=$f3->get('form.description') ?></textarea>
+                <label for="description">Description</label>
+            </div>
+
+            <div class="input-field col s12">
+                <input required  class="validate" type="text" name="expires" id="expires" value="<?=$f3->get('form.expires') ?>">
+                <label for="expires">Expires (YYYY-MM-DD HH:MM:SS) - leave empty for never</label>
+            </div>
+
+            <div class="input-field col s12">
+                <p>Allow Robots?</p>
+                <p>
+                  <input class="with-gap" name="robots" value=1 type="radio" id="robots-on"<?php if (!empty($f3->get('form.robots'))) {
+    echo ' checked';
+} ?> />
+                  <label for="robots-on">On</label>
+                </p>
+                <p>
+                    <input class="with-gap" name="robots" value=0 type="radio" id="robots-off"<?php if (empty($f3->get('form.robots'))) {
+    echo ' checked';
+} ?> />
+                    <label for="robots-off">Off</label>
+                </p>
+                <br><br>
+            </div>
+
+<!--
+            <div class="input-field col s12">
+                <input required  class="validate" type="text" name="metadata" id="metadata" value="<?=$f3->get('form.metadata') ?>">
+                <label for="metadata">Additional Metadata</label>
+            </div>
+-->
+        </fieldset>
+
+        <div class="center">
+            <button class="waves-effect waves-light btn btn-large green darken-1">Update Page</button>
+        </div>
+
+    </form>
+
+</div>
+
+
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>
+
+<script type="text/javascript">
+
+function updateSummary(){
+    updateSummary.refreshes--;
+    $('#summary-preview').html(updateSummary.converter.makeHtml($('#summary').val()));
+    if (updateSummary.refreshes > 0) {
+        setTimeout(updateSummary, 250);
+    }
+}
+updateSummary.converter =  new showdown.Converter();
+updateSummary.refreshes = 5000;
+updateSummary();
+
+function updateBody(){
+    updateBody.refreshes--;
+    $('#body-preview').html(updateBody.converter.makeHtml($('#body').val()));
+    if (updateBody.refreshes > 0) {
+        setTimeout(updateBody, 250);
+    }
+}
+updateBody.converter =  new showdown.Converter();
+updateBody.refreshes = 5000;
+updateBody();
+
+</script>

@@ -1,6 +1,6 @@
 <?php
-$f3 = \Base::instance();
-$user = $f3->get('user');
+$f3    = \Base::instance();
+$user  = $f3->get('user');
 $title = 'CMS Admin';
 ?>
 <?=\View::instance()->render('cms/header.phtml'); ?>
@@ -20,12 +20,13 @@ $title = 'CMS Admin';
         <li><a href="<?=$f3->alias('admin_usersdata_list')?>">Users Data</a> - Supplementary data of users</li>
         <li><a href="<?=$f3->alias('admin_apps_list')?>">Apps</a> - Registered OAuth2 API apps of users</li>
         <li><a href="<?=$f3->alias('admin_tokens_list')?>">Tokens</a> - Tokens granted to registered, approved apps</li>
+        <li><a href="<?=$f3->alias('admin_pages_list')?>">Pages</a> - Website pages</li>
     </ul>
 
     <h2>Documentation</h2>
 
     <ul>
-        <?php $files = glob($f3->get('HOMEDIR') . '/docs/*.md'); ?>
+        <?php $files                     = glob($f3->get('HOMEDIR') . '/docs/*.md'); ?>
         <?php foreach ($files as $f): $f = basename($f, '.md'); ?>
             <li><a href="/docs/<?=$f ?>" target="doc"><?=ucfirst(strtolower($f)) ?></a></li>
         <?php endforeach ?>
