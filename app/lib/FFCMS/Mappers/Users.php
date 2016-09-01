@@ -107,7 +107,7 @@ class Users extends Mapper
      * Return the on-the-fly dynamic image generation URL path
      *
      * @param array $params params to url
-     * @return false|array return the url path or false if not exists
+     * @return string return the url path or false if not exists
      */
     public function profileImageUrlDynamic(array $params = [])
     {
@@ -157,8 +157,8 @@ class Users extends Mapper
     /**
      * Return the URL path to the image if exists or false
      *
-     * @return null|string $path to the profile image
-     * @return bool true if the profile image exists
+     * @return boolean $path to the profile image
+     * @return boolean true if the profile image exists
      */
     public function profileImageExists($filename = null)
     {
@@ -168,6 +168,7 @@ class Users extends Mapper
     /**
      * Return the URL path to the image if exists or false
      *
+     * @param string $filename
      * @return false|string return the url path or false if not exists
      */
     public function profileImageUrl($filename = null)
