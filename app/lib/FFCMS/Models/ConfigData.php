@@ -44,12 +44,12 @@ class ConfigData extends DB
         // tidy up keys for query
         $keys = array_unique($keys);
         ksort($keys);
-        $keys = array_map(function($key) use ($db) {
-            return $this->quote($key);
+        $keys = array_map(function($key) use ($m) {
+            return $m->quote($key);
         }, $keys);
 
         // load keys query
-        $sql = sprintf("%s IN (%s)", $this->quotekey('key'), join(',', $keys));
+        $sql = sprintf("%s IN (%s)", $m->quotekey('key'), join(',', $keys));
 
         // execute query, count results
         $results = $m->load($sql);
