@@ -148,8 +148,20 @@ class Users extends Mapper
         $metadata = $exif->getData();
         unset($exif);
 
-        // convert to .png, create new profile image file
+        // load image
         $img = new \Image($file);
+
+        // make sure maximum width/height not exceeded
+        $max    = $f3->get('assets.image.max');
+        $height = $img->height();
+        $width  = $img->width();
+        if ($width > $max['width'] || $height > $max['height']) {
+            $height = $height > $max['height'] ? $max['height'] : $height;
+            $width  = $width > $max['width'] ? $max['width'] : $width;
+            $img->resize($width, $height);
+        }
+
+        // convert to .png, create new profile image file, overwrites existing
         $profileImagePath = $this->profileImageFilePath();
         if (!$f3->write($profileImagePath, $img->dump('png', 9))) {
             return false;
