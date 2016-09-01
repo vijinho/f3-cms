@@ -24,7 +24,7 @@ $usersMapper = $f3->get('usersMapper');
             <div class="row">
 
                 <div class="input-field col s12">
-                    <?php if ($url = $f3->alias('profile_image', 'key=profile,uuid=' . $f3->get('uuid'))): ?>
+                    <?php if ($url = $usersMapper->profileImageUrlDynamic(['height' => 150])): ?>
                         <a href="<?=$url ?>"><?=$url ?></a>
                         <img class="center-align valign-wrapper circle responsive-img" src="<?=$url?>">
                     <?php endif ?>

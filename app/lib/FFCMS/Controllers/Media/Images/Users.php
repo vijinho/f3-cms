@@ -34,6 +34,8 @@ class Users
         $height = abs((int) $f3->get('REQUEST.height'));
         $width  = abs((int) $f3->get('REQUEST.width'));
 
+        // If $crop is TRUE the image will be resized to fit with its smallest side into the resize box
+        $crop = true;
         if (empty($height) || empty($width)) {
             // resize on longest side
             if ($height > $width) {
@@ -56,7 +58,7 @@ class Users
         $usersMapper->load($params['uuid']);
 
         // work out filename
-        $hash     = $f3->hash($asset); // generate unique hash for asset
+        //$hash     = $f3->hash($asset); // generate unique hash for asset
         $filename = 'profile_' . $width . 'x' . $height . '.jpg';
 
         // return the url if exists
@@ -72,7 +74,7 @@ class Users
 
         // create new resized file
         $img      = new \Image($asset->filename);
-        $img->resize($width, $height);
+        $img->resize($width, $height, $crop);
         if (!$f3->write($usersMapper->profileImageFilePath($filename), $img->dump('jpeg', $f3->get('assets.image.default.quality.jpg')))) {
             return $f3->status(404);
         }

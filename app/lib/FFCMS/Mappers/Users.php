@@ -4,6 +4,8 @@ namespace FFCMS\Mappers;
 
 use FFCMS\{Traits, Models};
 
+use FFMVC\Helpers;
+
 /**
  * Users Mapper Class.
  *
@@ -88,6 +90,18 @@ class Users extends Mapper
     ];
 
     protected $profileImageFileName = 'profile.png';
+
+    /**
+     * Return the on-the-fly dynamic image generation URL path
+     *
+     * @param array $params params to url
+     * @return string return the url path or false if not exists
+     */
+    public function profileImageUrlDynamic(array $params = []): string
+    {
+        $f3 = \Base::instance();
+        return Helpers\Url::internal($f3->alias('profile_image', 'key=profile,uuid=' . $this->uuid), $params);
+    }
 
     /**
      * Return the URL path to the image if exists or false
