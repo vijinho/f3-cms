@@ -186,7 +186,7 @@ trait SearchController
 
         // fetch results
         if ($isAdmin && empty($users_uuid)) {
-            $m->load('', [
+            $m->load(null, [
                 'order' => $order,
                 'offset' => (1 == $page) ? 0 : ($page - 1) * $perPage,
                 'limit' => $perPage
