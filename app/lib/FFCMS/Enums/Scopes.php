@@ -37,5 +37,6 @@ class Scopes extends Enum
         'admin',
         'api',
         'user',
+        'public',
     ];
 }
