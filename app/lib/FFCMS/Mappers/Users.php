@@ -89,6 +89,18 @@ class Users extends Mapper
         'firstname'         => 'valid_name',
     ];
 
+    /**
+     * Path in assets folder to user profile images
+     *
+     * @var string $profileImagePath
+     */
+    protected $profileImagePath = '/img/users/';
+
+    /**
+     * Default profile image name
+     *
+     * @var string $profileImageFileName
+     */
     protected $profileImageFileName = 'profile.png';
 
     /**
@@ -114,8 +126,8 @@ class Users extends Mapper
         if (empty($filename)) {
             $filename = $this->profileImageFileName;
         }
-        $f3 = \Base::instance();
-        return $f3->get('assets.url') . '/img/users/' . $this->uuid . '/' . $filename;
+        $assetsModel = Models\Assets::instance();
+        return $assetsModel->assetUrlPath($this->profileImagePath . $this->uuid . '/' . $filename);
     }
 
     /**
@@ -125,12 +137,8 @@ class Users extends Mapper
      */
     public function profileImageDirPath(): string
     {
-        $f3  = \Base::instance();
-        $dir = $f3->get('assets.dir') . '/img/users/' . $this->uuid;
-        if (!file_exists($dir)) {
-            mkdir($dir, 0777, true);
-        }
-        return $dir . '/';
+        $assetsModel = Models\Assets::instance();
+        return $assetsModel->assetDirPath($this->profileImagePath . $this->uuid);
     }
 
     /**
