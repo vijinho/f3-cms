@@ -25,11 +25,10 @@ $usersMapper = $f3->get('usersMapper');
 
                 <div class="input-field col s12">
                     <?php if ($url = $usersMapper->profileImageUrlDynamic(['height' => 150])): ?>
-                        <a href="<?=$url ?>"><?=$url ?></a>
                         <img class="center-align valign-wrapper circle responsive-img" src="<?=$url?>">
                     <?php endif ?>
                     <input type="file" name="profile" id="profile">
-                    <label for="profile">Profile Image (max size 4MB)</label>
+                    <p>Profile Image (max size 4MB)</p>
                 </div>
 
             </div>
