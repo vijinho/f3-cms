@@ -337,6 +337,11 @@ trait Validation
                             $fieldname);
                         break;
 
+                    case 'validate_boolean':
+                        $msg = sprintf(_('%s must be a valid boolean (0/1 false/true off/on yes/no).'),
+                            $fieldname);
+                        break;
+
                     default:
                         $msg = sprintf('Exception: %s %s %s', $fieldname,
                             $e['rule'], $e['param']);
