@@ -247,4 +247,12 @@ class Users extends Mapper
 
         return $asset->save();
     }
+
+    /**
+     * @return string "firstname lastname"
+     */
+    public function fullName(): string
+    {
+        return $this->firstname . ' ' . $this->lastname;
+    }
 }
