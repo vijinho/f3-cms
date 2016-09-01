@@ -68,9 +68,8 @@ class Apps extends Controllers\User\Base
         }
 
         // check app name exists
-        $db = \Registry::get('db');
         $m = clone $appsMapper;
-        if ($m->load(['LOWER('.$db->quotekey('name').') = LOWER(?)', $m->name]) && null !== $m->client_id) {
+        if ($m->load(['LOWER('.$m->quotekey('name').') = LOWER(?)', $m->name]) && null !== $m->client_id) {
             $this->notify(_('An app with that name is already in use!'), 'warning');
             $f3->set('form', $f3->get('REQUEST'));
             echo \View::instance()->render($view);

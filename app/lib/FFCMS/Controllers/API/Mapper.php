@@ -131,9 +131,8 @@ abstract class Mapper extends API
         }
 
         // load object by correct id
-        $db = \Registry::get('db');
         $m = $this->getMapper();
-        $m->load([$db->quotekey($idField) . ' = ?', $id]);
+        $m->load([$m->quotekey($idField) . ' = ?', $id]);
         if (null == $m->$idField) {
             $this->failure('authentication_error', "Object with @id does not exist.", 404);
             return $this->setOAuthError('invalid_request');
@@ -179,9 +178,8 @@ abstract class Mapper extends API
         }
 
         // check id exists
-        $db = \Registry::get('db');
         $m = $this->getMapper();
-        $m->load([$db->quotekey($idField) . ' = ?', $id]);
+        $m->load([$m->quotekey($idField) . ' = ?', $id]);
         if (null == $m->$idField) {
             $this->failure('authentication_error', "Object with @id does not exist.", 404);
             return $this->setOAuthError('invalid_request');

@@ -3,7 +3,7 @@
 namespace FFCMS\Mappers;
 
 use FFMVC\Helpers;
-use FFCMS\{Traits, Models};
+use FFCMS\{Traits, Models, Exceptions};
 
 /**
  * Base Database Mapper Class extends f3's DB\SQL\Mapper
@@ -248,6 +248,34 @@ abstract class Mapper extends \DB\SQL\Mapper
         });
     }
 
+
+    /**
+     * Quote a database fieldname/key
+     *
+     * @param string $key String to quote as a database key
+     * @param string $key
+     */
+    public function quotekey(string $key): string
+    {
+        if (!in_array($key, $this->fields())) {
+            throw new Exceptions\InvalidArgumentException('No such key ' . $key . ' exists for mapper ' . $this->mapperName);
+        }
+        return $this->db->quotekey($key);
+    }
+
+
+    /**
+     * Quote a database value
+     *
+     * @param mixed $value Value to quote
+     * @param mixed $value
+     */
+    public function quote($value)
+    {
+        return $this->db->quote($value);
+    }
+
+
     /**
      * return string representation of class - json of data
      *
@@ -380,7 +408,6 @@ abstract class Mapper extends \DB\SQL\Mapper
      */
     public function setUUID(string $field = 'uuid', $len = 8)
     {
-        $db = \Registry::get('db');
         // a proper uuid is actually 36 characters but we don't need so many
         if (in_array($field, $this->fields()) &&
             (empty($this->$field) || strlen($this->$field) < 36)) {
@@ -389,7 +416,7 @@ abstract class Mapper extends \DB\SQL\Mapper
             do {
                 $uuid = Helpers\Str::uuid($len);
             }
-            while ($tmp->load([$db->quotekey($field) . ' = ?', $uuid]));
+            while ($tmp->load([$this->quotekey($field) . ' = ?', $uuid]));
 
             unset($tmp);
             $this->$field = $uuid;
@@ -410,4 +437,5 @@ abstract class Mapper extends \DB\SQL\Mapper
         $this->auditData = array_merge($this->auditData, $data);
         return $this->auditData;
     }
+
 }

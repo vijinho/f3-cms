@@ -401,13 +401,12 @@ class User extends Base
      */
     public function confirmEmail(\Base $f3)
     {
-        $db = \Registry::get('db');
         $usersModel = Models\Users::instance();
         $usersMapper = $usersModel->getMapper();
         $usersDataMapper = $usersModel->getDataMapper();
 
         // load in the forgot password reset code row
-        $usersDataMapper->load([$db->quotekey('value')." = ? AND ".$db->quotekey('key')." = 'confirm_email_code'", $f3->get('REQUEST.code')]);
+        $usersDataMapper->load([$usersDataMapper->quotekey('value')." = ? AND ".$usersDataMapper->quotekey('key')." = 'confirm_email_code'", $f3->get('REQUEST.code')]);
         if (null == $usersDataMapper->uuid) {
             $this->notify(_('Unknown password reset code!'), 'error');
             $f3->reroute('@index');

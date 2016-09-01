@@ -35,12 +35,11 @@ class UsersData extends Mapper
         }
 
         // load pre-existing value
-        $db = \Registry::get('db');
         $m = $this->getMapper();
         if ($f3->get('VERB') == 'PUT') {
             $m->load(['uuid = ?', $data['uuid']]);
         } else {
-            $m->load(['users_uuid = ? AND ' . $db->quotekey('key') . ' = ?', $data['users_uuid'], $data['key']]);
+            $m->load(['users_uuid = ? AND ' . $m->quotekey('key') . ' = ?', $data['users_uuid'], $data['key']]);
         }
 
         // copy data and validate

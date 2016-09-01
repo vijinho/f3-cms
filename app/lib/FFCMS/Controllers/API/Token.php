@@ -77,7 +77,6 @@ class Token extends API
         }
 
         // fetch models
-        $db = \Registry::get('db');
         $oAuth2Model = Models\OAuth2::instance();
         $appsMapper = $oAuth2Model->getAppsMapper();
         $tokensMapper = $oAuth2Model->getTokensMapper();
@@ -106,7 +105,7 @@ class Token extends API
 
         // check if there's already a refresh token for the client/user combination
         $rTokensMapper = clone $tokensMapper;
-        $rTokensMapper->load(['client_id = ? AND users_uuid = ? AND '.$db->quotekey('type').' = "refresh_token"',
+        $rTokensMapper->load(['client_id = ? AND users_uuid = ? AND '.$rTokensMapper->quotekey('type').' = "refresh_token"',
                 $appsMapper->client_id, $appsMapper->users_uuid]);
 
         // make a new refresh token if one doesn't exist
@@ -160,13 +159,12 @@ class Token extends API
             return;
         }
 
-        $db = \Registry::get('db');
         $oAuth2Model = Models\OAuth2::instance();
         $appsMapper = $oAuth2Model->getAppsMapper();
         $tokensMapper = $oAuth2Model->getTokensMapper();
 
         // get the app's authorized app token if it exists
-        $tokensMapper->load(['client_id = ? AND users_uuid = ? AND '.$db->quotekey('type').' = "access_token"',
+        $tokensMapper->load(['client_id = ? AND users_uuid = ? AND '.$tokensMapper->quotekey('type').' = "access_token"',
                 $appsMapper->client_id, $appsMapper->users_uuid]);
         if (null == $tokensMapper->users_uuid) {
                 // make a new token (and refresh token)
@@ -188,7 +186,7 @@ class Token extends API
 
         // check if there's already a refresh token for the client/user combination
         $rTokensMapper = clone $tokensMapper;
-        $rTokensMapper->load(['client_id = ? AND users_uuid = ? AND '.$db->quotekey('type').' = "refresh_token"',
+        $rTokensMapper->load(['client_id = ? AND users_uuid = ? AND '.$rTokensMapper->quotekey('type').' = "refresh_token"',
                 $appsMapper->client_id, $appsMapper->users_uuid]);
         // if not, create one
         if (null == $rTokensMapper->token) {
@@ -233,7 +231,6 @@ class Token extends API
         }
 
         // fetch models now
-        $db = \Registry::get('db');
         $oAuth2Model = Models\OAuth2::instance();
         $appsMapper = $oAuth2Model->getAppsMapper();
         $tokensMapper = $oAuth2Model->getTokensMapper();
@@ -281,7 +278,7 @@ class Token extends API
         }
 
         // get the app users authorized app token if it exists
-        $tokensMapper->load(['client_id = ? AND users_uuid = ? AND '.$db->quotekey('type').' = "access_token"',
+        $tokensMapper->load(['client_id = ? AND users_uuid = ? AND '.$tokensMapper->quotekey('type').' = "access_token"',
                 $appsMapper->client_id, $usersMapper->uuid]);
         if (null == $tokensMapper->users_uuid) {
                 // make a new token (and refresh token)
@@ -302,7 +299,7 @@ class Token extends API
 
         // check if there's already a refresh token for the client/user combination
         $rTokensMapper = clone $tokensMapper;
-        $rTokensMapper->load(['client_id = ? AND users_uuid = ? AND '.$db->quotekey('type').' = "refresh_token"',
+        $rTokensMapper->load(['client_id = ? AND users_uuid = ? AND '.$rTokensMapper->quotekey('type').' = "refresh_token"',
                 $appsMapper->client_id, $usersMapper->uuid]);
 
         // create one otherwise
@@ -413,7 +410,6 @@ class Token extends API
         // fetch models now
         $oAuth2Model = Models\OAuth2::instance();
         $tokensMapper = $oAuth2Model->getTokensMapper();
-        $db = \Registry::get('db');
 
         // check required params
         $refreshToken = $f3->get('REQUEST.refresh_token');
@@ -443,7 +439,7 @@ class Token extends API
         $app = $f3->get('api_app');
 
         // check refresh token exists
-        $tokensMapper->load(['client_id = ? AND token =? AND '.$db->quotekey('type').' = "refresh_token"',
+        $tokensMapper->load(['client_id = ? AND token =? AND '.$tokensMapper->quotekey('type').' = "refresh_token"',
                 $app['client_id'], $refreshToken]);
         if (null == $tokensMapper->client_id) {
             $this->failure('authentication_error', "Could not find that refresh token!", 401);
@@ -452,7 +448,7 @@ class Token extends API
         }
         $refreshToken = $tokensMapper->cast();
 
-        $tokensMapper->load(['client_id = ? AND users_uuid =? AND '.$db->quotekey('type').' = "access_token"',
+        $tokensMapper->load(['client_id = ? AND users_uuid =? AND '.$tokensMapper->quotekey('type').' = "access_token"',
                 $app['client_id'], $refreshToken['users_uuid']]);
 
         // no-pre existing token, make one

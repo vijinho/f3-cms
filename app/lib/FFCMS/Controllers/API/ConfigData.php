@@ -32,7 +32,6 @@ class ConfigData extends Mapper
         }
 
         // load pre-existing value
-        $db = \Registry::get('db');
         $m = $this->getMapper();
 
         // copy data and validate
@@ -52,7 +51,7 @@ class ConfigData extends Mapper
             if ($f3->get('VERB') == 'PUT') {
                 $m->load(['uuid = ?', $data['uuid']]);
             } else {
-                $m->load([$db->quotekey('key') . ' = ?', $data['key']]);
+                $m->load([$m->quotekey('key') . ' = ?', $data['key']]);
             }
             $m->copyfrom($data);
 

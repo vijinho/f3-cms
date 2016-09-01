@@ -38,7 +38,6 @@ class ConfigData extends DB
      */
     public function getValues(array $keys = []): array
     {
-        $db = \Registry::get('db');
         $m = $this->getMapper();
         $data = [];
 
@@ -46,11 +45,11 @@ class ConfigData extends DB
         $keys = array_unique($keys);
         ksort($keys);
         $keys = array_map(function($key) use ($db) {
-            return $db->quote($key);
+            return $this->quote($key);
         }, $keys);
 
         // load keys query
-        $sql = sprintf("%s IN (%s)", $db->quotekey('key'), join(',', $keys));
+        $sql = sprintf("%s IN (%s)", $this->quotekey('key'), join(',', $keys));
 
         // execute query, count results
         $results = $m->load($sql);

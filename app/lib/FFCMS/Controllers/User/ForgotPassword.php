@@ -149,7 +149,6 @@ class ForgotPassword extends User
         $this->redirectLoggedInUser();
         $this->csrf();
 
-        $db = \Registry::get('db');
         $usersModel = Models\Users::instance();
         $usersMapper = $usersModel->getMapper();
         $usersDataMapper = $usersModel->getDataMapper();
@@ -158,7 +157,7 @@ class ForgotPassword extends User
         $viewStep3 = 'forgot_password/forgot_password_step3.phtml';
 
         // load in the forgot password reset code row
-        $usersDataMapper->load([$db->quotekey('value')." = ? AND ".$db->quotekey('key')." = 'forgot-password-code'", $f3->get('REQUEST.code')]);
+        $usersDataMapper->load([$usersDataMapper->quotekey('value')." = ? AND ".$usersDataMapper->quotekey('key')." = 'forgot-password-code'", $f3->get('REQUEST.code')]);
         if (null == $usersDataMapper->uuid) {
             $this->notify(_('Unknown password reset code!'), 'error');
             $f3->set('form', $f3->get('REQUEST'));
@@ -200,7 +199,6 @@ class ForgotPassword extends User
         $this->redirectLoggedInUser();
         $this->csrf();
 
-        $db = \Registry::get('db');
         $usersModel = Models\Users::instance();
         $usersMapper = $usersModel->getMapper();
         $usersDataMapper = $usersModel->getDataMapper();
@@ -208,7 +206,7 @@ class ForgotPassword extends User
         $redirectUrlStep2 = $this->url('@forgot_password_step2', ['code' => $f3->get('REQUEST.code')]);
 
         // load in the forgot password reset code row
-        $usersDataMapper->load([$db->quotekey('value')." = ? AND ".$db->quotekey('key')." = 'forgot-password-code'", $f3->get('REQUEST.code')]);
+        $usersDataMapper->load([$usersDataMapper->quotekey('value')." = ? AND ".$usersDataMapper->quotekey('key')." = 'forgot-password-code'", $f3->get('REQUEST.code')]);
         if (null == $usersDataMapper->uuid) {
             $this->notify(_('Unknown password reset code!'), 'error');
             return $f3->reroute($redirectUrlStep2);
