@@ -19,6 +19,11 @@ abstract class Base
         Traits\SecurityController,
         Traits\Validation;
 
+    public function __construct()
+    {
+        $this->addScripts();
+    }
+
     /**
      * Add default scripts for displaying templates - override in controller to add more
      *
