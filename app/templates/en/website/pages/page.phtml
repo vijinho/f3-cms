@@ -1,0 +1,28 @@
+<?php
+$f3     = \Base::instance();
+$p      = $f3->get('pagesMapper');
+$f3->set('page', $p->cast());
+extract($p->cast());
+?>
+<?=\View::instance()->render('cms/header.phtml'); ?>
+<?=\View::instance()->render('cms/header-menu.phtml'); ?>
+<?=\View::instance()->render('cms/notifications.phtml'); ?>
+
+<div class="container">
+
+    <h1><?=\Markdown::instance()->convert($title) ?></h1>
+
+    <?=$published ?>
+
+    <?=\Markdown::instance()->convert($summary) ?>
+
+    <?=\Markdown::instance()->convert($body) ?>
+
+    <?=\Markdown::instance()->convert($author) ?>
+
+    <?=$updated ?>
+
+</div>
+
+<?=\View::instance()->render('cms/footer-menu.phtml'); ?>
+<?=\View::instance()->render('cms/footer.phtml'); ?>
