@@ -61,7 +61,18 @@ $f3->set('title', $title);
 
             <div class="input-field col s12">
                 <input required  class="validate" type="text" name="published" id="published" value="<?=$f3->get('form.published') ?>">
-                <label for="published">Publish date/time (YYYY-MM-DD HH:MM:SS) - leave empty or in the future to publish later</label>
+                <label for="published">Publish date/time</label>
+                <small>e.g:
+                    <ul>
+                        <li>now</li>
+                        <li>+1 day</li>
+                        <li>+1 week</li>
+                        <li>+1 month 2 days 4 hours</li>
+                        <li>next Thursday</li>
+                        <li>2016-09-02 02:42:01</li>
+                    </ul>
+                    See: <a href="http://php.net/manual/en/function.strtotime.php" target="php">Date/Time format is strtotime()</a>
+                </small>
             </div>
 
         </fieldset>
@@ -161,12 +172,12 @@ $f3->set('title', $title);
 
             <div class="input-field col s12">
                 <input required  class="validate" type="text" name="expires" id="expires" value="<?=$f3->get('form.expires') ?>">
-                <label for="expires">Content Expires (YYYY-MM-DD HH:MM:SS) - leave empty for never</label>
+                <label for="expires">Expiry Date</label>
             </div>
 
             <div class="input-field col s12">
                 <input required class="validate" type="text" name="key" id="key" value="<?=$f3->get('form.key') ?>">
-                <label for="key">Page ID Key (leave empty to generate from page title - only change if you know what this means)</label>
+                <label for="key">Page ID</label>
             </div>
 
 <!--

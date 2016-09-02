@@ -182,6 +182,10 @@ class Pages extends Admin
             }
         }
 
+        // http://php.net/manual/en/function.strtotime.php
+        $data['expires'] = Helpers\Time::database(strtotime($data['expires']));
+        $data['published'] = Helpers\Time::database(strtotime($data['published']));
+
         // update required fields to check from ones which changed
         // validate the entered data
         $data['users_uuid'] = $f3->get('uuid');
