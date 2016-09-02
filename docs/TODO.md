@@ -19,7 +19,8 @@
 - Search for routes of pages before 404
 - Add page template for cms pages
 - Add blog/news page templates for cms pages
-- Contact form
+- Contact form and map
+- Language selector
 
 ## User Area
 
