@@ -1,6 +1,7 @@
 <?php
 use \FFCMS\Enums\Languages;
 use \FFCMS\Enums\Scopes;
+use \FFCMS\Enums\PageCategories;
 
 $f3    = \Base::instance();
 $title = 'Edit Page';
@@ -20,12 +21,7 @@ $f3->set('title', $title);
 
         <fieldset>
 
-            <legend>Edit Page Content</legend>
-
-            <div class="input-field col s12">
-                <input required class="validate" type="text" name="author" id="author" value="<?=$f3->get('form.author') ?>">
-                <label for="author">Author (Free-text, default is you!)</label>
-            </div>
+            <legend>Page Content</legend>
 
             <div class="input-field col s12">
                 <input required class="validate" type="text" name="title" id="title" value="<?=$f3->get('form.title') ?>">
@@ -57,20 +53,54 @@ $f3->set('title', $title);
                 </div>
 
             </div>
-<!--
+
             <div class="input-field col s12">
-                <input required  class="validate" type="text" name="category" id="category" value="<?=$f3->get('form.category') ?>">
-                <label for="category">Category</label>
+                <input required class="validate" type="text" name="author" id="author" value="<?=$f3->get('form.author') ?>">
+                <label for="author">Author (Free-text, default is you!)</label>
             </div>
 
             <div class="input-field col s12">
-                <input required  class="validate" type="text" name="tags" id="tags" value="<?=$f3->get('form.tags') ?>">
-                <label for="tags">Tags</label>
-            </div>
--->
-            <div class="input-field col s12">
                 <input required  class="validate" type="text" name="published" id="published" value="<?=$f3->get('form.published') ?>">
                 <label for="published">Publish date/time (YYYY-MM-DD HH:MM:SS) - leave empty or in the future to publish later</label>
+            </div>
+
+        </fieldset>
+
+        <div class="center">
+            <button class="waves-effect waves-light btn btn-large green darken-1">Update Page</button>
+        </div>
+
+        <fieldset>
+
+            <legend>Meta Information</legend>
+
+
+            <div class="input-field col s12">
+              <select required class="validate" type="text" name="language" id="language">
+                <option disabled value="" selected>Language</option>
+                <?php
+                    $types = Languages::values();
+                    foreach ($types as $type => $name): ?>
+                        <option value="<?=$type ?>"<?php if ($type == $f3->get('form.language')) {
+    echo ' selected';
+} ?>><?=$name ?></option>
+                    <?php endforeach; ?>
+              </select>
+              <label for="language">Language</label>
+            </div>
+
+            <div class="input-field col s12">
+              <select required class="validate" type="text" name="category" id="category">
+                <option value="" disabled selected>Choose Category</option>
+                <?php
+                    $types = PageCategories::values();
+                    foreach ($types as $type => $name): ?>
+                        <option value="<?=$name ?>"<?php if ($type == $f3->get('form.category')) {
+    echo ' selected';
+} ?>><?=ucwords($name) ?></option>
+                    <?php endforeach; ?>
+              </select>
+              <label for="category">Category</label>
             </div>
 
             <div class="input-field col s12">
@@ -85,57 +115,6 @@ $f3->set('title', $title);
                     <?php endforeach; ?>
               </select>
               <label for="scopes">Audience</label>
-            </div>
-
-        </fieldset>
-
-        <fieldset>
-
-            <legend>Meta Information</legend>
-
-            <div class="input-field col s12">
-                <input required class="validate" type="text" name="key" id="key" value="<?=$f3->get('form.key') ?>">
-                <label for="key">Page ID Key (leave empty to generate from page title)</label>
-            </div>
-
-            <div class="input-field col s12">
-                <input required class="validate" type="text" name="path" id="path" value="<?=$f3->get('form.path') ?>">
-                <label for="path">Path (leave empty for top-level, or user /path/to/page)</label>
-            </div>
-
-            <div class="input-field col s12">
-                <input required class="validate" type="text" name="slug" id="slug" value="<?=$f3->get('form.slug') ?>">
-                <label for="slug">Slug (leave empty to generate automatically from title)</label>
-            </div>
-
-            <div class="input-field col s12">
-              <select required class="validate" type="text" name="language" id="language">
-                <option value="" disabled selected>Language</option>
-                <?php
-                    $types = Languages::values();
-                    foreach ($types as $type => $name): ?>
-                        <option value="<?=$type ?>"<?php if ($type == $f3->get('form.language')) {
-    echo ' selected';
-} ?>><?=$name ?></option>
-                    <?php endforeach; ?>
-              </select>
-              <label for="language">Language</label>
-            </div>
-
-
-            <div class="input-field col s12">
-                <input required class="validate" type="text" name="keywords" id="keywords" value="<?=$f3->get('form.keywords') ?>">
-                <label for="keywords">Keywords</label>
-            </div>
-
-            <div class="input-field col s12">
-                <textarea required name="description" id="description" class="materialize-textarea"><?=$f3->get('form.description') ?></textarea>
-                <label for="description">Description</label>
-            </div>
-
-            <div class="input-field col s12">
-                <input required  class="validate" type="text" name="expires" id="expires" value="<?=$f3->get('form.expires') ?>">
-                <label for="expires">Expires (YYYY-MM-DD HH:MM:SS) - leave empty for never</label>
             </div>
 
             <div class="input-field col s12">
@@ -153,6 +132,41 @@ $f3->set('title', $title);
                     <label for="robots-off">Off</label>
                 </p>
                 <br><br>
+            </div>
+
+            <div class="input-field col s12">
+                <input required class="validate" type="text" name="path" id="path" value="<?=$f3->get('form.path') ?>">
+                <label for="path">Path (leave empty or / for top-level, or use /path/to/page)</label>
+            </div>
+
+            <div class="input-field col s12">
+                <input required class="validate" type="text" name="slug" id="slug" value="<?=$f3->get('form.slug') ?>">
+                <label for="slug">Slug (leave empty to generate automatically from title)</label>
+            </div>
+
+            <div class="input-field col s12">
+                <input required class="validate" type="text" name="keywords" id="keywords" value="<?=$f3->get('form.keywords') ?>">
+                <label for="keywords">Meta Keywords (comma-seperated)</label>
+            </div>
+
+            <div class="input-field col s12">
+                <textarea required name="description" id="description" class="materialize-textarea"><?=$f3->get('form.description') ?></textarea>
+                <label for="description">Meta Description</label>
+            </div>
+
+            <div class="input-field col s12">
+                <textarea required name="tags" id="tags" class="materialize-textarea"><?=$f3->get('form.tags') ?></textarea>
+                <label for="tags">Tags (comma, space or semi-colon  separated)</label>
+            </div>
+
+            <div class="input-field col s12">
+                <input required  class="validate" type="text" name="expires" id="expires" value="<?=$f3->get('form.expires') ?>">
+                <label for="expires">Content Expires (YYYY-MM-DD HH:MM:SS) - leave empty for never</label>
+            </div>
+
+            <div class="input-field col s12">
+                <input required class="validate" type="text" name="key" id="key" value="<?=$f3->get('form.key') ?>">
+                <label for="key">Page ID Key (leave empty to generate from page title - only change if you know what this means)</label>
             </div>
 
 <!--

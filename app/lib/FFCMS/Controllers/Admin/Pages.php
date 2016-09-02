@@ -231,6 +231,8 @@ class Pages extends Admin
             $data['scopes'] = 'public';
         }
 
+        $data['robots'] = (int) !empty($data['robots']);
+
         $mapper->copyfrom($data);
         $mapper->copyfrom($mapper->filter()); // filter mapa data
         $mapper->validationRequired([
@@ -337,11 +339,6 @@ class Pages extends Admin
 
         $uuid = $f3->get('REQUEST.uuid');
 
-        $mapper = new Mappers\Pages;
-
-        $data = $mapper->cast();
-        $data['uuid'] = $uuid;
-
         $f3->set('breadcrumbs', [
             _('Admin') => 'admin',
             _('Pages') => $this->url('@admin_pages_search', [
@@ -352,6 +349,12 @@ class Pages extends Admin
                 ]),
             _('Add') => '',
         ]);
+
+        $mapper = new Mappers\Pages;
+        $data = $mapper->cast();
+        $data = $this->filterPageInput($f3, $mapper);
+        $data['uuid'] = $uuid;
+        $data['robots'] = 1;
 
         $f3->set('form', $data);
         echo \View::instance()->render($this->template_path . 'add.phtml');
