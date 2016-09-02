@@ -1,13 +1,25 @@
-<?php $f3 = \Base::instance() ?>
+<?php
+$f3       = \Base::instance();
+$page     = $f3->get('page');
+if (is_array($page)) {
+    extract($page);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title><?=empty($title) ? 'f3-cms admin' : $title ?></title>
-    <meta name="description" content="<?=empty($description) ? '' : $description ?>">
-    <meta name="keywords" content="<?=empty($keywords) ? '' : $keywords ?>">
+    <?php if (!empty($title)): ?>
+        <title><?=$title ?></title>
+    <?php endif ?>
+    <?php if (!empty($description)): ?>
+        <meta name="description" content="<?=$description ?>">
+    <?php endif ?>
+    <?php if (!empty($keywords)): ?>
+        <meta name="keywords" content="<?=$keywords ?>">
+    <?php endif ?>
     <?php /* <link rel="alternate" type="application/rss+xml" href="/rss.xml" title="RSS"> */ ?>
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0">
     <meta name="HandheldFriendly" content="True"/>
@@ -19,5 +31,6 @@
 }?>>
     <?php endforeach; endif ?>
     <link rel="icon" type="image/png" href="/img/favicon.png">
+    <?php if (!empty($head)): echo $head; endif ?>
 </head>
 <body>
