@@ -48,6 +48,9 @@ I wrote this project for myself, but if you are thinking to use it, thinking on 
  * Optional SQL database creation and changes using migrations
  * Data validation and filtering added to Fat-Free DB Mapper classes
  * Acceptance and Unit Tests using Codeception
+ * Changes to the database are tracked in an audit table (optional)
+ * Pages can be made generically to any website path in the CMS or customised on a per-page basis
+ * Basic features: signup/register, confirm via email
  * See [doc/GUIDE.md](docs/GUIDE.md) for more
 
 ## Setup
