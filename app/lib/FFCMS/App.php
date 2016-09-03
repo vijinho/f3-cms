@@ -344,7 +344,11 @@ class App
         // create routes for slugged pages
         if (!empty($slugs)) {
             $lang = $f3->get('LANG');
+            $existingRoutes = array_keys($f3->ROUTES);
             foreach ($slugs as $path) {
+                if (in_array($path, $existingRoutes)) {
+                    continue;
+                }
                 $f3->route('GET ' . $path, 'FFCMS\Controllers\Page->page');
             }
         }
