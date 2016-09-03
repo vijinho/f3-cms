@@ -27,3 +27,7 @@
 
 - API for Pages
 - API for Assets
+
+## i18n
+
+- Create a smaple version of the site in Spanish as a proof-of-concept

@@ -1,6 +1,6 @@
-# f3-cms - WORK-IN-PROGRESS!
+# f3-cms
 
-Consider this a work-in-progress and an 'alpha' release.
+Consider this a work-in-progress and an 'alpha' release. Contributions are welcome!
 
 [![Travis CI Build](https://travis-ci.org/vijinho/f3-cms.svg?branch=dev-master)](https://travis-ci.org/vijinho/f3-cms)
 [![Build Status](https://scrutinizer-ci.com/g/vijinho/f3-cms/badges/build.png?b=dev-master)](https://scrutinizer-ci.com/g/vijinho/f3-cms/build-status/dev-master)
@@ -196,7 +196,7 @@ Used for bootstrapping the application and generic enough to be separate from th
  * [PHPMailer](https://github.com/PHPMailer/PHPMailer) for outgoing emails
  * [Whoops](https://github.com/filp/whoops) for nicer error handling if level of DEBUG=4
  * [php-exif](https://github.com/Miljar/php-exif) for parsing EXIF data in images
- 
+
 ### Javascript Libraries
 
  * [Showdown](https://github.com/showdownjs/showdown) - Markdown converter
