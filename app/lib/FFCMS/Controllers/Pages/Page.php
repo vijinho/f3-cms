@@ -25,14 +25,24 @@ class Page extends Base
      */
     public function page(\Base $f3, array $params = [])
     {
-        if (empty($params['slug'])) {
+        if (array_key_exists('slug', $params)) {
+            $slug = $params['slug'];
+        } elseif (preg_match('/^\/(?P<lang>[^\/]+)\/(?P<slug>.+)/', $f3->get('PATH'), $matches)) {
+            $slug = $matches['slug'];
+        } else {
+            // 404
+            echo 'missing slug';
+            die(404);
+        }
+
+        if (empty($slug)) {
             // 404
             echo 'page does not exist';
             die(404);
         }
 
         $page = new Mappers\Pages;
-        $page->load(['slug = ?', $params['slug']]);
+        $page->load(['slug = ?', $slug]);
 
         // conditions if page is viewable
         $publishTime = strtotime($page->published);

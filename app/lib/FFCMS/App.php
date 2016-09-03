@@ -327,7 +327,33 @@ class App
         }
         self::loadConfigData($f3);
 
-        // from here we add-in routes generated from the database (cms routes)
+        // load page slugs from cache and create routes after
+        $cache = \Cache::instance();
+        $key = 'page-slugs';
+        if (!$cache->exists($key, $slugs)) {
+            $db = \Registry::get('db');
+            $data = $db->exec('SELECT language, slug FROM pages');
+            if (!empty($data)) {
+                foreach ($data as $row) {
+                    $slugs[$row['language']][] = $row['slug'];
+                }
+            }
+            $cache->set($key, $slugs, $f3->get('ttl.cfg'));
+        }
+
+        // create routes for slugged pages
+        if (!empty($slugs)) {
+            $lang = $f3->get('LANG');
+            foreach ($slugs as $language => $slugslist) {
+                if ($lang !== $language) {
+                    continue;
+                }
+                foreach ($slugslist as $slug) {
+                    $f3->route('GET /' . $language . '/' . $slug, 'FFCMS\Controllers\Page->page');
+                }
+            }
+        }
+
         $f3->run();
     }
 }
