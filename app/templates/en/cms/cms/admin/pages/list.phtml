@@ -57,7 +57,10 @@ if (!empty($p['results'])) {
 
                 <table class="responsive-table">
                     <tr>
-                        <?php foreach ($listFields as $field): ?>
+                        <?php foreach ($listFields as $field):
+                            if ('body' == $field || 'summary' == $field) {
+                                continue;
+                            }?>
                             <th data-field="<?=$field ?>"><?=$field ?></th>
                         <?php endforeach ?>
                         <th>Action</th>
@@ -67,22 +70,25 @@ if (!empty($p['results'])) {
                         <?php foreach ($results['objects'] as $k => $o):  //unset($results['objects'][$k]);  ?>
                             <tr>
                                 <?php foreach ($listFields as $field):
-                                        $v = $o[$field];
+                                        if ('body' == $field || 'summary' == $field) {
+                                            continue;
+                                        }
+                                        $v    = $o[$field];
                                         $link = '';
                                     switch ($field) {
                                        case 'login_last':
                                        case 'created':
-                                            $v = substr(date('r', strtotime($v)), 0, -6);
+                                            $v     = substr(date('r', strtotime($v)), 0, -6);
                                             $class = 'text-small';
                                             break;
                                         case 'uuid':
                                         case 'users_uuid':
-                                            $class = "text-tiny";
+                                            $class = 'text-tiny';
                                             if ($field == 'users_uuid') {
                                                 $link = $uh->internal('@admin_users_search', [
-                                                    'search' => $o['users_uuid'],
+                                                    'search'        => $o['users_uuid'],
                                                     'search_fields' => 'uuid',
-                                                    'type' => 'exact',
+                                                    'type'          => 'exact',
                                                 ]);
                                             }
                                             break;

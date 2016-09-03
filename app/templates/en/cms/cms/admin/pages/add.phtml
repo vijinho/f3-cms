@@ -2,6 +2,7 @@
 use \FFCMS\Enums\Languages;
 use \FFCMS\Enums\Scopes;
 use \FFCMS\Enums\PageCategories;
+use \FFCMS\Enums\PageStatuses;
 
 $f3    = \Base::instance();
 $title = 'Add Page';
@@ -126,6 +127,20 @@ $f3->set('title', $title);
                     <?php endforeach; ?>
               </select>
               <label for="scopes">Audience</label>
+            </div>
+
+            <div class="input-field col s12">
+              <select required class="validate" type="text" name="status" id="status">
+                <option disabled value="" selected>Status</option>
+                <?php
+                    $types = PageStatuses::values();
+                    foreach ($types as $type => $name): ?>
+                        <option value="<?=$name ?>"<?php if ($type == $f3->get('form.status')) {
+    echo ' selected';
+} ?>><?=ucwords($name) ?></option>
+                    <?php endforeach; ?>
+              </select>
+              <label for="status">Status</label>
             </div>
 
             <div class="input-field col s12">

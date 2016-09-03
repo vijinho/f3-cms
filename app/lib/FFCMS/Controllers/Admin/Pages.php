@@ -183,8 +183,8 @@ class Pages extends Admin
         }
 
         // http://php.net/manual/en/function.strtotime.php
-        $data['expires'] = Helpers\Time::database(strtotime($data['expires']));
-        $data['published'] = Helpers\Time::database(strtotime($data['published']));
+        $data['expires'] = empty($data['expires']) ? null : Helpers\Time::database(strtotime($data['expires']));
+        $data['published'] = empty($data['published']) ? null : Helpers\Time::database(strtotime($data['published']));
 
         // update required fields to check from ones which changed
         // validate the entered data

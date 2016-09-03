@@ -12,15 +12,7 @@ extract($p->cast());
 
     <h1><?=\Markdown::instance()->convert($title) ?></h1>
 
-    <?=$published ?>
-
-    <?=\Markdown::instance()->convert($summary) ?>
-
     <?=\Markdown::instance()->convert($body) ?>
-
-    <?=\Markdown::instance()->convert($author) ?>
-
-    <?=$updated ?>
 
 </div>
 

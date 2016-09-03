@@ -1,6 +1,6 @@
 <?php
-$f3 = \Base::instance();
-$user = $f3->get('user');
+$f3     = \Base::instance();
+$user   = $f3->get('user');
 $scopes = $f3->get('userScopes');
 ?>
 <footer class="page-footer grey darken-1 z-depth-3">
@@ -22,8 +22,8 @@ $scopes = $f3->get('userScopes');
             <div class="col s6 m4">
                 <h5 class="grey-text text-lighten-2">Organisation</h5>
                 <ul>
-                    <li><a class="white-text" href="#">Contact</a></li>
-                    <li><a class="white-text" href="#">About</a></li>
+                    <li><a class="white-text" href="<?=$f3->alias('contact') ?>">Contact</a></li>
+                    <li><a class="white-text" href="<?=$f3->alias('about') ?>">About</a></li>
                 </ul>
             </div>
             <div class="col s6 m4">
@@ -41,9 +41,9 @@ $scopes = $f3->get('userScopes');
         <div class="container">
             <ul class="footer-copyright">
                 <li>&copy; <?=date('Y')?> <a href="<?=$f3->get('cfg.author-url') ?>" class="white-text text-lighten-3">Vijay Mahrra</a> All rights reserved.</li>
-                <li><a class="" href="#">Terms of Use</a></li>
-                <li><a class="" href="#">Privacy Policy</a></li>
-                <li><a class="" href="#">Legal Policies</a></li>
+                <li><a class="white-text" href="<?=$f3->alias('termsandconditions') ?>">Terms of Use</a></li>
+                <li><a class="white-text" href="<?=$f3->alias('privacypolicy') ?>">Privacy Policy</a></li>
+                <li><a class="white-text" href="<?=$f3->alias('cookies') ?>">Cookies</a></li>
             </ul>
             <a class="grey-text text-lighten-4 right" href="#!">Sitemap</a>
         </div>

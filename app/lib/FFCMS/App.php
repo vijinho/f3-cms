@@ -332,10 +332,10 @@ class App
         $key = 'page-slugs';
         if (!$cache->exists($key, $slugs)) {
             $db = \Registry::get('db');
-            $data = $db->exec('SELECT language, slug FROM pages');
+            $data = $db->exec('SELECT slug, CONCAT("/", language, path, slug) AS path FROM pages');
             if (!empty($data)) {
                 foreach ($data as $row) {
-                    $slugs[$row['language']][] = $row['slug'];
+                    $slugs[$row['slug']] = $f3->fixslashes($row['path']);
                 }
             }
             $cache->set($key, $slugs, $f3->get('ttl.cfg'));
@@ -344,13 +344,8 @@ class App
         // create routes for slugged pages
         if (!empty($slugs)) {
             $lang = $f3->get('LANG');
-            foreach ($slugs as $language => $slugslist) {
-                if ($lang !== $language) {
-                    continue;
-                }
-                foreach ($slugslist as $slug) {
-                    $f3->route('GET /' . $language . '/' . $slug, 'FFCMS\Controllers\Page->page');
-                }
+            foreach ($slugs as $path) {
+                $f3->route('GET ' . $path, 'FFCMS\Controllers\Page->page');
             }
         }
 

@@ -27,8 +27,10 @@ class Page extends Base
     {
         if (array_key_exists('slug', $params)) {
             $slug = $params['slug'];
-        } elseif (preg_match('/^\/(?P<lang>[^\/]+)\/(?P<slug>.+)/', $f3->get('PATH'), $matches)) {
-            $slug = $matches['slug'];
+        } elseif (preg_match('/^\/(?P<lang>[^\/]+)\/(?P<path>.+)/', $f3->get('PATH'), $matches)) {
+            // split /XX/path/to/slug -> slug
+            $parts = preg_split('/[\/]+/', $matches['path']);
+            $slug = $parts[count($parts) - 1];
         } else {
             // 404
             echo 'missing slug';
