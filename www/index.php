@@ -42,7 +42,7 @@ function boot()
     ]]);
 
     // session handler in db
-    $dice->addRule('DB\\SQL\\Seession', ['shared' => true]);
+    $dice->addRule('DB\\SQL\\Session', ['shared' => true]);
     $session = $dice->create('DB\\SQL\\Session');
 
     // auto-create database if options set
