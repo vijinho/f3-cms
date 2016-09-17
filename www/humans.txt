@@ -7,6 +7,8 @@
 
 # CONTRIBUTORS
 
+    Alexandre Plennevaux -- https://github.com/pixeline
+
 # THANKS
 
 * Fat-Free Framework - http://fatfreeframework.com/
