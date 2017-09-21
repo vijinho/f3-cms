@@ -25,7 +25,7 @@ class Pages extends AbstractMigration
                ->addColumn('summary', 'text', ['comment' => 'Summary', 'null' => true])
                ->addColumn('body', 'text', ['comment' => 'Body Content', 'null' => true])
                ->addColumn('scopes', 'string', ['comment' => 'Scopes', 'limit' => 255, 'null' => true])
-               ->addColumn('category', 'text', ['comment' => 'Categories', 'limit' => 255, 'default' => 'page', 'null' => true])
+               ->addColumn('category', 'text', ['comment' => 'Categories', 'limit' => 255, 'null' => true])
                ->addColumn('tags', 'text', ['comment' => 'Tags', 'null' => true])
                ->addColumn('metadata', 'text', ['comment' => 'Additional Metadata', 'null' => true])
                ->addColumn('created', 'datetime', ['comment' => 'Date Created'])
