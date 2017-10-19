@@ -73,7 +73,7 @@ VALUES
 	(3,'73aeed16','Twitter URL','twitter-url','http://twitter.com/vijinh0','url','',0),
 	(4,'25cb0566','EyeEm URL','eyem-url','http://eyeem.com/u/vijinho','url','',0),
 	(5,'df06116c','Instagram URL','instagram-url','http://instagram.com/vijinho','url','',0),
-	(6,'c9bbfd21','Website Author URL','author-url','http://about.me/vijay.mahrra','url','',0);
+	(6,'c9bbfd21','Website Author URL','author-url','http://www.urunu.com','url','',0);
 
 /*!40000 ALTER TABLE `config_data` ENABLE KEYS */;
 UNLOCK TABLES;

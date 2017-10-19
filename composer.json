@@ -10,7 +10,7 @@
         {
             "name": "Vijay Mahrra",
             "email": "vijay@yoyo.org",
-            "homepage": "http://about.me/vijay.mahrra",
+            "homepage": "http://www.urunu.com",
             "role": "Developer"
         }
     ],
@@ -24,7 +24,7 @@
     ]},
     "require": {
         "php": ">=5.6.0",
-        "bcosca/fatfree-core": "dev-master",
+        "bcosca/fatfree-core": "3.6.1",
         "level-2/dice": "dev-master",
         "filp/whoops": "dev-master",
         "wixel/gump": "dev-master",

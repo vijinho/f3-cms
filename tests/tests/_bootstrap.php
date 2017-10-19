@@ -7,7 +7,7 @@ define('ADMIN_PASSWORD', 'admin');
 define('CLIENT_ID', 'c431c11e');
 define('CLIENT_SECRET', '29699621');
 
-define('USER_EMAIL', 'vijay.mahrra@gmail.com');
+define('USER_EMAIL', 'vijay@yoyo.org');
 define('USER_PASSWORD', 'test');
 define('USER_FORENAME', 'Vijay');
 define('USER_SURNAME', 'Mahrra');
